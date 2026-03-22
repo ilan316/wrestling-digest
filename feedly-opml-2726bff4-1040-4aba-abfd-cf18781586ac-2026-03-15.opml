@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<opml version="1.0">
+    <head>
+        <title>Ilan subscriptions in feedly Cloud</title>
+    </head>
+    <body>
+        <outline text="Wrestling" title="Wrestling">
+            <outline type="rss" text="NoDQ.com: WWE and AEW Coverage" title="NoDQ.com: WWE and AEW Coverage" xmlUrl="https://nodq.com/feed/" htmlUrl="https://nodq.com/"/>
+            <outline type="rss" text="AEW | Cageside Seats, for Pro Wrestling fans" title="AEW | Cageside Seats, for Pro Wrestling fans" xmlUrl="https://www.cagesideseats.com/rss/aew/index.xml" htmlUrl="https://www.cagesideseats.com/aew"/>
+            <outline type="rss" text="F4W/WON" title="F4W/WON" xmlUrl="https://www.f4wonline.com/feed/" htmlUrl="https://www.f4wonline.com"/>
+            <outline type="rss" text="Ringside News" title="Ringside News" xmlUrl="https://ringsidenews.com/feed" htmlUrl="https://ringsidenews.com"/>
+            <outline type="rss" text="Wrestling Inc" title="Wrestling Inc" xmlUrl="https://feeds.feedburner.com/wrestlinginc-news" htmlUrl="https://www.wrestlinginc.com"/>
+            <outline type="rss" text="WrestleZone" title="WrestleZone" xmlUrl="https://wrestlezone.com/feed" htmlUrl="https://wrestlezone.com"/>
+            <outline type="rss" text="Fightful" title="Fightful" xmlUrl="https://www.fightful.com/rss" htmlUrl="https://www.fightful.com"/>
+            <outline type="rss" text="PWMania" title="PWMania" xmlUrl="https://pwmania.com/feed" htmlUrl="https://pwmania.com"/>
+            <outline type="rss" text="WrestleTalk" title="WrestleTalk" xmlUrl="https://wrestletalk.com/feed" htmlUrl="https://wrestletalk.com"/>
+            <outline type="rss" text="Wrestling Headlines" title="Wrestling Headlines" xmlUrl="https://wrestlingheadlines.com/feed" htmlUrl="https://wrestlingheadlines.com"/>
+            <outline type="rss" text="BodySlam.net" title="BodySlam.net" xmlUrl="https://www.bodyslam.net/feed" htmlUrl="https://www.bodyslam.net"/>
+        </outline>
+    </body>
+</opml>
