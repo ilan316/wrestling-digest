@@ -154,7 +154,7 @@ _STORY_TEMPLATE = """\
 """
 
 
-def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date_str: str = "") -> str:
+def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date_str: str = "", pages_url: str = "") -> str:
     date_str = date_str or datetime.now().strftime("%d/%m")
     total_articles = sum(s["count"] for s in digest)
 
@@ -184,7 +184,7 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date
         story_count=len(digest),
         article_count=total_articles,
         stories_html="\n".join(stories_parts),
-        pages_url=PAGES_URL,
+        pages_url=pages_url or PAGES_URL,
     )
 
 
@@ -205,13 +205,14 @@ def send(
     title: str = "Feedly Digest",
     emoji: str = "📰",
     date_range: str = "",
+    pages_url: str = "",
 ) -> None:
     if not digest:
         print(f"[email] {title}: No stories — skipping.")
         return
 
     date_str = date_range or datetime.now().strftime("%d/%m")
-    html_body = _build_html(digest, title=f"{emoji} {title}", date_str=date_str)
+    html_body = _build_html(digest, title=f"{emoji} {title}", date_str=date_str, pages_url=pages_url)
     subject = f"[feedly-digest] {emoji} {title} | {date_str} ({len(digest)} stories)"
 
     msg = MIMEMultipart("alternative")
@@ -228,80 +229,84 @@ def send(
     print(f"[email] Sent digest to {recipient} — {len(digest)} stories")
 
 
-def save_page(all_digests: dict[str, tuple[list, str, str]], date_str: str, docs_dir: str) -> None:
-    """Save combined digest as a clean HTML page for GitHub Pages / Eleven Reader."""
-    sections = []
-    total_stories = 0
+_PAGE_STYLE = """
+  body { font-family: Georgia, serif; max-width: 720px; margin: 40px auto; padding: 0 20px; color: #222; line-height: 1.7; }
+  h1 { font-size: 22px; border-bottom: 2px solid #eee; padding-bottom: 8px; margin-top: 32px; }
+  h2 { font-size: 17px; margin-top: 24px; }
+  h2 a { color: #1a1a2e; text-decoration: none; }
+  h2 a:hover { text-decoration: underline; }
+  p { margin: 8px 0; }
+  .meta { font-size: 12px; color: #888; }
+  .hdr { background: #1a1a2e; color: #fff; padding: 24px; border-radius: 8px; margin-bottom: 32px; }
+  .hdr h1 { color: #fff; border: none; margin: 0; font-size: 20px; }
+  .hdr p { margin: 4px 0 0; opacity: .7; font-size: 13px; }
+"""
 
-    for promo_key, (digest, label, emoji) in all_digests.items():
-        if not digest:
-            continue
-        total_stories += len(digest)
-        stories_html = []
-        for story in digest:
-            sources_text = " · ".join(s.get("source_name", "") for s in story["sources"] if s.get("source_name"))
-            first_url = story["sources"][0]["url"] if story.get("sources") else "#"
-            stories_html.append(f"""
+BASE_PAGES_URL = "https://ilan316.github.io/wrestling-digest/"
+
+
+def save_page(
+    digest: list[dict[str, Any]],
+    promo_key: str,
+    label: str,
+    emoji: str,
+    date_str: str,
+    docs_dir: str,
+) -> str:
+    """Save a per-promotion HTML page. Returns the public URL."""
+    from datetime import timedelta
+
+    stories_html = []
+    for story in digest:
+        sources_text = " · ".join(s.get("source_name", "") for s in story["sources"] if s.get("source_name"))
+        first_url = story["sources"][0]["url"] if story.get("sources") else "#"
+        stories_html.append(f"""
   <article>
     <h2><a href="{first_url}" target="_blank">{_esc(story['story_title'])}</a></h2>
     <p>{_esc(story['summary']).replace(chr(10), '<br>')}</p>
     <p class="meta">{_esc(sources_text)}</p>
   </article>""")
-        sections.append(f"<section><h1>{emoji} {_esc(label)}</h1>{''.join(stories_html)}</section>")
 
     page_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Wrestling Digest — {date_str}</title>
-<style>
-  body {{ font-family: Georgia, serif; max-width: 720px; margin: 40px auto; padding: 0 20px; color: #222; line-height: 1.7; }}
-  h1 {{ font-size: 24px; border-bottom: 2px solid #eee; padding-bottom: 8px; margin-top: 40px; }}
-  h2 {{ font-size: 18px; margin-top: 28px; }}
-  h2 a {{ color: #1a1a2e; text-decoration: none; }}
-  h2 a:hover {{ text-decoration: underline; }}
-  p {{ margin: 8px 0; }}
-  .meta {{ font-size: 12px; color: #888; }}
-  .header {{ background: #1a1a2e; color: #fff; padding: 24px; border-radius: 8px; margin-bottom: 32px; }}
-  .header h1 {{ color: #fff; border: none; margin: 0; font-size: 20px; }}
-  .header p {{ margin: 4px 0 0; opacity: .7; font-size: 13px; }}
-</style>
+<title>{emoji} {label} — {date_str}</title>
+<style>{_PAGE_STYLE}</style>
 </head>
 <body>
-<div class="header">
-  <h1>🤼 Wrestling Digest</h1>
-  <p>{date_str} &nbsp;·&nbsp; {total_stories} stories</p>
+<div class="hdr">
+  <h1>{emoji} {_esc(label)}</h1>
+  <p>{date_str} &nbsp;·&nbsp; {len(digest)} stories</p>
 </div>
-{''.join(sections)}
+{''.join(stories_html)}
 </body>
 </html>"""
 
     os.makedirs(docs_dir, exist_ok=True)
 
-    # Save dated archive file
-    dated_name = datetime.now().strftime("%Y-%m-%d") + ".html"
-    dated_path = os.path.join(docs_dir, dated_name)
-    with open(dated_path, "w", encoding="utf-8") as f:
+    # Save dated per-promotion file: 2026-03-23-aew.html
+    today = datetime.now().strftime("%Y-%m-%d")
+    fname = f"{today}-{promo_key.lower()}.html"
+    fpath = os.path.join(docs_dir, fname)
+    with open(fpath, "w", encoding="utf-8") as f:
         f.write(page_html)
 
-    # Save as index.html (always latest)
-    index_path = os.path.join(docs_dir, "index.html")
-    with open(index_path, "w", encoding="utf-8") as f:
-        f.write(page_html)
-
-    # Delete dated files older than 10 days
-    from datetime import timedelta
+    # Delete files for this promotion older than 10 days
     cutoff = datetime.now() - timedelta(days=10)
-    for fname in os.listdir(docs_dir):
-        if fname == "index.html" or not fname.endswith(".html"):
+    prefix = f"-{promo_key.lower()}.html"
+    for old in os.listdir(docs_dir):
+        if not old.endswith(prefix):
             continue
         try:
-            file_date = datetime.strptime(fname.replace(".html", ""), "%Y-%m-%d")
+            file_date = datetime.strptime(old.replace(prefix, ""), "%Y-%m-%d")
             if file_date < cutoff:
-                os.remove(os.path.join(docs_dir, fname))
-                print(f"[page] Deleted old file: {fname}")
+                os.remove(os.path.join(docs_dir, old))
+                print(f"[page] Deleted old file: {old}")
         except ValueError:
             pass
 
-    print(f"[page] Saved digest page → {dated_path} + index.html")
+    url = f"{BASE_PAGES_URL}{fname}"
+    print(f"[page] Saved → {fpath} ({url})")
+    return url

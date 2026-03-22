@@ -88,7 +88,6 @@ def run() -> None:
 
     # 4. For each promotion: blackout check → summarize → send
     date_str = datetime.now().strftime("%d/%m")
-    all_digests: dict[str, tuple[list, str, str]] = {}
 
     for promo in PROMOTIONS:
         key = promo["key"]
@@ -125,6 +124,16 @@ def run() -> None:
         else:
             date_range = date_str
 
+        docs_dir = os.path.join(os.path.dirname(__file__), "docs")
+        page_url = email_sender.save_page(
+            digest=digest,
+            promo_key=key,
+            label=promo["label"],
+            emoji=promo["emoji"],
+            date_str=date_range,
+            docs_dir=docs_dir,
+        )
+
         email_sender.send(
             digest=digest,
             gmail_user=config.GMAIL_USER,
@@ -133,13 +142,8 @@ def run() -> None:
             title=promo["label"],
             emoji=promo["emoji"],
             date_range=date_range,
+            pages_url=page_url,
         )
-
-        all_digests[key] = (digest, promo["label"], promo["emoji"])
-
-    # 5. Save GitHub Pages digest
-    docs_dir = os.path.join(os.path.dirname(__file__), "docs")
-    email_sender.save_page(all_digests, date_str=date_str, docs_dir=docs_dir)
 
     print("\n[main] Done.")
 
