@@ -66,7 +66,7 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
 
         title = html.unescape(entry.get("title", "(no title)"))
         title_upper = title.upper()
-        if "SPOILER" in title_upper or "RESULTS" in title_upper or "HIGHLIGHTS" in title_upper:
+        if any(kw in title_upper for kw in ("SPOILER", "RESULTS", "HIGHLIGHTS", "REPORT", "PREVIEW")):
             continue
 
         summary = _clean_html(
