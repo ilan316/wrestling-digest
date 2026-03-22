@@ -25,7 +25,7 @@ CATEGORIES_FILTER: list[str] = [
 
 # Claude
 CLAUDE_API_KEY: str = _require("CLAUDE_API_KEY")
-CLAUDE_MODEL: str = "claude-sonnet-4-6"
+CLAUDE_MODEL: str = "claude-haiku-4-5-20251001"
 
 # Gmail
 GMAIL_USER: str = _require("GMAIL_USER")
