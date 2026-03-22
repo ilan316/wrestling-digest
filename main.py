@@ -87,6 +87,9 @@ def run() -> None:
     print(f"[main] AEW={len(by_promo['AEW'])}  WWE={len(by_promo['WWE'])}  Other={len(by_promo['Other'])} clusters")
 
     # 4. For each promotion: blackout check → summarize → send
+    date_str = datetime.now().strftime("%d/%m")
+    all_digests: dict[str, tuple[list, str, str]] = {}
+
     for promo in PROMOTIONS:
         key = promo["key"]
         clusters = by_promo.get(key, [])
@@ -116,12 +119,11 @@ def run() -> None:
             if a.get("published")
         ]
         if all_pub:
-            from datetime import timezone
             date_from = datetime.fromtimestamp(min(all_pub) / 1000).strftime("%d/%m")
             date_to   = datetime.fromtimestamp(max(all_pub) / 1000).strftime("%d/%m")
             date_range = date_from if date_from == date_to else f"{date_from} – {date_to}"
         else:
-            date_range = datetime.now().strftime("%d/%m")
+            date_range = date_str
 
         email_sender.send(
             digest=digest,
@@ -132,6 +134,12 @@ def run() -> None:
             emoji=promo["emoji"],
             date_range=date_range,
         )
+
+        all_digests[key] = (digest, promo["label"], promo["emoji"])
+
+    # 5. Save GitHub Pages digest
+    docs_dir = os.path.join(os.path.dirname(__file__), "docs")
+    email_sender.save_page(all_digests, date_str=date_str, docs_dir=docs_dir)
 
     print("\n[main] Done.")
 

@@ -5,6 +5,9 @@ on:
     - cron: "0 18 * * *"  # 18:00 UTC = 20:00 Israel winter (UTC+2). After 27/3 change to 17:00
   workflow_dispatch:       # manual trigger from GitHub UI
 
+permissions:
+  contents: write
+
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -26,3 +29,11 @@ jobs:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
         run: python main.py
+
+      - name: Publish digest page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          git diff --cached --quiet || git commit -m "Update digest $(date +%Y-%m-%d)"
+          git push
