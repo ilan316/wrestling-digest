@@ -59,19 +59,20 @@ def fetch_events(promotion: str, url: str, until: datetime) -> list[dict]:
         import html as html_mod
         clean_name = html_mod.unescape(name.strip())
 
-        # Weekly shows get 24h blackout, PPVs get 48h
+        # Skip weekly TV shows — blackout only for PPV/special events
         is_weekly = bool(re.search(
             r'(RAW|SmackDown|Dynamite|Collision|NXT)\s+#\d+|'
             r'(RAW|SmackDown|Dynamite|Collision|NXT)\s+Live',
             clean_name, re.IGNORECASE
         ))
-        blackout_hours = 24 if is_weekly else 48
+        if is_weekly:
+            continue
 
         events.append({
             "name": clean_name,
             "date": event_date.strftime("%Y-%m-%d"),
             "promotion": promotion,
-            "blackout_hours": blackout_hours,
+            "blackout_hours": 48,
         })
 
     # Deduplicate by name+date
