@@ -26,17 +26,17 @@ def summarize_cluster(
     """Generate a unified Hebrew summary for a cluster of related articles."""
     cluster_text = _build_cluster_text(cluster)
 
-    prompt = f"""You are an experienced wrestling news editor. Below are multiple articles from different sources covering the same story: "{story_title}".
+    prompt = f"""You are an experienced wrestling news editor. Below are {'multiple articles' if len(cluster) > 1 else 'an article'} covering the story: "{story_title}".
 
 {cluster_text}
 
-Merge these articles into one single, complete article in English.
-- Preserve ALL information, details, quotes, and context from every source
-- Remove only pure duplicates (exact same sentence repeated across sources)
-- Add unique details from each source — do not leave anything out
+Write a complete, well-structured news article in English based on the content above.
+- Preserve ALL information, details, quotes, and context
+- Remove only pure duplicate sentences
 - Use multiple paragraphs naturally
 - Do not start with "Summary:" or "Title:" — just write the article directly
-- Do not mention website/source names in the body"""
+- Do not mention website/source names in the body
+- If the excerpt is incomplete, summarize what is available — do not ask for more content"""
 
     client = anthropic.Anthropic(api_key=api_key)
     message = client.messages.create(
