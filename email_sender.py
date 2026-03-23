@@ -309,4 +309,51 @@ def save_page(
 
     url = f"{BASE_PAGES_URL}{fname}"
     print(f"[page] Saved → {fpath} ({url})")
+
+    # Update index.html with links to all available pages
+    _update_index(docs_dir)
+
     return url
+
+
+def _update_index(docs_dir: str) -> None:
+    """Rebuild index.html with links to all dated promotion pages."""
+    files = sorted(
+        [f for f in os.listdir(docs_dir) if f != "index.html" and f.endswith(".html") and f != ".nojekyll"],
+        reverse=True,
+    )
+    links = ""
+    for fname in files:
+        parts = fname.replace(".html", "").rsplit("-", 1)
+        if len(parts) == 2:
+            date_part, promo = parts[0], parts[1].upper()
+            emoji = {"AEW": "🔶", "WWE": "🔴", "OTHER": "🤼"}.get(promo, "📰")
+            links += f'<li><a href="{fname}">{emoji} {promo} — {date_part}</a></li>\n'
+
+    index_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🤼 Wrestling Digest</title>
+<style>
+  body {{ font-family: -apple-system, Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }}
+  .hdr {{ background: #1a1a2e; color: #fff; padding: 24px; border-radius: 8px; margin-bottom: 24px; }}
+  .hdr h1 {{ margin: 0; font-size: 22px; }}
+  ul {{ list-style: none; padding: 0; }}
+  li {{ margin: 10px 0; }}
+  a {{ color: #1a73e8; font-size: 16px; text-decoration: none; }}
+  a:hover {{ text-decoration: underline; }}
+</style>
+</head>
+<body>
+<div class="hdr"><h1>🤼 Wrestling Digest</h1></div>
+<ul>
+{links}</ul>
+</body>
+</html>"""
+
+    index_path = os.path.join(docs_dir, "index.html")
+    with open(index_path, "w", encoding="utf-8") as f:
+        f.write(index_html)
+    print("[page] Updated index.html")
