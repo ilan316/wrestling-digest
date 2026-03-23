@@ -90,10 +90,11 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
         if any(kw in title_upper for kw in ("SPOILER", "RESULTS", "HIGHLIGHTS", "REPORT", "PREVIEW", "RECAP", "WINNERS", "RATINGS")):
             continue
 
-        rss_summary = _clean_html(
-            entry.get("summary", "")
-            or entry.get("content", [{}])[0].get("value", "")
-        )
+        rss_summary_raw = entry.get("summary", "")
+        rss_content_raw = entry.get("content", [{}])[0].get("value", "")
+        # Prefer content over summary when content is significantly longer
+        best_raw = rss_content_raw if len(rss_content_raw) > len(rss_summary_raw) * 1.5 else rss_summary_raw
+        rss_summary = _clean_html(best_raw)
 
         # For short-summary feeds, fetch the full article text
         article_url = entry.get("link", "")

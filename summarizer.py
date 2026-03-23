@@ -12,7 +12,7 @@ def _build_cluster_text(cluster: list[dict[str, Any]]) -> str:
         parts.append(f"- Title: {a['title']}")
         parts.append(f"  Source: {a.get('source_name', 'Unknown')}")
         if a.get("summary"):
-            parts.append(f"  Excerpt: {a['summary'][:1500]}")
+            parts.append(f"  Excerpt: {a['summary'][:4000]}")
         parts.append("")
     return "\n".join(parts)
 
