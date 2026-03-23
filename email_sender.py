@@ -258,13 +258,16 @@ def save_page(
 
     stories_html = []
     for story in digest:
-        sources_text = " · ".join(s.get("source_name", "") for s in story["sources"] if s.get("source_name"))
+        source_links = " · ".join(
+            f'<a href="{s["url"]}" target="_blank">{_esc(s.get("source_name", "") or s.get("title", "")[:40])}</a>'
+            for s in story["sources"] if s.get("url")
+        )
         first_url = story["sources"][0]["url"] if story.get("sources") else "#"
         stories_html.append(f"""
   <article>
     <h2><a href="{first_url}" target="_blank">{_esc(story['story_title'])}</a></h2>
     <p>{_esc(story['summary']).replace(chr(10), '<br>')}</p>
-    <p class="meta">{_esc(sources_text)}</p>
+    <p class="meta">{source_links}</p>
   </article>""")
 
     page_html = f"""<!DOCTYPE html>
