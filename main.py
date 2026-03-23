@@ -34,7 +34,8 @@ def check_blackout(promotion: str) -> tuple[bool, str]:
     except Exception:
         return False, ""
 
-    now = datetime.now()
+    from zoneinfo import ZoneInfo
+    now = datetime.now(ZoneInfo("Asia/Jerusalem")).replace(tzinfo=None)
     for event in events:
         if event.get("promotion", "") != promotion:
             continue
