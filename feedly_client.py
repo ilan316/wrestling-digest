@@ -16,6 +16,7 @@ SCRAPE_FEEDS = {
     "ringsidenews.com",
     "wrestlinginc.com",
     "wrestletalk.com",
+    "pwmania.com",
 }
 
 
