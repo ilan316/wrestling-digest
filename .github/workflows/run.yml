@@ -2,7 +2,7 @@ name: Wrestling Digest
 
 on:
   schedule:
-    - cron: "0 18 * * *"  # 18:00 UTC = 20:00 Israel winter (UTC+2). After 27/3 change to 17:00
+    - cron: "0 17 * * *"  # 17:00 UTC = 20:00 Israel summer (UTC+3)
   workflow_dispatch:       # manual trigger from GitHub UI
 
 permissions:
