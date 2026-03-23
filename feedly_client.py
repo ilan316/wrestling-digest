@@ -9,6 +9,27 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
 import feedparser
+import trafilatura
+
+# Feeds that provide very short summaries — fetch full article text
+SCRAPE_FEEDS = {
+    "ringsidenews.com",
+    "wrestlinginc.com",
+    "wrestletalk.com",
+}
+
+
+def _fetch_full_text(url: str) -> str:
+    """Fetch and extract full article text using trafilatura."""
+    try:
+        downloaded = trafilatura.fetch_url(url)
+        if downloaded:
+            text = trafilatura.extract(downloaded, include_comments=False, include_tables=False)
+            if text:
+                return text.strip()
+    except Exception:
+        pass
+    return ""
 
 
 def parse_opml(opml_path: str) -> dict[str, list[dict[str, str]]]:
@@ -69,10 +90,19 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
         if any(kw in title_upper for kw in ("SPOILER", "RESULTS", "HIGHLIGHTS", "REPORT", "PREVIEW", "RECAP", "WINNERS", "RATINGS")):
             continue
 
-        summary = _clean_html(
+        rss_summary = _clean_html(
             entry.get("summary", "")
             or entry.get("content", [{}])[0].get("value", "")
         )
+
+        # For short-summary feeds, fetch the full article text
+        article_url = entry.get("link", "")
+        needs_scrape = any(domain in feed["xmlUrl"] for domain in SCRAPE_FEEDS)
+        if needs_scrape and article_url:
+            full_text = _fetch_full_text(article_url)
+            summary = full_text if full_text else rss_summary
+        else:
+            summary = rss_summary
 
         articles.append({
             "id": entry.get("id") or entry.get("link", ""),
