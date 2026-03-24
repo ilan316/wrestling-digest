@@ -88,7 +88,7 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
 
         title = html.unescape(entry.get("title", "(no title)"))
         title_upper = title.upper()
-        if any(kw in title_upper for kw in ("SPOILER", "RESULTS", "HIGHLIGHTS", "REPORT", "PREVIEW", "RECAP", "WINNERS", "RATINGS")):
+        if any(kw in title_upper for kw in ("SPOILER", "RESULTS", "HIGHLIGHTS", "REPORT", "PREVIEW", "RECAP", "WINNERS", "RATINGS", "REVIEW", "UFC")):
             continue
 
         rss_summary_raw = entry.get("summary", "")
