@@ -60,10 +60,13 @@ def summarize_all(
     results = []
     for cluster in clusters:
         story_title: str = cluster[0].get("_story_title", cluster[0]["title"])
-        sources = [
-            {"title": a["title"], "url": a["url"], "source_name": a.get("source_name", "")}
-            for a in cluster
-        ]
+        seen_sources: set[str] = set()
+        sources = []
+        for a in cluster:
+            name = a.get("source_name", "")
+            if name not in seen_sources:
+                seen_sources.add(name)
+                sources.append({"title": a["title"], "url": a["url"], "source_name": name})
 
         print(f"[summarizer] Summarizing: {story_title!r} ({len(cluster)} articles)")
         try:
