@@ -30,10 +30,14 @@ def summarize_cluster(
 
 {cluster_text}
 
-Write a complete, well-structured news article in English based on the content above.
+Write your response in exactly this format:
+TL;DR: <one sentence summary of the key fact>
+
+<full article — complete, well-structured, multiple paragraphs>
+
+Rules for the full article:
 - Preserve ALL information, details, quotes, and context
 - Remove only pure duplicate sentences
-- Use multiple paragraphs naturally
 - Do not start with "Summary:" or "Title:" — just write the article directly
 - Do not mention website/source names in the body
 - If the excerpt is incomplete, summarize what is available — do not ask for more content"""
@@ -70,16 +74,48 @@ def summarize_all(
 
         print(f"[summarizer] Summarizing: {story_title!r} ({len(cluster)} articles)")
         try:
-            summary = summarize_cluster(cluster, story_title, api_key, model)
+            raw = summarize_cluster(cluster, story_title, api_key, model)
         except Exception as e:
             print(f"[summarizer] Error: {e}")
-            summary = cluster[0].get("summary", "") or "(סיכום לא זמין)"
+            raw = cluster[0].get("summary", "") or "(סיכום לא זמין)"
+
+        # Parse TL;DR line
+        tldr = ""
+        summary = raw
+        if raw.startswith("TL;DR:"):
+            parts = raw.split("\n", 2)
+            tldr = parts[0].replace("TL;DR:", "").strip()
+            summary = parts[2].strip() if len(parts) > 2 else ""
 
         results.append({
             "story_title": story_title,
+            "tldr": tldr,
             "summary": summary,
             "sources": sources,
             "count": len(cluster),
         })
 
     return results
+
+
+def summarize_executive(digest: list[dict[str, Any]], api_key: str, model: str) -> str:
+    """Generate a 3-4 sentence executive summary covering all stories in the digest."""
+    if not digest:
+        return ""
+    titles = "\n".join(f"- {s['story_title']}" for s in digest)
+    prompt = f"""You are a wrestling news editor. Here are today's top stories:
+{titles}
+
+Write a 3-4 sentence executive summary covering the highlights of today's wrestling news. Be concise and informative. Do not use bullet points."""
+
+    try:
+        client = anthropic.Anthropic(api_key=api_key)
+        msg = client.messages.create(
+            model=model,
+            max_tokens=300,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return msg.content[0].text.strip()
+    except Exception as e:
+        print(f"[summarizer] executive summary error: {e}")
+        return ""
