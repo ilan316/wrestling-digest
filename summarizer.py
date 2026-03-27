@@ -98,24 +98,3 @@ def summarize_all(
     return results
 
 
-def summarize_executive(digest: list[dict[str, Any]], api_key: str, model: str) -> str:
-    """Generate a 3-4 sentence executive summary covering all stories in the digest."""
-    if not digest:
-        return ""
-    titles = "\n".join(f"- {s['story_title']}" for s in digest)
-    prompt = f"""You are a wrestling news editor. Here are today's top stories:
-{titles}
-
-Write a 3-4 sentence executive summary covering the highlights of today's wrestling news. Be concise and informative. Do not use bullet points."""
-
-    try:
-        client = anthropic.Anthropic(api_key=api_key)
-        msg = client.messages.create(
-            model=model,
-            max_tokens=300,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        return msg.content[0].text.strip()
-    except Exception as e:
-        print(f"[summarizer] executive summary error: {e}")
-        return ""

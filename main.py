@@ -111,12 +111,6 @@ def run() -> None:
             min_cluster_size=config.MIN_CLUSTER_SIZE_FOR_SUMMARY,
         )
 
-        executive = summarizer.summarize_executive(
-            digest=digest,
-            api_key=config.CLAUDE_API_KEY,
-            model=config.CLAUDE_MODEL,
-        )
-
         # Calculate article date range across all clusters
         all_pub = [
             a["published"]
@@ -139,7 +133,6 @@ def run() -> None:
             emoji=promo["emoji"],
             date_str=date_range,
             docs_dir=docs_dir,
-            executive_summary=executive,
         )
 
         email_sender.send(
@@ -151,7 +144,6 @@ def run() -> None:
             emoji=promo["emoji"],
             date_range=date_range,
             pages_url=page_url,
-            executive_summary=executive,
         )
 
     print("\n[main] Done.")

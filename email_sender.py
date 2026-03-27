@@ -184,20 +184,21 @@ _STORY_TEMPLATE = """\
     {title}
     {badge}
   </div>
-  {tldr_html}
   <div class="summary">{summary}</div>
   <div class="sources">Sources: {source_links}</div>
 </div>
 """
 
 
-def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date_str: str = "", pages_url: str = "", executive_summary: str = "") -> str:
+def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date_str: str = "", pages_url: str = "") -> str:
     date_str = date_str or datetime.now().strftime("%d/%m")
     total_articles = sum(s["count"] for s in digest)
 
-    executive_html = ""
-    if executive_summary:
-        executive_html = f'<div class="executive"><strong>📋 Daily Summary</strong>{_esc(executive_summary)}</div>'
+    # Bullet list of TL;DRs at the top
+    bullets = "".join(
+        f'<li>{_esc(s["tldr"])}</li>' for s in digest if s.get("tldr")
+    )
+    executive_html = f'<div class="executive"><strong>📋 Today\'s Stories</strong><ul>{bullets}</ul></div>' if bullets else ""
 
     stories_parts = []
     for story in digest:
@@ -206,10 +207,6 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date
             badges += '<span class="hot-badge">🔥 HOT</span>'
         if story["count"] >= 2:
             badges += f'<span class="badge">{story["count"]} sources</span>'
-
-        tldr_html = ""
-        if story.get("tldr"):
-            tldr_html = f'<div class="tldr"><strong>TL;DR:</strong> {_esc(story["tldr"])}</div>'
 
         source_links = " · ".join(
             f'<a href="{s["url"]}" target="_blank">{s["source_name"] or s["title"][:40]}</a>'
@@ -220,7 +217,6 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date
             _STORY_TEMPLATE.format(
                 title=_esc(story["story_title"]),
                 badge=badges,
-                tldr_html=tldr_html,
                 summary=_esc(story["summary"]).replace("\n", "<br>"),
                 source_links=source_links,
             )
@@ -255,14 +251,13 @@ def send(
     emoji: str = "📰",
     date_range: str = "",
     pages_url: str = "",
-    executive_summary: str = "",
 ) -> None:
     if not digest:
         print(f"[email] {title}: No stories — skipping.")
         return
 
     date_str = date_range or datetime.now().strftime("%d/%m")
-    html_body = _build_html(digest, title=f"{emoji} {title}", date_str=date_str, pages_url=pages_url, executive_summary=executive_summary)
+    html_body = _build_html(digest, title=f"{emoji} {title}", date_str=date_str, pages_url=pages_url)
     subject = f"[feedly-digest] {emoji} {title} | {date_str} ({len(digest)} stories)"
 
     msg = MIMEMultipart("alternative")
@@ -305,10 +300,15 @@ def save_page(
     emoji: str,
     date_str: str,
     docs_dir: str,
-    executive_summary: str = "",
 ) -> str:
     """Save a per-promotion HTML page. Returns the public URL."""
     from datetime import timedelta
+
+    # Bullet list of TL;DRs
+    bullets = "".join(
+        f'<li>{_esc(s["tldr"])}</li>' for s in digest if s.get("tldr")
+    )
+    executive_block = f'<div class="executive"><strong>📋 Today\'s Stories</strong><ul>{bullets}</ul></div>' if bullets else ""
 
     stories_html = []
     for story in digest:
@@ -318,18 +318,12 @@ def save_page(
         )
         first_url = story["sources"][0]["url"] if story.get("sources") else "#"
         hot_label = "🔥 " if story.get("count", 0) >= 3 else ""
-        tldr_block = f'<p class="tldr"><strong>TL;DR:</strong> {_esc(story["tldr"])}</p>' if story.get("tldr") else ""
         stories_html.append(f"""
   <article>
     <h2><a href="{first_url}" target="_blank">{hot_label}{_esc(story['story_title'])}</a></h2>
-    {tldr_block}
     <p>{_esc(story['summary']).replace(chr(10), '<br>')}</p>
     <p class="meta">{source_links}</p>
   </article>""")
-
-    executive_block = ""
-    if executive_summary:
-        executive_block = f'<div class="executive"><strong>📋 Daily Summary</strong>{_esc(executive_summary)}</div>'
 
     page_html = f"""<!DOCTYPE html>
 <html lang="en">
