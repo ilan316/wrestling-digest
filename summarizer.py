@@ -31,7 +31,7 @@ def summarize_cluster(
 {cluster_text}
 
 Write your response in exactly this format:
-TL;DR: <one sentence summary of the key fact>
+TL;DR: <3-4 sentence summary with enough context to understand the full story>
 
 <full article — complete, well-structured, multiple paragraphs>
 

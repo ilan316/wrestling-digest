@@ -198,7 +198,7 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date
     bullets = "".join(
         f'<li>{_esc(s["tldr"])}</li>' for s in digest if s.get("tldr")
     )
-    executive_html = f'<div class="executive"><strong>📋 Today\'s Stories</strong><ul>{bullets}</ul></div>' if bullets else ""
+    executive_html = f'<div class="executive"><strong>TL;DR</strong><ul>{bullets}</ul></div>' if bullets else ""
 
     stories_parts = []
     for story in digest:
@@ -308,7 +308,7 @@ def save_page(
     bullets = "".join(
         f'<li>{_esc(s["tldr"])}</li>' for s in digest if s.get("tldr")
     )
-    executive_block = f'<div class="executive"><strong>📋 Today\'s Stories</strong><ul>{bullets}</ul></div>' if bullets else ""
+    executive_block = f'<div class="executive"><strong>TL;DR</strong><ul>{bullets}</ul></div>' if bullets else ""
 
     stories_html = []
     for story in digest:
