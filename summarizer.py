@@ -79,13 +79,17 @@ def summarize_all(
             print(f"[summarizer] Error: {e}")
             raw = cluster[0].get("summary", "") or "(סיכום לא זמין)"
 
-        # Parse TL;DR line
+        # Parse TL;DR block — everything before the first blank line
         tldr = ""
         summary = raw
         if raw.startswith("TL;DR:"):
-            parts = raw.split("\n", 2)
-            tldr = parts[0].replace("TL;DR:", "").strip()
-            summary = parts[2].strip() if len(parts) > 2 else ""
+            blank = raw.find("\n\n")
+            if blank != -1:
+                tldr = raw[:blank].replace("TL;DR:", "").strip()
+                summary = raw[blank:].strip()
+            else:
+                tldr = raw.replace("TL;DR:", "").strip()
+                summary = ""
 
         results.append({
             "story_title": story_title,
