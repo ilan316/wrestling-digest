@@ -1,5 +1,11 @@
 [
   {
+    "name": "WWE EVOLVE #54",
+    "date": "2026-04-01",
+    "promotion": "WWE",
+    "blackout_hours": 48
+  },
+  {
     "name": "WWE NXT Stand & Deliver 2026",
     "date": "2026-04-04",
     "promotion": "WWE",
@@ -9,6 +15,12 @@
     "name": "AEW Dynasty 2026",
     "date": "2026-04-12",
     "promotion": "AEW",
+    "blackout_hours": 48
+  },
+  {
+    "name": "WWE EVOLVE #56",
+    "date": "2026-04-15",
+    "promotion": "WWE",
     "blackout_hours": 48
   },
   {
