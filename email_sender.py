@@ -182,7 +182,7 @@ _HTML_TEMPLATE = """\
 """
 
 _STORY_TEMPLATE = """\
-<div class="story">
+<div class="story" id="{anchor}">
   <div class="story-title">
     {title}
     {badge}
@@ -197,14 +197,15 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date
     date_str = date_str or datetime.now().strftime("%d/%m")
     total_articles = sum(s["count"] for s in digest)
 
-    # Bullet list of TL;DRs at the top
+    # Bullet list of TL;DRs at the top — each links to its story anchor
     bullets = "".join(
-        f'<li>{_esc(s["tldr"])}</li>' for s in digest if s.get("tldr")
+        f'<li><a href="#story-{i}" style="color:#1a1a2e;text-decoration:none;">{_esc(s["tldr"])}</a></li>'
+        for i, s in enumerate(digest) if s.get("tldr")
     )
     executive_html = f'<div class="executive"><strong>TL;DR</strong><ul>{bullets}</ul></div>' if bullets else ""
 
     stories_parts = []
-    for story in digest:
+    for i, story in enumerate(digest):
         badges = ""
         if story["count"] >= 3:
             badges += '<span class="hot-badge">🔥 HOT</span>'
@@ -218,6 +219,7 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date
 
         stories_parts.append(
             _STORY_TEMPLATE.format(
+                anchor=f'story-{i}',
                 title=_esc(story["story_title"]),
                 badge=badges,
                 summary=_esc(story["summary"]).replace("\n", "<br>"),
@@ -308,14 +310,15 @@ def save_page(
     """Save a per-promotion HTML page. Returns the public URL."""
     from datetime import timedelta
 
-    # Bullet list of TL;DRs
+    # Bullet list of TL;DRs — each links to its story anchor
     bullets = "".join(
-        f'<li>{_esc(s["tldr"])}</li>' for s in digest if s.get("tldr")
+        f'<li><a href="#story-{i}" style="color:#1a1a2e;text-decoration:none;">{_esc(s["tldr"])}</a></li>'
+        for i, s in enumerate(digest) if s.get("tldr")
     )
     executive_block = f'<div class="executive"><strong>TL;DR</strong><ul>{bullets}</ul></div>' if bullets else ""
 
     stories_html = []
-    for story in digest:
+    for i, story in enumerate(digest):
         source_links = " · ".join(
             f'<a href="{s["url"]}" target="_blank">{_esc(s.get("source_name", "") or s.get("title", "")[:40])}</a>'
             for s in story["sources"] if s.get("url")
@@ -323,7 +326,7 @@ def save_page(
         first_url = story["sources"][0]["url"] if story.get("sources") else "#"
         hot_label = "🔥 " if story.get("count", 0) >= 3 else ""
         stories_html.append(f"""
-  <article>
+  <article id="story-{i}">
     <h2><a href="{first_url}" target="_blank">{hot_label}{_esc(story['story_title'])}</a></h2>
     <p>{_esc(story['summary']).replace(chr(10), '<br>')}</p>
     <p class="meta">{source_links}</p>
