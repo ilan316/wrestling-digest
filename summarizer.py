@@ -1,6 +1,7 @@
 """Summarize story clusters using Claude."""
 from __future__ import annotations
 
+import re
 from typing import Any
 
 import anthropic
@@ -30,7 +31,7 @@ def summarize_cluster(
 
 {cluster_text}
 
-Write your response in exactly this format:
+Write your response in exactly this format (no markdown, no bold, no asterisks):
 TL;DR: <3-4 sentence summary with enough context to understand the full story>
 
 <full article — complete, well-structured, multiple paragraphs>
@@ -40,7 +41,8 @@ Rules for the full article:
 - Remove only pure duplicate sentences
 - Do not start with "Summary:" or "Title:" — just write the article directly
 - Do not mention website/source names in the body
-- If the excerpt is incomplete, summarize what is available — do not ask for more content"""
+- If the excerpt is incomplete, summarize what is available — do not ask for more content
+- Do not use markdown formatting (no **, no --, no ##)"""
 
     client = anthropic.Anthropic(api_key=api_key)
     message = client.messages.create(
@@ -79,17 +81,13 @@ def summarize_all(
             print(f"[summarizer] Error: {e}")
             raw = cluster[0].get("summary", "") or "(סיכום לא זמין)"
 
-        # Parse TL;DR block — everything before the first blank line
+        # Parse TL;DR block — handle plain "TL;DR:" or markdown "**TL;DR:**"
         tldr = ""
         summary = raw
-        if raw.startswith("TL;DR:"):
-            blank = raw.find("\n\n")
-            if blank != -1:
-                tldr = raw[:blank].replace("TL;DR:", "").strip()
-                summary = raw[blank:].strip()
-            else:
-                tldr = raw.replace("TL;DR:", "").strip()
-                summary = ""
+        m = re.match(r'^\*{0,2}TL;DR:\*{0,2}\s*(.*?)(?:\n\n|\n---|\Z)(.*)', raw, re.DOTALL)
+        if m:
+            tldr = m.group(1).strip()
+            summary = m.group(2).strip()
 
         results.append({
             "story_title": story_title,
