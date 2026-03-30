@@ -290,7 +290,7 @@ _PAGE_STYLE = """
   .hdr { background: #1a1a2e; color: #fff; padding: 24px; border-radius: 8px; margin-bottom: 32px; }
   .hdr h1 { color: #fff; border: none; margin: 0; font-size: 20px; }
   .hdr p { margin: 4px 0 0; opacity: .7; font-size: 13px; }
-  .executive { background: #f0f4ff; border-left: 4px solid #4a6cf7; padding: 14px 16px; margin-bottom: 28px; border-radius: 4px; font-size: 14px; }
+  .executive { background: #f0f4ff; border-left: 4px solid #4a6cf7; padding: 14px 16px; margin-bottom: 28px; border-radius: 4px; font-size: 16px; }
   .executive strong { display: block; margin-bottom: 6px; color: #1a1a2e; }
   .executive ul li { margin-bottom: 12px; }
   .tldr { font-size: 13px; font-style: italic; color: #555; border-left: 3px solid #ccc; padding-left: 10px; margin: 6px 0 10px; }
