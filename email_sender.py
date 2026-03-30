@@ -294,6 +294,8 @@ _PAGE_STYLE = """
   .executive strong { display: block; margin-bottom: 6px; color: #1a1a2e; }
   .executive ul li { margin-bottom: 12px; }
   .tldr { font-size: 13px; font-style: italic; color: #555; border-left: 3px solid #ccc; padding-left: 10px; margin: 6px 0 10px; }
+  #back-to-top { position: fixed; bottom: 28px; right: 24px; background: #1a1a2e; color: #fff; border: none; border-radius: 50%; width: 44px; height: 44px; font-size: 20px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; text-decoration: none; }
+  #back-to-top:hover { background: #2d2d5e; }
 """
 
 BASE_PAGES_URL = "https://ilan316.github.io/wrestling-digest/"
@@ -341,6 +343,8 @@ def save_page(
 <style>{_PAGE_STYLE}</style>
 </head>
 <body>
+<a id="top"></a>
+<a id="back-to-top" href="#top" title="Back to top">↑</a>
 <div class="hdr">
   <h1>{emoji} {_esc(label)}</h1>
   <p>{date_str} &nbsp;·&nbsp; {len(digest)} stories</p>
