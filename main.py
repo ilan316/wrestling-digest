@@ -44,13 +44,10 @@ def check_blackout(promotion: str) -> tuple[bool, str]:
         except ValueError:
             continue
         blackout_hours = event.get("blackout_hours", 48)
-        # Blackout starts at 00:00 on event_date
+        # Blackout starts at 00:00 on event_date, ends exactly blackout_hours later
+        # e.g. 48h: 04/04 00:00 → 06/04 00:00 (blocks 04/04 and 05/04 evening emails)
         blackout_start = datetime(event_date.year, event_date.month, event_date.day, 0, 0)
-        # Blackout ends at 20:00 — (blackout_hours//24 - 1) days after event_date
-        # 24h → same day at 20:00 (20 hours total)
-        # 48h → next day at 20:00 (44 hours total)
-        offset_days = blackout_hours // 24 - 1
-        blackout_end = datetime(event_date.year, event_date.month, event_date.day, 20, 0) + timedelta(days=offset_days)
+        blackout_end = blackout_start + timedelta(hours=blackout_hours)
         if blackout_start <= now < blackout_end:
             return True, event["name"]
     return False, ""
