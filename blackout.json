@@ -1,26 +1,14 @@
 [
   {
-    "name": "WWE EVOLVE #54",
-    "date": "2026-04-01",
-    "promotion": "WWE",
-    "blackout_hours": 48
-  },
-  {
-    "name": "WWE NXT Stand & Deliver 2026",
-    "date": "2026-04-04",
-    "promotion": "WWE",
-    "blackout_hours": 48
-  },
-  {
     "name": "AEW Dynasty 2026",
     "date": "2026-04-12",
     "promotion": "AEW",
     "blackout_hours": 48
   },
   {
-    "name": "WWE EVOLVE #56",
-    "date": "2026-04-15",
-    "promotion": "WWE",
+    "name": "AEW Dynasty 2026 - Zero Hour",
+    "date": "2026-04-12",
+    "promotion": "AEW",
     "blackout_hours": 48
   },
   {
@@ -86,6 +74,24 @@
   {
     "name": "WWE European Summer Tour 2026",
     "date": "2026-06-07",
+    "promotion": "WWE",
+    "blackout_hours": 48
+  },
+  {
+    "name": "WWE Saturday Night's Main Event #45",
+    "date": "2026-07-18",
+    "promotion": "WWE",
+    "blackout_hours": 48
+  },
+  {
+    "name": "WWE SummerSlam 2026 - Saturday",
+    "date": "2026-08-01",
+    "promotion": "WWE",
+    "blackout_hours": 48
+  },
+  {
+    "name": "WWE SummerSlam 2026 - Sunday",
+    "date": "2026-08-02",
     "promotion": "WWE",
     "blackout_hours": 48
   }
