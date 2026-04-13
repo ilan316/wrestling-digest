@@ -42,6 +42,12 @@
     "blackout_hours": 48
   },
   {
+    "name": "WWE European Summer Tour 2026",
+    "date": "2026-05-28",
+    "promotion": "WWE",
+    "blackout_hours": 48
+  },
+  {
     "name": "WWE Clash In Italy",
     "date": "2026-05-31",
     "promotion": "WWE",
@@ -74,6 +80,18 @@
   {
     "name": "WWE European Summer Tour 2026",
     "date": "2026-06-07",
+    "promotion": "WWE",
+    "blackout_hours": 48
+  },
+  {
+    "name": "WWE European Summer Tour 2026",
+    "date": "2026-06-20",
+    "promotion": "WWE",
+    "blackout_hours": 48
+  },
+  {
+    "name": "WWE European Summer Tour 2026",
+    "date": "2026-06-21",
     "promotion": "WWE",
     "blackout_hours": 48
   },
