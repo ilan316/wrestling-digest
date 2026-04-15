@@ -10,20 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  check-time:
-    runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
-    steps:
-      - id: check
-        run: |
-          HOUR=$(TZ="Asia/Jerusalem" date +%H)
-          echo "Israel hour: $HOUR"
-          [ "$HOUR" = "08" ] && echo "should_run=true" >> $GITHUB_OUTPUT || echo "should_run=false" >> $GITHUB_OUTPUT
-
   run:
-    needs: check-time
-    if: needs.check-time.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
