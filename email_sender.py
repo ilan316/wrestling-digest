@@ -154,14 +154,16 @@ _HTML_TEMPLATE = """\
     margin-right: 6px;
     vertical-align: middle;
   }}
-  .promo-badge {{
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 12px;
-    margin-right: 6px;
-    vertical-align: middle;
+  .section-header {{
+    margin: 28px 0 4px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: .4px;
+  }}
+  .section-header:first-child {{
+    margin-top: 0;
   }}
   .footer {{
     background: #f9f9f9;
@@ -213,18 +215,28 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date
     )
     executive_html = f'<div class="executive"><strong>TL;DR</strong><ul>{bullets}</ul></div>' if bullets else ""
 
-    _PROMO_STYLE = {
-        "AEW":   ("🔶 AEW",   "#fff3e0", "#e65100"),
-        "WWE":   ("🔴 WWE",   "#fce8e8", "#c62828"),
-        "Other": ("🤼 Other", "#e8f5e9", "#2e7d32"),
-    }
+    _PROMO_SECTIONS = [
+        ("AEW",   "🔶 AEW News",             "#fff3e0", "#e65100"),
+        ("WWE",   "🔴 WWE News",             "#fce8e8", "#c62828"),
+        ("Other", "🤼 Other Wrestling News",  "#e8f5e9", "#2e7d32"),
+    ]
 
     stories_parts = []
+    current_promo = None
     for i, story in enumerate(digest):
-        promo_label, promo_bg, promo_color = _PROMO_STYLE.get(
-            story.get("promotion", "Other"), _PROMO_STYLE["Other"]
-        )
-        badges = f'<span class="promo-badge" style="background:{promo_bg};color:{promo_color};">{promo_label}</span>'
+        story_promo = story.get("promotion", "Other")
+
+        # Inject section header when promotion changes
+        if story_promo != current_promo:
+            current_promo = story_promo
+            for key, label, bg, color in _PROMO_SECTIONS:
+                if key == story_promo:
+                    stories_parts.append(
+                        f'<div class="section-header" style="background:{bg};color:{color};">{label}</div>'
+                    )
+                    break
+
+        badges = ""
         if story["count"] >= 3:
             badges += '<span class="hot-badge">🔥 HOT</span>'
         if story["count"] >= 2:
