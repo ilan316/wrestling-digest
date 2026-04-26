@@ -95,6 +95,7 @@ def summarize_all(
             "summary": summary,
             "sources": sources,
             "count": len(cluster),
+            "promotion": cluster[0].get("promotion", "Other"),
         })
 
     return results

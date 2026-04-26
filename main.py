@@ -19,6 +19,8 @@ PROMOTIONS = [
     {"key": "Other", "label": "Wrestling Digest",  "emoji": "🤼"},
 ]
 
+PROMO_ORDER = {"AEW": 0, "WWE": 1, "Other": 2}
+
 
 def run() -> None:
     print("=" * 50)
@@ -43,74 +45,80 @@ def run() -> None:
         model=config.CLAUDE_MODEL,
     )
 
-    # 3. Split clusters by promotion
-    by_promo: dict[str, list] = defaultdict(list)
-    for cluster in all_clusters:
-        promo = cluster[0].get("promotion", "Other")
-        by_promo[promo].append(cluster)
-
-    print(f"[main] AEW={len(by_promo['AEW'])}  WWE={len(by_promo['WWE'])}  Other={len(by_promo['Other'])} clusters")
-
-    # 4. For each promotion: filter lookback → summarize → send
-    date_str = datetime.now().strftime("%d/%m")
+    # 3. Filter lookback window
     newer_than_ms = (time.time() - config.LOOKBACK_HOURS * 3600) * 1000
+    all_clusters = [
+        [a for a in cluster if a.get("published", 0) >= newer_than_ms]
+        for cluster in all_clusters
+    ]
+    all_clusters = [c for c in all_clusters if c]
 
+    by_promo: dict[str, int] = defaultdict(int)
+    for cluster in all_clusters:
+        by_promo[cluster[0].get("promotion", "Other")] += 1
+    print(f"[main] AEW={by_promo['AEW']}  WWE={by_promo['WWE']}  Other={by_promo['Other']} clusters")
+
+    if not all_clusters:
+        print("[main] No stories after filtering. Exiting.")
+        return
+
+    # 4. Summarize all clusters together
+    digest = summarizer.summarize_all(
+        clusters=all_clusters,
+        api_key=config.CLAUDE_API_KEY,
+        model=config.CLAUDE_MODEL,
+        min_cluster_size=config.MIN_CLUSTER_SIZE_FOR_SUMMARY,
+    )
+
+    # Sort: AEW → WWE → Other, then by source count descending
+    digest.sort(key=lambda s: (PROMO_ORDER.get(s.get("promotion", "Other"), 2), -s["count"]))
+
+    # Date range across all articles
+    date_str = datetime.now().strftime("%d/%m")
+    all_pub = [
+        a["published"]
+        for cluster in all_clusters
+        for a in cluster
+        if a.get("published")
+    ]
+    if all_pub:
+        date_from = datetime.fromtimestamp(min(all_pub) / 1000).strftime("%d/%m")
+        date_to   = datetime.fromtimestamp(max(all_pub) / 1000).strftime("%d/%m")
+        date_range = date_from if date_from == date_to else f"{date_from} – {date_to}"
+    else:
+        date_range = date_str
+
+    # 5. Save per-promotion GitHub Pages (unchanged)
+    docs_dir = os.path.join(os.path.dirname(__file__), "docs")
+    by_promo_digest: dict[str, list] = defaultdict(list)
+    for story in digest:
+        by_promo_digest[story.get("promotion", "Other")].append(story)
+
+    pages_url = email_sender.BASE_PAGES_URL
     for promo in PROMOTIONS:
         key = promo["key"]
-        print(f"\n{'─' * 40}")
+        promo_digest = by_promo_digest.get(key, [])
+        if promo_digest:
+            pages_url = email_sender.save_page(
+                digest=promo_digest,
+                promo_key=key,
+                label=promo["label"],
+                emoji=promo["emoji"],
+                date_str=date_range,
+                docs_dir=docs_dir,
+            )
 
-        raw_clusters = by_promo.get(key, [])
-        clusters = [
-            [a for a in cluster if a.get("published", 0) >= newer_than_ms]
-            for cluster in raw_clusters
-        ]
-        clusters = [c for c in clusters if c]
-
-        if not clusters:
-            print(f"[{key}] No stories.")
-            continue
-
-        digest = summarizer.summarize_all(
-            clusters=clusters,
-            api_key=config.CLAUDE_API_KEY,
-            model=config.CLAUDE_MODEL,
-            min_cluster_size=config.MIN_CLUSTER_SIZE_FOR_SUMMARY,
-        )
-
-        # Date range across all clusters
-        all_pub = [
-            a["published"]
-            for cluster in clusters
-            for a in cluster
-            if a.get("published")
-        ]
-        if all_pub:
-            date_from = datetime.fromtimestamp(min(all_pub) / 1000).strftime("%d/%m")
-            date_to   = datetime.fromtimestamp(max(all_pub) / 1000).strftime("%d/%m")
-            date_range = date_from if date_from == date_to else f"{date_from} – {date_to}"
-        else:
-            date_range = date_str
-
-        docs_dir = os.path.join(os.path.dirname(__file__), "docs")
-        page_url = email_sender.save_page(
-            digest=digest,
-            promo_key=key,
-            label=promo["label"],
-            emoji=promo["emoji"],
-            date_str=date_range,
-            docs_dir=docs_dir,
-        )
-
-        email_sender.send(
-            digest=digest,
-            gmail_user=config.GMAIL_USER,
-            gmail_app_password=config.GMAIL_APP_PASSWORD,
-            recipient=config.RECIPIENT_EMAIL,
-            title=promo["label"],
-            emoji=promo["emoji"],
-            date_range=date_range,
-            pages_url=page_url,
-        )
+    # 6. Send ONE combined email
+    email_sender.send(
+        digest=digest,
+        gmail_user=config.GMAIL_USER,
+        gmail_app_password=config.GMAIL_APP_PASSWORD,
+        recipient=config.RECIPIENT_EMAIL,
+        title="Wrestling Digest",
+        emoji="🤼",
+        date_range=date_range,
+        pages_url=pages_url,
+    )
 
     print("\n[main] Done.")
 

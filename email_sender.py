@@ -154,6 +154,15 @@ _HTML_TEMPLATE = """\
     margin-right: 6px;
     vertical-align: middle;
   }}
+  .promo-badge {{
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }}
   .footer {{
     background: #f9f9f9;
     text-align: center;
@@ -204,9 +213,18 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date
     )
     executive_html = f'<div class="executive"><strong>TL;DR</strong><ul>{bullets}</ul></div>' if bullets else ""
 
+    _PROMO_STYLE = {
+        "AEW":   ("🔶 AEW",   "#fff3e0", "#e65100"),
+        "WWE":   ("🔴 WWE",   "#fce8e8", "#c62828"),
+        "Other": ("🤼 Other", "#e8f5e9", "#2e7d32"),
+    }
+
     stories_parts = []
     for i, story in enumerate(digest):
-        badges = ""
+        promo_label, promo_bg, promo_color = _PROMO_STYLE.get(
+            story.get("promotion", "Other"), _PROMO_STYLE["Other"]
+        )
+        badges = f'<span class="promo-badge" style="background:{promo_bg};color:{promo_color};">{promo_label}</span>'
         if story["count"] >= 3:
             badges += '<span class="hot-badge">🔥 HOT</span>'
         if story["count"] >= 2:
