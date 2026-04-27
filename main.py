@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import time
-from collections import defaultdict
 from datetime import datetime
 
 import config
@@ -12,12 +11,6 @@ import feedly_client
 import clusterer
 import summarizer
 import email_sender
-
-PROMOTIONS = [
-    {"key": "AEW",   "label": "AEW Digest",       "emoji": "🔶"},
-    {"key": "WWE",   "label": "WWE Digest",        "emoji": "🔴"},
-    {"key": "Other", "label": "Wrestling Digest",  "emoji": "🤼"},
-]
 
 PROMO_ORDER = {"AEW": 0, "WWE": 1, "Other": 2}
 
@@ -88,25 +81,13 @@ def run() -> None:
     else:
         date_range = date_str
 
-    # 5. Save per-promotion GitHub Pages (unchanged)
+    # 5. Save one combined GitHub Pages file
     docs_dir = os.path.join(os.path.dirname(__file__), "docs")
-    by_promo_digest: dict[str, list] = defaultdict(list)
-    for story in digest:
-        by_promo_digest[story.get("promotion", "Other")].append(story)
-
-    pages_url = email_sender.BASE_PAGES_URL
-    for promo in PROMOTIONS:
-        key = promo["key"]
-        promo_digest = by_promo_digest.get(key, [])
-        if promo_digest:
-            pages_url = email_sender.save_page(
-                digest=promo_digest,
-                promo_key=key,
-                label=promo["label"],
-                emoji=promo["emoji"],
-                date_str=date_range,
-                docs_dir=docs_dir,
-            )
+    pages_url = email_sender.save_combined_page(
+        digest=digest,
+        date_str=date_range,
+        docs_dir=docs_dir,
+    )
 
     # 6. Send ONE combined email
     email_sender.send(
