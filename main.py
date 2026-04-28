@@ -46,10 +46,11 @@ def run() -> None:
     ]
     all_clusters = [c for c in all_clusters if c]
 
-    by_promo: dict[str, int] = defaultdict(int)
+    by_promo: dict[str, int] = {}
     for cluster in all_clusters:
-        by_promo[cluster[0].get("promotion", "Other")] += 1
-    print(f"[main] AEW={by_promo['AEW']}  WWE={by_promo['WWE']}  Other={by_promo['Other']} clusters")
+        key = cluster[0].get("promotion", "Other")
+        by_promo[key] = by_promo.get(key, 0) + 1
+    print(f"[main] AEW={by_promo.get('AEW', 0)}  WWE={by_promo.get('WWE', 0)}  Other={by_promo.get('Other', 0)} clusters")
 
     if not all_clusters:
         print("[main] No stories after filtering. Exiting.")
