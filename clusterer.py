@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import time
 from typing import Any
 
 import anthropic
@@ -47,17 +48,27 @@ Articles:
 {article_list}"""
 
     client = anthropic.Anthropic(api_key=api_key)
-    try:
-        message = client.messages.create(
-            model=model,
-            max_tokens=8192,
-            messages=[{"role": "user", "content": prompt}],
-        )
-    except Exception as e:
-        print(f"[clusterer] Claude API error: {e}")
-        return [[a] for a in articles]
+    raw = None
+    for attempt in range(4):
+        try:
+            message = client.messages.create(
+                model=model,
+                max_tokens=8192,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            raw = message.content[0].text.strip()
+            break
+        except anthropic.OverloadedError as e:
+            wait = 30 * (2 ** attempt)
+            print(f"[clusterer] Claude overloaded (attempt {attempt+1}/4), retrying in {wait}s...")
+            time.sleep(wait)
+        except Exception as e:
+            print(f"[clusterer] Claude API error: {e}")
+            return [[a] for a in articles]
 
-    raw = message.content[0].text.strip()
+    if raw is None:
+        print("[clusterer] Claude still overloaded after retries — falling back to solo clusters")
+        return [[a] for a in articles]
 
     # Parse JSON — Claude sometimes wraps in ```json ... ```
     if raw.startswith("```"):
