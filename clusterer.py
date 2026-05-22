@@ -47,11 +47,15 @@ Articles:
 {article_list}"""
 
     client = anthropic.Anthropic(api_key=api_key)
-    message = client.messages.create(
-        model=model,
-        max_tokens=8192,
-        messages=[{"role": "user", "content": prompt}],
-    )
+    try:
+        message = client.messages.create(
+            model=model,
+            max_tokens=8192,
+            messages=[{"role": "user", "content": prompt}],
+        )
+    except Exception as e:
+        print(f"[clusterer] Claude API error: {e}")
+        return [[a] for a in articles]
 
     raw = message.content[0].text.strip()
 
