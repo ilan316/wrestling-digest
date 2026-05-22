@@ -325,6 +325,26 @@ def send(
     print(f"[email] Sent digest to {recipient} — {len(digest)} stories")
 
 
+def send_error(
+    gmail_user: str,
+    gmail_app_password: str,
+    recipient: str,
+    subject: str,
+    body: str,
+) -> None:
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = gmail_user
+    msg["To"] = recipient
+    msg.attach(MIMEText(body, "plain", "utf-8"))
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(gmail_user, gmail_app_password)
+        server.sendmail(gmail_user, recipient, msg.as_string())
+    print(f"[email] Sent error notification to {recipient}")
+
+
 _PAGE_STYLE = """
   body { font-family: Georgia, serif; max-width: 720px; margin: 40px auto; padding: 0 20px; color: #222; line-height: 1.7; }
   h1 { font-size: 22px; border-bottom: 2px solid #eee; padding-bottom: 8px; margin-top: 32px; }

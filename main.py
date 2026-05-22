@@ -105,5 +105,28 @@ def run() -> None:
     print("\n[main] Done.")
 
 
+def _send_error_email(subject: str, body: str) -> None:
+    try:
+        email_sender.send_error(
+            gmail_user=config.GMAIL_USER,
+            gmail_app_password=config.GMAIL_APP_PASSWORD,
+            recipient=config.RECIPIENT_EMAIL,
+            subject=subject,
+            body=body,
+        )
+    except Exception as e:
+        print(f"[main] Failed to send error email: {e}")
+
+
 if __name__ == "__main__":
-    run()
+    import traceback
+    try:
+        run()
+    except Exception:
+        tb = traceback.format_exc()
+        print(tb)
+        _send_error_email(
+            subject="⚠️ Wrestling Digest — Pipeline Error",
+            body=f"The wrestling digest pipeline failed.\n\n{tb}",
+        )
+        raise
