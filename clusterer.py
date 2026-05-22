@@ -58,7 +58,10 @@ Articles:
             )
             raw = message.content[0].text.strip()
             break
-        except anthropic.OverloadedError as e:
+        except anthropic.APIStatusError as e:
+            if e.status_code != 529:
+                print(f"[clusterer] Claude API error {e.status_code}: {e}")
+                return [[a] for a in articles]
             wait = 30 * (2 ** attempt)
             print(f"[clusterer] Claude overloaded (attempt {attempt+1}/4), retrying in {wait}s...")
             time.sleep(wait)
