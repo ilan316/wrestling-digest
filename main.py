@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import time
 from datetime import datetime
 
 import config
@@ -38,14 +37,7 @@ def run() -> None:
         model=config.CLAUDE_MODEL,
     )
 
-    # 3. Filter lookback window
-    newer_than_ms = (time.time() - config.LOOKBACK_HOURS * 3600) * 1000
-    all_clusters = [
-        [a for a in cluster if a.get("published", 0) >= newer_than_ms]
-        for cluster in all_clusters
-    ]
-    all_clusters = [c for c in all_clusters if c]
-
+    # 3. Tally clusters by promotion (articles are already lookback-filtered in fetch_all)
     by_promo: dict[str, int] = {}
     for cluster in all_clusters:
         key = cluster[0].get("promotion", "Other")
@@ -61,7 +53,6 @@ def run() -> None:
         clusters=all_clusters,
         api_key=config.CLAUDE_API_KEY,
         model=config.CLAUDE_MODEL,
-        min_cluster_size=config.MIN_CLUSTER_SIZE_FOR_SUMMARY,
     )
 
     # Sort: AEW → WWE → Other, then by source count descending

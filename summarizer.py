@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import re
+import time
 from typing import Any
 
 import anthropic
@@ -45,19 +46,27 @@ Rules for the full article:
 - Do not use markdown formatting (no **, no --, no ##)"""
 
     client = anthropic.Anthropic(api_key=api_key)
-    message = client.messages.create(
-        model=model,
-        max_tokens=4096,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    return message.content[0].text.strip()
+    for attempt in range(4):
+        try:
+            message = client.messages.create(
+                model=model,
+                max_tokens=4096,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            return message.content[0].text.strip()
+        except anthropic.APIStatusError as e:
+            if e.status_code != 529 or attempt == 3:
+                raise
+            wait = 30 * (2 ** attempt)
+            print(f"[summarizer] Claude overloaded (attempt {attempt+1}/4), retrying in {wait}s...")
+            time.sleep(wait)
+    raise RuntimeError("unreachable")  # loop either returns or raises
 
 
 def summarize_all(
     clusters: list[list[dict[str, Any]]],
     api_key: str,
     model: str,
-    min_cluster_size: int,
 ) -> list[dict[str, Any]]:
     """
     For each cluster produce:

@@ -1,9 +1,11 @@
 """OPML parser + RSS feed fetcher (replaces Feedly API)."""
 from __future__ import annotations
 
+import calendar
 import html
 import re
 import time
+import urllib.request
 import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
@@ -18,6 +20,11 @@ SCRAPE_FEEDS = {
     "wrestletalk.com",
     "pwmania.com",
 }
+
+# Network timeout for fetching a single feed (seconds). Without this, a slow
+# or hung feed can block a worker thread indefinitely.
+FEED_TIMEOUT = 20
+_USER_AGENT = "Mozilla/5.0 (compatible; WrestlingDigest/1.0)"
 
 
 def _fetch_full_text(url: str) -> str:
@@ -69,17 +76,22 @@ def _clean_html(text: str) -> str:
 def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]:
     """Fetch a single RSS feed and return articles newer than the timestamp."""
     try:
-        parsed = feedparser.parse(feed["xmlUrl"])
+        req = urllib.request.Request(feed["xmlUrl"], headers={"User-Agent": _USER_AGENT})
+        with urllib.request.urlopen(req, timeout=FEED_TIMEOUT) as resp:
+            raw = resp.read()
+        parsed = feedparser.parse(raw)
     except Exception as e:
         print(f"[rss] Error fetching {feed['xmlUrl']}: {e}")
         return []
 
     articles = []
     for entry in parsed.entries:
-        # Get publish time
+        # Get publish time. feedparser returns *_parsed as a UTC struct_time,
+        # so use calendar.timegm (UTC), NOT time.mktime (local time) — otherwise
+        # the lookback window is off by the local UTC offset.
         pub_struct = entry.get("published_parsed") or entry.get("updated_parsed")
         if pub_struct:
-            pub_ts = time.mktime(pub_struct)
+            pub_ts = calendar.timegm(pub_struct)
         else:
             pub_ts = time.time()  # treat as now if no date
 

@@ -34,6 +34,3 @@ RECIPIENT_EMAIL: str = os.getenv("RECIPIENT_EMAIL", "") or GMAIL_USER
 
 # How many hours back to fetch articles
 LOOKBACK_HOURS: int = int(os.getenv("LOOKBACK_HOURS", "24"))
-
-# Minimum articles in a cluster to trigger AI summarization
-MIN_CLUSTER_SIZE_FOR_SUMMARY: int = 2
