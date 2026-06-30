@@ -2,7 +2,10 @@ name: Wrestling Digest
 
 on:
   schedule:
-    - cron: "0 5 * * *"   # 08:00 Israel time (UTC+3, summer — change to 0 6 in October)
+    # 04:43 UTC = 07:43 Israel (summer, UTC+3). Off-the-hour minute (:43) to avoid
+    # GitHub Actions' top-of-hour congestion, which can delay scheduled runs by 1-2h.
+    # In winter (UTC+2) this becomes 06:43 Israel — change to "43 5 * * *" in October.
+    - cron: "43 4 * * *"
   workflow_dispatch:       # manual trigger from GitHub UI
 
 permissions:
