@@ -309,7 +309,7 @@ def send(
 
     date_str = date_range or datetime.now().strftime("%d/%m")
     html_body = _build_html(digest, title=f"{emoji} {title}", date_str=date_str, pages_url=pages_url)
-    subject = f"[feedly-digest] {emoji} {title} | {date_str} ({len(digest)} stories)"
+    subject = f"Wrestling News | {date_str} ({len(digest)} stories)"
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
