@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import config
 import feedly_client
@@ -18,6 +19,23 @@ def run() -> None:
     print("=" * 50)
     print("Feedly Daily Digest Agent")
     print("=" * 50)
+
+    # DST-proof scheduling guard. GitHub Actions cron is UTC-only, so run.yml fires
+    # at both 04:43 and 05:43 UTC and we let the run that lands on ~07:xx Israel time
+    # do the work — no manual cron edits at DST changeovers. Delay-tolerant: a late
+    # run only lands *later* than 07:00 (still >= 7), never earlier, so a day is
+    # never silently dropped. Manual workflow_dispatch bypasses the guard entirely.
+    docs_dir = os.path.join(os.path.dirname(__file__), "docs")
+    manual = os.getenv("GITHUB_EVENT_NAME") == "workflow_dispatch"
+    if not manual:
+        il_now = datetime.now(ZoneInfo("Asia/Jerusalem"))
+        if il_now.hour < 7:
+            print(f"[main] Israel time {il_now:%H:%M} is before 07:00 — the other scheduled run will send. Skipping.")
+            return
+        today_file = os.path.join(docs_dir, f"{il_now:%Y-%m-%d}-digest.html")
+        if os.path.exists(today_file):
+            print(f"[main] Digest for {il_now:%Y-%m-%d} already sent — skipping duplicate run.")
+            return
 
     # 1. Fetch all articles
     articles = feedly_client.fetch_all(
@@ -74,7 +92,6 @@ def run() -> None:
         date_range = date_str
 
     # 5. Save one combined GitHub Pages file
-    docs_dir = os.path.join(os.path.dirname(__file__), "docs")
     pages_url = email_sender.save_combined_page(
         digest=digest,
         date_str=date_range,
