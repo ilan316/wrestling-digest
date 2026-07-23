@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import re
 import smtplib
 import ssl
 from datetime import datetime
@@ -193,7 +194,7 @@ _HTML_TEMPLATE = """\
     {executive_html}
     {stories_html}
   </div>
-  <div class="footer">Generated automatically by Feedly Digest Agent</div>
+  <div class="footer">Generated automatically by Wrestling Digest</div>
 </div>
 </body>
 </html>
@@ -211,7 +212,7 @@ _STORY_TEMPLATE = """\
 """
 
 
-def _build_html(digest: list[dict[str, Any]], title: str = "Feedly Digest", date_str: str = "", pages_url: str = "") -> str:
+def _build_html(digest: list[dict[str, Any]], title: str = "Wrestling Digest", date_str: str = "", pages_url: str = "") -> str:
     date_str = date_str or datetime.now().strftime("%d/%m")
     total_articles = sum(s["count"] for s in digest)
 
@@ -298,7 +299,7 @@ def send(
     gmail_user: str,
     gmail_app_password: str,
     recipient: str,
-    title: str = "Feedly Digest",
+    title: str = "Wrestling Digest",
     emoji: str = "📰",
     date_range: str = "",
     pages_url: str = "",
@@ -451,13 +452,17 @@ def save_combined_page(
     with open(fpath, "w", encoding="utf-8") as f:
         f.write(page_html)
 
-    # Delete old combined digest files older than 10 days
+    # Delete old digest files older than 10 days. Matches ANY date-prefixed html
+    # (both the current "-digest.html" and the legacy "-aew/-wwe/-other.html"
+    # per-promotion format) so obsolete files don't accumulate forever.
     cutoff = datetime.now() - timedelta(days=10)
+    date_re = re.compile(r"^(\d{4}-\d{2}-\d{2})-.*\.html$")
     for old in os.listdir(docs_dir):
-        if not old.endswith("-digest.html"):
+        m = date_re.match(old)
+        if not m:
             continue
         try:
-            file_date = datetime.strptime(old.replace("-digest.html", ""), "%Y-%m-%d")
+            file_date = datetime.strptime(m.group(1), "%Y-%m-%d")
             if file_date < cutoff:
                 os.remove(os.path.join(docs_dir, old))
                 print(f"[page] Deleted old file: {old}")

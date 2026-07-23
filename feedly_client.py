@@ -28,16 +28,26 @@ _USER_AGENT = "Mozilla/5.0 (compatible; WrestlingDigest/1.0)"
 
 
 def _fetch_full_text(url: str) -> str:
-    """Fetch and extract full article text using trafilatura."""
+    """Fetch and extract full article text. Uses our own urllib download so the
+    request honors FEED_TIMEOUT — trafilatura.fetch_url has no timeout we control
+    and a slow page could hang a worker thread indefinitely."""
     try:
-        downloaded = trafilatura.fetch_url(url)
-        if downloaded:
-            text = trafilatura.extract(downloaded, include_comments=False, include_tables=False)
-            if text:
-                return text.strip()
+        req = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT})
+        with urllib.request.urlopen(req, timeout=FEED_TIMEOUT) as resp:
+            downloaded = resp.read()
+        text = trafilatura.extract(downloaded, include_comments=False, include_tables=False)
+        if text:
+            return text.strip()
     except Exception:
         pass
     return ""
+
+
+# Off-topic / spoiler-type titles to skip. Word-boundary match (not substring) so
+# "report"/"rumor" no longer nuke legitimate news — those are core wrestling genres.
+_SKIP_RE = re.compile(
+    r"\b(SPOILERS?|RESULTS|HIGHLIGHTS|PREVIEW|RECAP|WINNERS|RATINGS|REVIEW|UFC|MMA)\b"
+)
 
 
 def parse_opml(opml_path: str) -> dict[str, list[dict[str, str]]]:
@@ -99,12 +109,14 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
             continue
 
         title = html.unescape(entry.get("title", "(no title)"))
-        title_upper = title.upper()
-        if any(kw in title_upper for kw in ("SPOILER", "RESULTS", "HIGHLIGHTS", "REPORT", "PREVIEW", "RECAP", "WINNERS", "RATINGS", "REVIEW", "UFC", "RUMOR", "MMA")):
+        if _SKIP_RE.search(title.upper()):
             continue
 
         rss_summary_raw = entry.get("summary", "")
-        rss_content_raw = entry.get("content", [{}])[0].get("value", "")
+        # entry["content"] may be absent OR present-but-empty ([]) — guard both,
+        # otherwise [0] raises IndexError and crashes the whole pipeline.
+        content_list = entry.get("content") or [{}]
+        rss_content_raw = content_list[0].get("value", "")
         # Prefer content over summary when content is significantly longer
         best_raw = rss_content_raw if len(rss_content_raw) > len(rss_summary_raw) * 1.5 else rss_summary_raw
         rss_summary = _clean_html(best_raw)

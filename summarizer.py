@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import re
 import time
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 import anthropic
@@ -72,9 +73,23 @@ def summarize_all(
     For each cluster produce:
       {story_title, summary, sources: [{title, url, source_name}], count}
     """
-    results = []
-    for cluster in clusters:
+    def _summarize_one(cluster: list[dict[str, Any]]) -> str:
         story_title: str = cluster[0].get("_story_title", cluster[0]["title"])
+        print(f"[summarizer] Summarizing: {story_title!r} ({len(cluster)} articles)")
+        try:
+            return summarize_cluster(cluster, story_title, api_key, model)
+        except Exception as e:
+            print(f"[summarizer] Error: {e}")
+            return cluster[0].get("summary", "") or "(סיכום לא זמין)"
+
+    # Each cluster is an independent Claude call — run them in parallel instead of
+    # serially. ThreadPoolExecutor.map preserves input order, so results still align.
+    with ThreadPoolExecutor(max_workers=6) as executor:
+        raws = list(executor.map(_summarize_one, clusters))
+
+    results = []
+    for cluster, raw in zip(clusters, raws):
+        story_title = cluster[0].get("_story_title", cluster[0]["title"])
         seen_sources: set[str] = set()
         sources = []
         for a in cluster:
@@ -82,13 +97,6 @@ def summarize_all(
             if name not in seen_sources:
                 seen_sources.add(name)
                 sources.append({"title": a["title"], "url": a["url"], "source_name": name})
-
-        print(f"[summarizer] Summarizing: {story_title!r} ({len(cluster)} articles)")
-        try:
-            raw = summarize_cluster(cluster, story_title, api_key, model)
-        except Exception as e:
-            print(f"[summarizer] Error: {e}")
-            raw = cluster[0].get("summary", "") or "(סיכום לא זמין)"
 
         # Parse TL;DR block — handle plain "TL;DR:" or markdown "**TL;DR:**"
         tldr = ""

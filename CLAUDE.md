@@ -1,11 +1,11 @@
 # wrestling-digest
 
 ## תיאור
-מערכת יומית לאיסוף חדשות פלחון מ-RSS feeds, קיבוץ לפי נושא דרך Claude, וסיכום מפורט לפי promotion (AEW/WWE/Other). נשלח כאימייל HTML בכל בוקר (יעד: 08:00 שעון ישראל).
+מערכת יומית לאיסוף חדשות פלחון מ-RSS feeds, קיבוץ לפי נושא דרך Claude, וסיכום מפורט לפי promotion (AEW/WWE/Other). נשלח כאימייל HTML בכל בוקר (יעד: ~07:43 שעון ישראל).
 
 ## טכנולוגיות
 - **שפה:** Python 3.11+
-- **AI:** Claude API (claude-sonnet-4-6)
+- **AI:** Claude API (claude-haiku-4-5)
 - **feeds:** RSS via feedparser + OPML
 - **Email:** Gmail SMTP (App Password)
 - **Scheduler:** GitHub Actions (cron) + Windows Task Scheduler (מקומי)
@@ -29,9 +29,7 @@ LOOKBACK_HOURS=24
 - `feedly_client.py` — קריאת OPML + RSS fetch מקביל
 - `clusterer.py` — קיבוץ כתבות דרך Claude
 - `summarizer.py` — סיכום מפורט לפי cluster
-- `email_sender.py` — שליחת HTML email
-- `blackout.py` / `blackout.json` — חסימה בזמן אירועים חיים
-- `update_blackout.py` — עדכון אוטומטי מ-cagematch.net
+- `email_sender.py` — שליחת HTML email + יצירת עמוד GitHub Pages משולב
 
 ## כללי עבודה
 1. תמיד Plan Mode לפני שינויים

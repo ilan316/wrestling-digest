@@ -109,8 +109,6 @@ Articles:
         if i not in assigned:
             a = dict(article)
             a["_story_title"] = article["title"]
-            if "_story_title" not in a or not a["_story_title"]:
-                a["_story_title"] = article["title"]
             clusters.append([a])
 
     # Sort clusters: largest first
