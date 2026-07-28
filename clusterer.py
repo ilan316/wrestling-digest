@@ -133,6 +133,13 @@ Articles:
     return clusters
 
 
+def _norm_headline(s: str) -> str:
+    """Key for matching a cited headline back to history. Claude retypes headlines
+    rather than copying them byte-for-byte, so case and smart quotes must not count."""
+    s = s.translate(str.maketrans({"‘": "'", "’": "'", "“": '"', "”": '"'}))
+    return " ".join(s.split()).casefold()
+
+
 def _cluster_digest_line(idx: int, cluster: list[dict[str, Any]]) -> str:
     """One prompt line per cluster: story title + article titles + a content taste."""
     story_title = cluster[0].get("_story_title", cluster[0]["title"])
@@ -219,7 +226,7 @@ Return ONLY valid JSON (no markdown, no explanation), one object per story index
     current_headline = None
     for line in history_block.splitlines():
         if line.startswith("["):
-            current_headline = line.split("] ", 1)[-1].strip()
+            current_headline = _norm_headline(line.split("] ", 1)[-1])
             known_headlines.add(current_headline)
         elif current_headline and line.strip():
             prev_tldr_by_headline.setdefault(current_headline, line.strip())
@@ -236,10 +243,11 @@ Return ONLY valid JSON (no markdown, no explanation), one object per story index
         status = str(verdict.get("status", "NEW")).upper()
         story_title = cluster[0].get("_story_title", cluster[0]["title"])
         prev_headline = str(verdict.get("prev_headline", "") or "")
+        prev_key = _norm_headline(prev_headline)
 
         # A drop must cite a headline we actually sent. Without this check a
         # hallucinated or paraphrased reference silently deletes real news.
-        if status == "DUPLICATE" and prev_headline not in known_headlines:
+        if status == "DUPLICATE" and prev_key not in known_headlines:
             print(f"[history-filter] Ignoring DUPLICATE for {story_title!r} — "
                   f"unrecognised reference {prev_headline!r}")
             status = "NEW"
@@ -252,7 +260,7 @@ Return ONLY valid JSON (no markdown, no explanation), one object per story index
         if status == "UPDATE":
             updates += 1
             cluster[0]["_is_update"] = True
-            cluster[0]["_prev_tldr"] = prev_tldr_by_headline.get(prev_headline, prev_headline)
+            cluster[0]["_prev_tldr"] = prev_tldr_by_headline.get(prev_key, prev_headline)
             print(f"[history-filter] UPDATE: {story_title!r} ~ {prev_headline!r}")
 
         kept.append(cluster)
