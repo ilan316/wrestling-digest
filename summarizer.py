@@ -25,12 +25,31 @@ def summarize_cluster(
     story_title: str,
     api_key: str,
     model: str,
+    prev_tldr: str = "",
 ) -> str:
-    """Generate a unified Hebrew summary for a cluster of related articles."""
+    """Generate a unified Hebrew summary for a cluster of related articles.
+
+    When `prev_tldr` is set the reader already received this story in an earlier
+    digest, so the summary must cover only what has changed since then.
+    """
     cluster_text = _build_cluster_text(cluster)
 
-    prompt = f"""You are an experienced wrestling news editor. Below are {'multiple articles' if len(cluster) > 1 else 'an article'} covering the story: "{story_title}".
+    if prev_tldr:
+        continuation_block = f"""
+IMPORTANT — the reader ALREADY received this story in a previous digest:
+"{prev_tldr}"
 
+Write only what is NEW since then. Open with at most one short sentence of context, then go
+straight to the new development. Do not re-tell background the reader already has. If most of
+the material below repeats what they already know, keep the whole piece short.
+"""
+        length_rule = "- Cover the new developments fully, but skip anything already covered above"
+    else:
+        continuation_block = ""
+        length_rule = "- Preserve ALL information, details, quotes, and context"
+
+    prompt = f"""You are an experienced wrestling news editor. Below are {'multiple articles' if len(cluster) > 1 else 'an article'} covering the story: "{story_title}".
+{continuation_block}
 {cluster_text}
 
 Write your response in exactly this format (no markdown, no bold, no asterisks):
@@ -39,7 +58,7 @@ TL;DR: <3-4 sentence summary with enough context to understand the full story>
 <full article — complete, well-structured, multiple paragraphs>
 
 Rules for the full article:
-- Preserve ALL information, details, quotes, and context
+{length_rule}
 - Remove only pure duplicate sentences
 - Do not start with "Summary:" or "Title:" — just write the article directly
 - Do not mention website/source names in the body
@@ -75,9 +94,11 @@ def summarize_all(
     """
     def _summarize_one(cluster: list[dict[str, Any]]) -> str:
         story_title: str = cluster[0].get("_story_title", cluster[0]["title"])
-        print(f"[summarizer] Summarizing: {story_title!r} ({len(cluster)} articles)")
+        prev_tldr: str = cluster[0].get("_prev_tldr", "")
+        cont = " [continuation]" if prev_tldr else ""
+        print(f"[summarizer] Summarizing: {story_title!r} ({len(cluster)} articles){cont}")
         try:
-            return summarize_cluster(cluster, story_title, api_key, model)
+            return summarize_cluster(cluster, story_title, api_key, model, prev_tldr=prev_tldr)
         except Exception as e:
             print(f"[summarizer] Error: {e}")
             return cluster[0].get("summary", "") or "(סיכום לא זמין)"
@@ -113,6 +134,7 @@ def summarize_all(
             "sources": sources,
             "count": len(cluster),
             "promotion": cluster[0].get("promotion", "Other"),
+            "is_update": bool(cluster[0].get("_is_update")),
         })
 
     return results

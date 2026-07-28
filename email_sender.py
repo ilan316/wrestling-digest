@@ -162,6 +162,17 @@ _HTML_TEMPLATE = """\
     margin-right: 6px;
     vertical-align: middle;
   }}
+  .update-badge {{
+    display: inline-block;
+    background: #eef1f5;
+    color: #5a6472;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }}
   .section-header {{
     margin: 28px 0 4px;
     padding: 10px 14px;
@@ -254,6 +265,8 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Wrestling Digest", d
                     break
 
         badges = ""
+        if story.get("is_update"):
+            badges += '<span class="update-badge">🔄 המשך</span>'
         if story["count"] >= 3:
             badges += '<span class="hot-badge">🔥 HOT</span>'
         if story["count"] >= 2:
@@ -361,6 +374,7 @@ _PAGE_STYLE = """
   .executive strong { display: block; margin-bottom: 6px; color: #1a1a2e; }
   .executive ul li { margin-bottom: 12px; }
   .tldr { font-size: 13px; font-style: italic; color: #555; border-left: 3px solid #ccc; padding-left: 10px; margin: 6px 0 10px; }
+  .update-badge { display: inline-block; background: #eef1f5; color: #5a6472; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; vertical-align: middle; }
   #back-to-top { position: fixed; bottom: 28px; right: 24px; background: #1a1a2e; color: #fff; border: none; border-radius: 50%; width: 44px; height: 44px; font-size: 20px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; text-decoration: none; }
   #back-to-top:hover { background: #2d2d5e; }
 """
@@ -417,9 +431,12 @@ def save_combined_page(
         )
         first_url = story["sources"][0]["url"] if story.get("sources") else "#"
         hot_label = "🔥 " if story.get("count", 0) >= 3 else ""
+        update_label = (
+            '<span class="update-badge">🔄 המשך</span> ' if story.get("is_update") else ""
+        )
         stories_html.append(f"""
   <article id="story-{i}">
-    <h2><a href="{first_url}" target="_blank">{hot_label}{_esc(story['story_title'])}</a></h2>
+    <h2>{update_label}<a href="{first_url}" target="_blank">{hot_label}{_esc(story['story_title'])}</a></h2>
     <p>{_esc(story['summary']).replace(chr(10), '<br>')}</p>
     <p class="meta">{source_links}</p>
   </article>""")

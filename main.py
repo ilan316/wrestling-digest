@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import sys
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -11,13 +12,14 @@ import feedly_client
 import clusterer
 import summarizer
 import email_sender
+import history
 
 PROMO_ORDER = {"AEW": 0, "WWE": 1, "Other": 2}
 
 
-def run() -> None:
+def run(dry_run: bool = False) -> None:
     print("=" * 50)
-    print("Feedly Daily Digest Agent")
+    print("Feedly Daily Digest Agent" + (" (DRY RUN)" if dry_run else ""))
     print("=" * 50)
 
     # DST-proof scheduling guard. GitHub Actions cron is UTC-only, so run.yml fires
@@ -27,7 +29,7 @@ def run() -> None:
     # never silently dropped. Manual workflow_dispatch bypasses the guard entirely.
     docs_dir = os.path.join(os.path.dirname(__file__), "docs")
     manual = os.getenv("GITHUB_EVENT_NAME") == "workflow_dispatch"
-    if not manual:
+    if not manual and not dry_run:
         il_now = datetime.now(ZoneInfo("Asia/Jerusalem"))
         if il_now.hour < 7:
             print(f"[main] Israel time {il_now:%H:%M} is before 07:00 — the other scheduled run will send. Skipping.")
@@ -55,26 +57,40 @@ def run() -> None:
         model=config.CLAUDE_MODEL,
     )
 
-    # 3. Tally clusters by promotion (articles are already lookback-filtered in fetch_all)
+    # 3. Drop stories we already sent in the last few days. Wrestling sites rehash the
+    # same story daily, so without this the digest repeats itself every morning.
+    # Fails open — on any error every cluster survives.
+    history_entries = history.load(docs_dir)
+    all_clusters = clusterer.filter_against_history(
+        clusters=all_clusters,
+        history_block=history.as_prompt_block(history_entries),
+        api_key=config.CLAUDE_API_KEY,
+        model=config.CLAUDE_MODEL,
+    )
+    if not all_clusters:
+        print("[main] Every story was already sent in a previous digest. Nothing to send.")
+        return
+
+    # 4. Tally clusters by promotion (articles are already lookback-filtered in fetch_all)
     by_promo: dict[str, int] = {}
     for cluster in all_clusters:
         key = cluster[0].get("promotion", "Other")
         by_promo[key] = by_promo.get(key, 0) + 1
     print(f"[main] AEW={by_promo.get('AEW', 0)}  WWE={by_promo.get('WWE', 0)}  Other={by_promo.get('Other', 0)} clusters")
 
-    if not all_clusters:
-        print("[main] No stories after filtering. Exiting.")
-        return
-
-    # 4. Summarize all clusters together
+    # 5. Summarize all clusters together
     digest = summarizer.summarize_all(
         clusters=all_clusters,
         api_key=config.CLAUDE_API_KEY,
         model=config.CLAUDE_MODEL,
     )
 
-    # Sort: AEW → WWE → Other, then by source count descending
-    digest.sort(key=lambda s: (PROMO_ORDER.get(s.get("promotion", "Other"), 2), -s["count"]))
+    # Sort: AEW → WWE → Other, fresh stories before continuations, then by source count
+    digest.sort(key=lambda s: (
+        PROMO_ORDER.get(s.get("promotion", "Other"), 2),
+        bool(s.get("is_update")),
+        -s["count"],
+    ))
 
     # Date range across all articles
     date_str = datetime.now().strftime("%d/%m")
@@ -91,14 +107,25 @@ def run() -> None:
     else:
         date_range = date_str
 
-    # 5. Save one combined GitHub Pages file
+    if dry_run:
+        print("\n[main] DRY RUN — final digest (nothing written, nothing sent):")
+        for s in digest:
+            tag = "🔄 " if s.get("is_update") else "   "
+            print(f"  {tag}[{s.get('promotion', 'Other')}] {s['story_title']} ({s['count']} sources)")
+        print(f"\n[main] {len(digest)} stories would be sent.")
+        return
+
+    # 6. Save one combined GitHub Pages file
     pages_url = email_sender.save_combined_page(
         digest=digest,
         date_str=date_range,
         docs_dir=docs_dir,
     )
 
-    # 6. Send ONE combined email
+    # Record today's stories so tomorrow's run can recognise them as already sent.
+    history.append(docs_dir, datetime.now().strftime("%Y-%m-%d"), digest)
+
+    # 7. Send ONE combined email
     email_sender.send(
         digest=digest,
         gmail_user=config.GMAIL_USER,
@@ -128,13 +155,15 @@ def _send_error_email(subject: str, body: str) -> None:
 
 if __name__ == "__main__":
     import traceback
+    dry = "--dry-run" in sys.argv
     try:
-        run()
+        run(dry_run=dry)
     except Exception:
         tb = traceback.format_exc()
         print(tb)
-        _send_error_email(
-            subject="⚠️ Wrestling Digest — Pipeline Error",
-            body=f"The wrestling digest pipeline failed.\n\n{tb}",
-        )
+        if not dry:
+            _send_error_email(
+                subject="⚠️ Wrestling Digest — Pipeline Error",
+                body=f"The wrestling digest pipeline failed.\n\n{tb}",
+            )
         raise
