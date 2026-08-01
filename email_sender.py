@@ -235,8 +235,9 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Wrestling Digest", d
             update_badge = (
                 '<span class="update-badge">🔄 המשך</span> ' if s.get("is_update") else ""
             )
+            hot_label = "🔥 " if s.get("count", 0) >= 3 else ""
             tldr_by_promo.setdefault(promo, []).append(
-                f'<li>{update_badge}<a href="#story-{i}" style="color:#1a1a2e;text-decoration:none;">{_esc(s["tldr"])}</a></li>'
+                f'<li>{update_badge}<a href="#story-{i}" style="color:#1a1a2e;text-decoration:none;">{hot_label}{_esc(s["tldr"])}</a></li>'
             )
 
     exec_parts = []
@@ -401,8 +402,9 @@ def save_combined_page(
             update_badge = (
                 '<span class="update-badge">🔄 המשך</span> ' if s.get("is_update") else ""
             )
+            hot_label = "🔥 " if s.get("count", 0) >= 3 else ""
             tldr_by_promo.setdefault(promo, []).append(
-                f'<li>{update_badge}<a href="#story-{i}" style="color:#1a1a2e;text-decoration:none;">{_esc(s["tldr"])}</a></li>'
+                f'<li>{update_badge}<a href="#story-{i}" style="color:#1a1a2e;text-decoration:none;">{hot_label}{_esc(s["tldr"])}</a></li>'
             )
 
     exec_parts = []
