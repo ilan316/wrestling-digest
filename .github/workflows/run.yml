@@ -10,6 +10,11 @@ on:
     - cron: "43 4 * * *"
     - cron: "43 5 * * *"
   workflow_dispatch:       # manual trigger from GitHub UI (bypasses the time guard)
+    inputs:
+      dry_run:
+        description: "Dry run — exercise secrets and the model without sending mail or touching docs/"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -35,7 +40,8 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
-        run: python main.py
+        # `inputs` is null on schedule runs, so this collapses to a plain run.
+        run: python main.py ${{ inputs.dry_run && '--dry-run' || '' }}
 
       - name: Publish digest page
         run: |
