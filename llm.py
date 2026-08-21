@@ -52,6 +52,20 @@ def _is_transient(err: Exception) -> bool:
     return any(s in text for s in ("429", "RESOURCE_EXHAUSTED", "503", "UNAVAILABLE", "500", "INTERNAL"))
 
 
+def _thinking_config() -> types.ThinkingConfig:
+    """Keep thinking to a minimum — it is billed against `max_output_tokens`, and
+    left on it returns a 200 with empty text.
+
+    The knob changed names between model generations: 2.5 takes a numeric
+    `thinking_budget` (0 = off), 3.x replaced it with a `thinking_level` enum and
+    rejects `thinking_budget` outright with a bare 400 INVALID_ARGUMENT. 3.x has no
+    "off" level, so LOW is the floor.
+    """
+    if config.GEMINI_MODEL.startswith("gemini-2"):
+        return types.ThinkingConfig(thinking_budget=0)
+    return types.ThinkingConfig(thinking_level="LOW")
+
+
 def generate(prompt: str, max_tokens: int, tag: str) -> str | None:
     """One Gemini call. Returns None on failure — every caller is expected to
     degrade gracefully rather than crash the run."""
@@ -63,9 +77,7 @@ def generate(prompt: str, max_tokens: int, tag: str) -> str | None:
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     max_output_tokens=max_tokens,
-                    # 2.5-flash thinks by default and the thinking tokens come out of
-                    # max_output_tokens — leaving it on returns a 200 with empty text.
-                    thinking_config=types.ThinkingConfig(thinking_budget=0),
+                    thinking_config=_thinking_config(),
                 ),
             )
             text = (response.text or "").strip()

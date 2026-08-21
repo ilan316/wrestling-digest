@@ -5,7 +5,7 @@
 
 ## טכנולוגיות
 - **שפה:** Python 3.11+
-- **AI:** Google Gemini API (`gemini-2.5-flash`, free tier) — כל הקריאות עוברות דרך `llm.py`
+- **AI:** Google Gemini API (`gemini-3.6-flash`, free tier) — כל הקריאות עוברות דרך `llm.py`
 - **feeds:** RSS via feedparser + OPML
 - **Email:** Gmail SMTP (App Password)
 - **Scheduler:** GitHub Actions (cron) + Windows Task Scheduler (מקומי)
@@ -23,7 +23,7 @@ GMAIL_USER=...
 GMAIL_APP_PASSWORD=...
 RECIPIENT_EMAIL=...
 LOOKBACK_HOURS=24
-GEMINI_MODEL=             # אופציונלי, ברירת מחדל gemini-2.5-flash
+GEMINI_MODEL=             # אופציונלי, ברירת מחדל gemini-3.6-flash
 GEMINI_RPM=               # אופציונלי, ברירת מחדל 10 (מגבלת ה-free tier)
 ```
 
@@ -31,9 +31,12 @@ GEMINI_RPM=               # אופציונלי, ברירת מחדל 10 (מגבל
 ה-free tier מוגבל ל-~10 בקשות לדקה, והפייפליין שולח ~62 קריאות ליום.
 `llm.py` מחזיק rate limiter גלובלי (`threading.Lock`) שכל ה-worker threads חולקים —
 ריצה שלמה לוקחת ~7 דקות. ריצה שנגמרת ב-30 שניות = ה-limiter לא עובד.
-כמו כן `thinking_budget=0` הוא **חובה**: ב-2.5-flash ה-thinking דלוק כברירת מחדל
-ואוכל את `max_output_tokens`, והתוצאה היא 200 OK עם טקסט ריק.
-אם מתחילים 429 — אפשר לרדת ל-`gemini-2.5-flash-lite` דרך `GEMINI_MODEL` בלי שינוי קוד.
+כמו כן חובה להשתיק thinking: הוא דלוק כברירת מחדל ואוכל את `max_output_tokens`,
+והתוצאה היא 200 OK עם טקסט ריק. **הכפתור החליף שם בין דורות** — 2.x מקבל
+`thinking_budget=0`, 3.x דוחה אותו ב-400 INVALID_ARGUMENT יבש ודורש
+`thinking_level="LOW"` (אין "off" ב-3.x). `_thinking_config()` ב-llm.py בורר לפי שם המודל.
+`gemini-2.5-flash` **סגור למפתחות חדשים** ("no longer available to new users") — לא לחזור אליו.
+אם מתחילים 429 — אפשר לרדת ל-`gemini-3.5-flash-lite` דרך `GEMINI_MODEL` בלי שינוי קוד.
 
 ## קבצים מרכזיים
 - `main.py` — pipeline ראשי

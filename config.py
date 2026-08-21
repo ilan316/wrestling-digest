@@ -25,7 +25,9 @@ CATEGORIES_FILTER: list[str] = [
 
 # Gemini (Google AI Studio free tier — no billing account attached)
 GEMINI_API_KEY: str = _require("GEMINI_API_KEY")
-GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+# gemini-2.5-flash is closed to new API keys ("no longer available to new users"),
+# so this key can only reach the 3.x line.
+GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
 # Free-tier request cap. Kept as an env var so we can drop to a lighter model /
 # slower rate mid-flight without a code change if 429s start showing up.
 GEMINI_RPM: int = int(os.getenv("GEMINI_RPM", "10"))
