@@ -25,11 +25,23 @@ CATEGORIES_FILTER: list[str] = [
 
 # Gemini (Google AI Studio free tier — no billing account attached)
 GEMINI_API_KEY: str = _require("GEMINI_API_KEY")
-# gemini-2.5-flash is closed to new API keys ("no longer available to new users"),
-# so this key can only reach the 3.x line.
-GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
-# Free-tier request cap. Kept as an env var so we can drop to a lighter model /
-# slower rate mid-flight without a code change if 429s start showing up.
+
+# Two models, split by free-tier *daily* quota rather than by capability.
+#
+# gemini-3.6-flash is the better reasoner but is capped at 20 requests/DAY on the
+# free tier (quotaId GenerateRequestsPerDayPerProjectPerModel-FreeTier). The
+# pipeline issues ~70 requests, so it cannot carry the run — measured the hard way
+# on 2026-08-21, when 9 of 13 summaries fell back to raw excerpts mid-run.
+#
+# The flash-lite line has no daily cap that fires at this volume; its binding
+# limit is 15 requests/MINUTE, which the throttle in llm.py already respects.
+#
+# So: the two structural calls per run (story clustering, history dedup) — where
+# reasoning quality actually decides the shape of the digest — stay on the strong
+# model, comfortably inside 20/day. The ~60 per-story summaries go to lite.
+GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
+GEMINI_MODEL_HEAVY: str = os.getenv("GEMINI_MODEL_HEAVY", "gemini-3.6-flash")
+# Kept below the measured 15/min so a burst never earns a 429.
 GEMINI_RPM: int = int(os.getenv("GEMINI_RPM", "10"))
 
 # Gmail

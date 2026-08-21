@@ -5,7 +5,9 @@
 
 ## טכנולוגיות
 - **שפה:** Python 3.11+
-- **AI:** Google Gemini API (`gemini-3.6-flash`, free tier) — כל הקריאות עוברות דרך `llm.py`
+- **AI:** Google Gemini API (free tier) — כל הקריאות עוברות דרך `llm.py`.
+  **שני מודלים:** `gemini-3.5-flash-lite` לסיכומים (~60 קריאות), `gemini-3.6-flash` לשתי הקריאות
+  המבניות (clusterer + history-filter) דרך `heavy=True`
 - **feeds:** RSS via feedparser + OPML
 - **Email:** Gmail SMTP (App Password)
 - **Scheduler:** GitHub Actions (cron) + Windows Task Scheduler (מקומי)
@@ -23,20 +25,35 @@ GMAIL_USER=...
 GMAIL_APP_PASSWORD=...
 RECIPIENT_EMAIL=...
 LOOKBACK_HOURS=24
-GEMINI_MODEL=             # אופציונלי, ברירת מחדל gemini-3.6-flash
-GEMINI_RPM=               # אופציונלי, ברירת מחדל 10 (מגבלת ה-free tier)
+GEMINI_MODEL=             # אופציונלי, ברירת מחדל gemini-3.5-flash-lite (הסיכומים)
+GEMINI_MODEL_HEAVY=       # אופציונלי, ברירת מחדל gemini-3.6-flash (clusterer + history-filter)
+GEMINI_RPM=               # אופציונלי, ברירת מחדל 10 (מתחת ל-15/דקה שנמדדו)
 ```
 
-## הערה — free tier ומגבלת קצב
-ה-free tier מוגבל ל-~10 בקשות לדקה, והפייפליין שולח ~62 קריאות ליום.
+## הערה — free tier ומגבלות מכסה
+**שתי מגבלות שונות, ואסור לבלבל ביניהן** (נמדדו 21/08/26 מול ה-API):
+
+| מודל | מגבלה חוסמת | ערך |
+|---|---|---|
+| `gemini-3.6-flash` | **PerDay** | **20 בקשות ליום** |
+| `gemini-3.5-flash-lite` | PerMinute | 15 בקשות לדקה (אין תקרה יומית שנדלקת בעומס שלנו) |
+
+הפייפליין שולח ~70 קריאות ליום, אז `gemini-3.6-flash` **לא יכול לשאת את הריצה** — ב-21/08
+9 מתוך 13 הסיכומים נפלו ל-raw excerpt באמצע ריצת פרודקשן. rate limiter לא פותר תקרה יומית.
+לכן הפיצול: הסיכומים ב-lite, ושתי הקריאות המבניות בלבד ב-3.6 דרך `heavy=True`.
+
 `llm.py` מחזיק rate limiter גלובלי (`threading.Lock`) שכל ה-worker threads חולקים —
 ריצה שלמה לוקחת ~7 דקות. ריצה שנגמרת ב-30 שניות = ה-limiter לא עובד.
-כמו כן חובה להשתיק thinking: הוא דלוק כברירת מחדל ואוכל את `max_output_tokens`,
+
+חובה להשתיק thinking: הוא דלוק כברירת מחדל ואוכל את `max_output_tokens`,
 והתוצאה היא 200 OK עם טקסט ריק. **הכפתור החליף שם בין דורות** — 2.x מקבל
 `thinking_budget=0`, 3.x דוחה אותו ב-400 INVALID_ARGUMENT יבש ודורש
 `thinking_level="LOW"` (אין "off" ב-3.x). `_thinking_config()` ב-llm.py בורר לפי שם המודל.
-`gemini-2.5-flash` **סגור למפתחות חדשים** ("no longer available to new users") — לא לחזור אליו.
-אם מתחילים 429 — אפשר לרדת ל-`gemini-3.5-flash-lite` דרך `GEMINI_MODEL` בלי שינוי קוד.
+`gemini-2.5-flash` ו-`gemini-2.5-flash-lite` **סגורים למפתחות חדשים**
+("no longer available to new users") — הם מופיעים ב-`models.list()` אבל 404 ב-`generateContent`.
+
+כל 429 בלוג מדפיס את ה-`quotaId` — אם כתוב `PerDay` הריצה גמורה ואין טעם ב-retry;
+`PerMinute` זה רק האטה.
 
 ## קבצים מרכזיים
 - `main.py` — pipeline ראשי

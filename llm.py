@@ -47,12 +47,23 @@ def _retry_after(err: Exception) -> float | None:
     return float(m.group(1)) if m else None
 
 
+def _quota_hint(err: Exception) -> str:
+    """A one-line reason for the log. Quota 429s carry a `quotaId` naming which
+    ceiling was hit — PerMinute is survivable, PerDay means the run is done."""
+    text = str(err)
+    ids = re.findall(r"'quotaId': '([^']+)'", text)
+    if ids:
+        vals = re.findall(r"'quotaValue': '([^']+)'", text)
+        return ", ".join(f"{i}={v}" for i, v in zip(ids, vals or ["?"] * len(ids)))
+    return text.split("\n")[0][:160]
+
+
 def _is_transient(err: Exception) -> bool:
     text = str(err)
     return any(s in text for s in ("429", "RESOURCE_EXHAUSTED", "503", "UNAVAILABLE", "500", "INTERNAL"))
 
 
-def _thinking_config() -> types.ThinkingConfig:
+def _thinking_config(model: str) -> types.ThinkingConfig:
     """Keep thinking to a minimum — it is billed against `max_output_tokens`, and
     left on it returns a 200 with empty text.
 
@@ -61,23 +72,29 @@ def _thinking_config() -> types.ThinkingConfig:
     rejects `thinking_budget` outright with a bare 400 INVALID_ARGUMENT. 3.x has no
     "off" level, so LOW is the floor.
     """
-    if config.GEMINI_MODEL.startswith("gemini-2"):
+    if model.startswith("gemini-2"):
         return types.ThinkingConfig(thinking_budget=0)
     return types.ThinkingConfig(thinking_level="LOW")
 
 
-def generate(prompt: str, max_tokens: int, tag: str) -> str | None:
+def generate(prompt: str, max_tokens: int, tag: str, heavy: bool = False) -> str | None:
     """One Gemini call. Returns None on failure — every caller is expected to
-    degrade gracefully rather than crash the run."""
+    degrade gracefully rather than crash the run.
+
+    `heavy=True` routes to the stronger model. Reserve it for the handful of
+    structural calls per run: it has a 20/day free-tier ceiling, so anything
+    called once per story must leave it alone. See config.py for the numbers.
+    """
+    model = config.GEMINI_MODEL_HEAVY if heavy else config.GEMINI_MODEL
     for attempt in range(4):
         _throttle()
         try:
             response = _client.models.generate_content(
-                model=config.GEMINI_MODEL,
+                model=model,
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     max_output_tokens=max_tokens,
-                    thinking_config=_thinking_config(),
+                    thinking_config=_thinking_config(model),
                 ),
             )
             text = (response.text or "").strip()
@@ -92,6 +109,13 @@ def generate(prompt: str, max_tokens: int, tag: str) -> str | None:
                 print(f"[{tag}] Gemini API error: {e}")
                 return None
             wait = _retry_after(e) or 20 * (2 ** attempt)
-            print(f"[{tag}] Gemini unavailable (attempt {attempt+1}/4), retrying in {wait:.0f}s...")
+            # Print *why*. Without the quota id here, a daily-cap exhaustion and an
+            # ordinary per-minute 429 look identical in the Actions log — which is
+            # exactly how the 20/day ceiling on the strong model stayed hidden for a
+            # full production run.
+            print(
+                f"[{tag}] Gemini unavailable on {model} (attempt {attempt+1}/4), "
+                f"retrying in {wait:.0f}s — {_quota_hint(e)}"
+            )
             time.sleep(wait)
     return None

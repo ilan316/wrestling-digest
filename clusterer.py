@@ -57,7 +57,8 @@ Return ONLY valid JSON (no markdown, no explanation):
 Articles:
 {article_list}"""
 
-    raw = llm.generate(prompt, max_tokens=8192, tag="clusterer")
+    # One call per run — worth the strong model, and well inside its 20/day.
+    raw = llm.generate(prompt, max_tokens=8192, tag="clusterer", heavy=True)
     if raw is None:
         print("[clusterer] Falling back to solo clusters")
         return [[a] for a in articles]
@@ -176,7 +177,7 @@ Return ONLY valid JSON (no markdown, no explanation), one object per story index
   {{"index": 2, "status": "DUPLICATE", "prev_headline": "Big Cass Return Vignettes"}}
 ]"""
 
-    raw = llm.generate(prompt, max_tokens=8192, tag="history-filter")
+    raw = llm.generate(prompt, max_tokens=8192, tag="history-filter", heavy=True)
     if raw is None:
         print("[history-filter] Skipping dedup — keeping all stories")
         return clusters
