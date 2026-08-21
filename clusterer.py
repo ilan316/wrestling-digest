@@ -1,41 +1,14 @@
-"""Group articles by news story using Claude."""
+"""Group articles by news story using an LLM."""
 from __future__ import annotations
 
 import json
-import time
 from typing import Any
 
-import anthropic
-
-
-def _ask_claude(prompt: str, api_key: str, model: str, max_tokens: int, tag: str) -> str | None:
-    """Single Claude call with the 529-overload backoff. Returns None on failure —
-    callers are expected to fall back to a safe no-op rather than crash the run."""
-    client = anthropic.Anthropic(api_key=api_key)
-    for attempt in range(4):
-        try:
-            message = client.messages.create(
-                model=model,
-                max_tokens=max_tokens,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            return message.content[0].text.strip()
-        except anthropic.APIStatusError as e:
-            if e.status_code != 529:
-                print(f"[{tag}] Claude API error {e.status_code}: {e}")
-                return None
-            wait = 30 * (2 ** attempt)
-            print(f"[{tag}] Claude overloaded (attempt {attempt+1}/4), retrying in {wait}s...")
-            time.sleep(wait)
-        except Exception as e:
-            print(f"[{tag}] Claude API error: {e}")
-            return None
-    print(f"[{tag}] Claude still overloaded after retries")
-    return None
+import llm
 
 
 def _parse_json(raw: str, tag: str) -> Any | None:
-    """Parse a JSON response, stripping the ```json fences Claude sometimes adds."""
+    """Parse a JSON response, stripping the ```json fences the model often adds."""
     if raw.startswith("```"):
         parts = raw.split("```")
         raw = parts[1] if len(parts) > 1 else raw
@@ -49,13 +22,9 @@ def _parse_json(raw: str, tag: str) -> Any | None:
         return None
 
 
-def group_by_story(
-    articles: list[dict[str, Any]],
-    api_key: str,
-    model: str,
-) -> list[list[dict[str, Any]]]:
+def group_by_story(articles: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
     """
-    Use Claude to group articles by the story they cover.
+    Use the LLM to group articles by the story they cover.
     Returns a list of clusters, each cluster is a list of article dicts.
     Articles that don't share a story with anyone else get their own cluster.
     """
@@ -88,7 +57,7 @@ Return ONLY valid JSON (no markdown, no explanation):
 Articles:
 {article_list}"""
 
-    raw = _ask_claude(prompt, api_key, model, max_tokens=8192, tag="clusterer")
+    raw = llm.generate(prompt, max_tokens=8192, tag="clusterer")
     if raw is None:
         print("[clusterer] Falling back to solo clusters")
         return [[a] for a in articles]
@@ -115,7 +84,7 @@ Articles:
         if cluster_articles:
             clusters.append(cluster_articles)
 
-    # Add any articles Claude didn't assign to any group
+    # Add any articles the model didn't assign to any group
     for i, article in enumerate(articles):
         if i not in assigned:
             a = dict(article)
@@ -128,13 +97,13 @@ Articles:
     total = sum(len(c) for c in clusters)
     dropped = len(articles) - len(assigned)
     if dropped:
-        print(f"[clusterer] WARNING: {dropped} articles were not assigned by Claude — added as solo clusters")
+        print(f"[clusterer] WARNING: {dropped} articles were not assigned by the model — added as solo clusters")
     print(f"[clusterer] {len(articles)} articles -> {len(clusters)} story clusters (total mapped: {total})")
     return clusters
 
 
 def _norm_headline(s: str) -> str:
-    """Key for matching a cited headline back to history. Claude retypes headlines
+    """Key for matching a cited headline back to history. The model retypes headlines
     rather than copying them byte-for-byte, so case and smart quotes must not count."""
     s = s.translate(str.maketrans({"‘": "'", "’": "'", "“": '"', "”": '"'}))
     return " ".join(s.split()).casefold()
@@ -154,8 +123,6 @@ def _cluster_digest_line(idx: int, cluster: list[dict[str, Any]]) -> str:
 def filter_against_history(
     clusters: list[list[dict[str, Any]]],
     history_block: str,
-    api_key: str,
-    model: str,
 ) -> list[list[dict[str, Any]]]:
     """Drop clusters that merely rehash a story we already sent, and mark the rest.
 
@@ -209,7 +176,7 @@ Return ONLY valid JSON (no markdown, no explanation), one object per story index
   {{"index": 2, "status": "DUPLICATE", "prev_headline": "Big Cass Return Vignettes"}}
 ]"""
 
-    raw = _ask_claude(prompt, api_key, model, max_tokens=8192, tag="history-filter")
+    raw = llm.generate(prompt, max_tokens=8192, tag="history-filter")
     if raw is None:
         print("[history-filter] Skipping dedup — keeping all stories")
         return clusters

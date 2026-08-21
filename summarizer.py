@@ -1,12 +1,11 @@
-"""Summarize story clusters using Claude."""
+"""Summarize story clusters using an LLM."""
 from __future__ import annotations
 
 import re
-import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
-import anthropic
+import llm
 
 
 def _build_cluster_text(cluster: list[dict[str, Any]]) -> str:
@@ -23,11 +22,11 @@ def _build_cluster_text(cluster: list[dict[str, Any]]) -> str:
 def summarize_cluster(
     cluster: list[dict[str, Any]],
     story_title: str,
-    api_key: str,
-    model: str,
     prev_tldr: str = "",
-) -> str:
-    """Generate a unified Hebrew summary for a cluster of related articles.
+) -> str | None:
+    """Generate a unified summary for a cluster of related articles.
+
+    Returns None if the model call failed — the caller falls back to the raw excerpt.
 
     When `prev_tldr` is set the reader already received this story in an earlier
     digest, so the summary must cover only what has changed since then.
@@ -65,29 +64,10 @@ Rules for the full article:
 - If the excerpt is incomplete, summarize what is available — do not ask for more content
 - Do not use markdown formatting (no **, no --, no ##)"""
 
-    client = anthropic.Anthropic(api_key=api_key)
-    for attempt in range(4):
-        try:
-            message = client.messages.create(
-                model=model,
-                max_tokens=4096,
-                messages=[{"role": "user", "content": prompt}],
-            )
-            return message.content[0].text.strip()
-        except anthropic.APIStatusError as e:
-            if e.status_code != 529 or attempt == 3:
-                raise
-            wait = 30 * (2 ** attempt)
-            print(f"[summarizer] Claude overloaded (attempt {attempt+1}/4), retrying in {wait}s...")
-            time.sleep(wait)
-    raise RuntimeError("unreachable")  # loop either returns or raises
+    return llm.generate(prompt, max_tokens=4096, tag="summarizer")
 
 
-def summarize_all(
-    clusters: list[list[dict[str, Any]]],
-    api_key: str,
-    model: str,
-) -> list[dict[str, Any]]:
+def summarize_all(clusters: list[list[dict[str, Any]]]) -> list[dict[str, Any]]:
     """
     For each cluster produce:
       {story_title, summary, sources: [{title, url, source_name}], count}
@@ -98,13 +78,20 @@ def summarize_all(
         cont = " [continuation]" if prev_tldr else ""
         print(f"[summarizer] Summarizing: {story_title!r} ({len(cluster)} articles){cont}")
         try:
-            return summarize_cluster(cluster, story_title, api_key, model, prev_tldr=prev_tldr)
+            text = summarize_cluster(cluster, story_title, prev_tldr=prev_tldr)
         except Exception as e:
             print(f"[summarizer] Error: {e}")
-            return cluster[0].get("summary", "") or "(סיכום לא זמין)"
+            text = None
+        if text:
+            return text
+        # A single failed story must not take the digest down — fall back to the
+        # raw feed excerpt so the reader still gets the item.
+        print(f"[summarizer] Falling back to raw excerpt for {story_title!r}")
+        return cluster[0].get("summary", "") or "(summary unavailable)"
 
-    # Each cluster is an independent Claude call — run them in parallel instead of
-    # serially. ThreadPoolExecutor.map preserves input order, so results still align.
+    # Each cluster is an independent model call — run them in parallel instead of
+    # serially. The rate limiter in llm.py, not the pool size, sets the actual pace.
+    # ThreadPoolExecutor.map preserves input order, so results still align.
     with ThreadPoolExecutor(max_workers=6) as executor:
         raws = list(executor.map(_summarize_one, clusters))
 

@@ -49,13 +49,9 @@ def run(dry_run: bool = False) -> None:
         print("[main] No articles found. Exiting.")
         return
 
-    # 2. Cluster ALL articles at once (Claude classifies each by promotion)
+    # 2. Cluster ALL articles at once (the model classifies each by promotion)
     print(f"\n[main] Clustering {len(articles)} articles...")
-    all_clusters = clusterer.group_by_story(
-        articles=articles,
-        api_key=config.CLAUDE_API_KEY,
-        model=config.CLAUDE_MODEL,
-    )
+    all_clusters = clusterer.group_by_story(articles=articles)
 
     # 3. Drop stories we already sent in the last few days. Wrestling sites rehash the
     # same story daily, so without this the digest repeats itself every morning.
@@ -64,8 +60,6 @@ def run(dry_run: bool = False) -> None:
     all_clusters = clusterer.filter_against_history(
         clusters=all_clusters,
         history_block=history.as_prompt_block(history_entries),
-        api_key=config.CLAUDE_API_KEY,
-        model=config.CLAUDE_MODEL,
     )
     if not all_clusters:
         print("[main] Every story was already sent in a previous digest. Nothing to send.")
@@ -79,11 +73,7 @@ def run(dry_run: bool = False) -> None:
     print(f"[main] AEW={by_promo.get('AEW', 0)}  WWE={by_promo.get('WWE', 0)}  Other={by_promo.get('Other', 0)} clusters")
 
     # 5. Summarize all clusters together
-    digest = summarizer.summarize_all(
-        clusters=all_clusters,
-        api_key=config.CLAUDE_API_KEY,
-        model=config.CLAUDE_MODEL,
-    )
+    digest = summarizer.summarize_all(clusters=all_clusters)
 
     # Sort: AEW → WWE → Other, fresh stories before continuations, then by source count
     digest.sort(key=lambda s: (
