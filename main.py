@@ -13,6 +13,7 @@ import clusterer
 import summarizer
 import email_sender
 import history
+import llm
 
 PROMO_ORDER = {"AEW": 0, "WWE": 1, "Other": 2}
 
@@ -21,6 +22,12 @@ def run(dry_run: bool = False) -> None:
     print("=" * 50)
     print("Feedly Daily Digest Agent" + (" (DRY RUN)" if dry_run else ""))
     print("=" * 50)
+
+    # A dry run exercises the full pipeline, so left alone it spends the strong
+    # model's 20/day allowance on a test — and that allowance does not reset until
+    # after the next scheduled run. Keep manual testing off that budget entirely.
+    if dry_run:
+        llm.disable_heavy_model("dry run — leaving the daily budget for the scheduled run")
 
     # DST-proof scheduling guard. GitHub Actions cron is UTC-only, so run.yml fires
     # at both 04:43 and 05:43 UTC and we let the run that lands on ~07:xx Israel time

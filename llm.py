@@ -30,6 +30,20 @@ _MIN_INTERVAL = 60.0 / max(config.GEMINI_RPM, 1)
 _rate_lock = threading.Lock()
 _last_call = 0.0
 
+# The strong model's ceiling is 20 requests per *day*, and the free tier resets at
+# midnight Pacific — i.e. ~07:00 UTC, *after* the 04:43/05:43 UTC scheduled run.
+# So a manual test in the evening spends budget the next morning's digest needs.
+# On 2026-08-22 the scheduled run opened on an already-exhausted quota and only got
+# through on a retry. Flipping this off makes a manual run physically unable to
+# touch that budget.
+_heavy_enabled = True
+
+
+def disable_heavy_model(reason: str) -> None:
+    global _heavy_enabled
+    _heavy_enabled = False
+    print(f"[llm] Strong model ({config.GEMINI_MODEL_HEAVY}) disabled — {reason}")
+
 
 def _throttle() -> None:
     global _last_call
@@ -84,8 +98,11 @@ def generate(prompt: str, max_tokens: int, tag: str, heavy: bool = False) -> str
     `heavy=True` routes to the stronger model. Reserve it for the handful of
     structural calls per run: it has a 20/day free-tier ceiling, so anything
     called once per story must leave it alone. See config.py for the numbers.
+    A `disable_heavy_model()` call downgrades those requests to the lite model —
+    the run still produces a digest, just with a weaker reasoner on the two
+    structural steps.
     """
-    model = config.GEMINI_MODEL_HEAVY if heavy else config.GEMINI_MODEL
+    model = config.GEMINI_MODEL_HEAVY if (heavy and _heavy_enabled) else config.GEMINI_MODEL
     for attempt in range(4):
         _throttle()
         try:
