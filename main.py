@@ -33,12 +33,18 @@ def run(dry_run: bool = False) -> None:
     # at both 04:43 and 05:43 UTC and we let the run that lands on ~07:xx Israel time
     # do the work — no manual cron edits at DST changeovers. Delay-tolerant: a late
     # run only lands *later* than 07:00 (still >= 7), never earlier, so a day is
-    # never silently dropped. Manual workflow_dispatch bypasses the guard entirely.
+    # never silently dropped. An external cron-job.org trigger also fires via
+    # workflow_dispatch (GitHub's own `schedule:` has repeatedly fired hours late or
+    # not at all — see wrestling-digest loop notes 2026-08-29); the hour check is
+    # skipped for a manual/external run so it's never blocked by clock drift, but the
+    # same-day dedup below still applies to every non-dry-run trigger so whichever
+    # source lands first — GitHub's schedule or the external one — the other is a
+    # no-op instead of a duplicate email.
     docs_dir = os.path.join(os.path.dirname(__file__), "docs")
     manual = os.getenv("GITHUB_EVENT_NAME") == "workflow_dispatch"
-    if not manual and not dry_run:
+    if not dry_run:
         il_now = datetime.now(ZoneInfo("Asia/Jerusalem"))
-        if il_now.hour < 7:
+        if not manual and il_now.hour < 7:
             print(f"[main] Israel time {il_now:%H:%M} is before 07:00 — the other scheduled run will send. Skipping.")
             return
         today_file = os.path.join(docs_dir, f"{il_now:%Y-%m-%d}-digest.html")
