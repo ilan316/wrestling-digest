@@ -1,13 +1,17 @@
 name: Wrestling Digest Watchdog
 
-# Safety net for GitHub's own scheduler dropping cron runs (happens during
-# platform incidents — see githubstatus.com). Runs after both candidate
-# windows of run.yml (04:43 / 05:43 UTC) have had time to finish, checks
-# whether a successful run already happened today, and if not, fires one
-# via workflow_dispatch.
+# Safety net for the external cron-job.org trigger (10:00 Asia/Jerusalem) ever
+# failing to fire run.yml — run.yml itself has no native `schedule:` trigger
+# anymore (GitHub's own cron repeatedly fired hours late or not at all, see
+# wrestling-digest loop notes 2026-08-29). Fires ~30-90min after the expected
+# 10:00 IL trigger, checks whether a successful run already happened today, and
+# if not, fires one via workflow_dispatch. Dual cron for DST-proofing (no manual
+# edits at changeovers) — whichever lands later than 10:00 IL that day just finds
+# count>0 from the earlier one and no-ops.
 on:
   schedule:
-    - cron: "15 6 * * *"   # 09:15 Israel (summer) / 08:15 (winter) — buffer past both windows
+    - cron: "30 7 * * *"   # 10:30 Israel (summer, UTC+3)
+    - cron: "30 8 * * *"   # 10:30 Israel (winter, UTC+2)
   workflow_dispatch: {}
 
 permissions:

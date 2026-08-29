@@ -29,24 +29,17 @@ def run(dry_run: bool = False) -> None:
     if dry_run:
         llm.disable_heavy_model("dry run — leaving the daily budget for the scheduled run")
 
-    # DST-proof scheduling guard. GitHub Actions cron is UTC-only, so run.yml fires
-    # at both 04:43 and 05:43 UTC and we let the run that lands on ~07:xx Israel time
-    # do the work — no manual cron edits at DST changeovers. Delay-tolerant: a late
-    # run only lands *later* than 07:00 (still >= 7), never earlier, so a day is
-    # never silently dropped. An external cron-job.org trigger also fires via
-    # workflow_dispatch (GitHub's own `schedule:` has repeatedly fired hours late or
-    # not at all — see wrestling-digest loop notes 2026-08-29); the hour check is
-    # skipped for a manual/external run so it's never blocked by clock drift, but the
-    # same-day dedup below still applies to every non-dry-run trigger so whichever
-    # source lands first — GitHub's schedule or the external one — the other is a
-    # no-op instead of a duplicate email.
+    # run.yml has no native `schedule:` trigger anymore — GitHub's own cron
+    # repeatedly fired hours late or not at all (see wrestling-digest loop notes
+    # 2026-08-29). The sole daily trigger is now an external cron-job.org job
+    # (10:00 Asia/Jerusalem, native timezone — no UTC/DST math needed) plus
+    # watchdog.yml as a fallback, both firing via workflow_dispatch. Same-day
+    # dedup still applies to every non-dry-run trigger so a watchdog fallback (or
+    # a manual re-run) landing after the primary trigger already sent is a no-op
+    # instead of a duplicate email.
     docs_dir = os.path.join(os.path.dirname(__file__), "docs")
-    manual = os.getenv("GITHUB_EVENT_NAME") == "workflow_dispatch"
     if not dry_run:
         il_now = datetime.now(ZoneInfo("Asia/Jerusalem"))
-        if not manual and il_now.hour < 7:
-            print(f"[main] Israel time {il_now:%H:%M} is before 07:00 — the other scheduled run will send. Skipping.")
-            return
         today_file = os.path.join(docs_dir, f"{il_now:%Y-%m-%d}-digest.html")
         if os.path.exists(today_file):
             print(f"[main] Digest for {il_now:%Y-%m-%d} already sent — skipping duplicate run.")

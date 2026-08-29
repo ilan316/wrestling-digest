@@ -1,15 +1,12 @@
 name: Wrestling Digest
 
 on:
-  schedule:
-    # DST-proof: cron is UTC-only, so we fire at BOTH candidate times and let
-    # main.py pick the run that lands on ~07:xx Israel time — no manual edits at
-    # DST changeovers. Summer (UTC+3): 04:43→07:43. Winter (UTC+2): 05:43→07:43.
-    # The other run each day exits early via the Israel-hour guard in main.py.
-    # Off-the-hour minute (:43) avoids GitHub Actions' top-of-hour congestion.
-    - cron: "43 4 * * *"
-    - cron: "43 5 * * *"
-  workflow_dispatch:       # manual trigger from GitHub UI (bypasses the time guard)
+  # No native `schedule:` trigger — GitHub's cron repeatedly fired hours late or
+  # not at all (see wrestling-digest loop notes 2026-08-29). The sole daily trigger
+  # is now an external cron-job.org job (10:00 Asia/Jerusalem, native timezone —
+  # no UTC/DST math) calling this via the GitHub API. watchdog.yml is the fallback
+  # if that external call ever fails.
+  workflow_dispatch:       # manual trigger from GitHub UI, or from cron-job.org / watchdog
     inputs:
       dry_run:
         description: "Dry run — exercise secrets and the model without sending mail or touching docs/ (stays off the strong model's 20/day budget)"
