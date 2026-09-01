@@ -22,6 +22,19 @@ def _parse_json(raw: str, tag: str) -> Any | None:
         return None
 
 
+def _guess_promotion(article: dict[str, Any]) -> str:
+    """Keyword fallback for when the model's grouping is unusable. Titles almost
+    always name the promotion outright (AEW/WWE/NXT), so this is a cheap and
+    fairly reliable stand-in for the LLM classification — better than silently
+    defaulting everything to "Other"."""
+    text = f"{article.get('title', '')} {article.get('summary', '')}".lower()
+    if "aew" in text or "all elite wrestling" in text:
+        return "AEW"
+    if "wwe" in text or "nxt" in text or "wrestlemania" in text:
+        return "WWE"
+    return "Other"
+
+
 def group_by_story(articles: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
     """
     Use the LLM to group articles by the story they cover.
@@ -57,16 +70,33 @@ Return ONLY valid JSON (no markdown, no explanation):
 Articles:
 {article_list}"""
 
-    # One call per run — worth the strong model, and well inside its 20/day.
-    raw = llm.generate(prompt, max_tokens=8192, tag="clusterer", heavy=True)
-    if raw is None:
-        print("[clusterer] Falling back to solo clusters")
-        return [[a] for a in articles]
+    # Up to two calls per run — a malformed-JSON response (not a quota/network
+    # error, so llm.generate()'s own retries don't cover it — see 2026-09-01,
+    # everything landed in "Other") is worth one retry before giving up on the
+    # strong model. Still well inside its 20/day.
+    groups = None
+    for attempt in range(2):
+        raw = llm.generate(prompt, max_tokens=8192, tag="clusterer", heavy=True)
+        if raw is None:
+            break
+        groups = _parse_json(raw, "clusterer")
+        if isinstance(groups, list):
+            break
+        groups = None
+        if attempt == 0:
+            print("[clusterer] Retrying once after malformed JSON")
 
-    groups = _parse_json(raw, "clusterer")
-    if not isinstance(groups, list):
-        # Fallback: one article per cluster
-        return [[a] for a in articles]
+    if groups is None:
+        # Fallback: one article per cluster, promotion guessed by keyword so it
+        # doesn't silently collapse into a single "Other" bucket.
+        print("[clusterer] Falling back to solo clusters with keyword-guessed promotion")
+        clusters = []
+        for a in articles:
+            article = dict(a)
+            article["_story_title"] = article["title"]
+            article["promotion"] = _guess_promotion(article)
+            clusters.append([article])
+        return clusters
 
     clusters: list[list[dict[str, Any]]] = []
     assigned: set[int] = set()
@@ -79,7 +109,7 @@ Articles:
             if 0 <= idx < len(articles) and idx not in assigned:
                 article = dict(articles[idx])
                 article["_story_title"] = story_title
-                article["promotion"] = promotion  # Claude's classification
+                article["promotion"] = promotion  # model's classification
                 cluster_articles.append(article)
                 assigned.add(idx)
         if cluster_articles:
@@ -90,6 +120,7 @@ Articles:
         if i not in assigned:
             a = dict(article)
             a["_story_title"] = article["title"]
+            a["promotion"] = _guess_promotion(a)
             clusters.append([a])
 
     # Sort clusters: largest first
