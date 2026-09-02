@@ -38,6 +38,13 @@ _last_call = 0.0
 # touch that budget.
 _heavy_enabled = True
 
+# 503 UNAVAILABLE ("high demand") is Google-side transient load, unrelated to our
+# own PerMinute/PerDay quotas. On 2026-09-02 a sustained wave of these cost one
+# summary its LLM pass (fell back to raw excerpt) after exhausting 4 attempts
+# (~140s of backoff). Widened to 6 attempts (~10min of backoff) to outlast a
+# longer outage window.
+_MAX_ATTEMPTS = 6
+
 
 def disable_heavy_model(reason: str) -> None:
     global _heavy_enabled
@@ -103,7 +110,7 @@ def generate(prompt: str, max_tokens: int, tag: str, heavy: bool = False) -> str
     structural steps.
     """
     model = config.GEMINI_MODEL_HEAVY if (heavy and _heavy_enabled) else config.GEMINI_MODEL
-    for attempt in range(4):
+    for attempt in range(_MAX_ATTEMPTS):
         _throttle()
         try:
             response = _client.models.generate_content(
@@ -122,7 +129,7 @@ def generate(prompt: str, max_tokens: int, tag: str, heavy: bool = False) -> str
             print(f"[{tag}] Gemini returned empty text (finish_reason={reason})")
             return None
         except Exception as e:
-            if not _is_transient(e) or attempt == 3:
+            if not _is_transient(e) or attempt == _MAX_ATTEMPTS - 1:
                 print(f"[{tag}] Gemini API error: {e}")
                 return None
             wait = _retry_after(e) or 20 * (2 ** attempt)
@@ -131,7 +138,7 @@ def generate(prompt: str, max_tokens: int, tag: str, heavy: bool = False) -> str
             # exactly how the 20/day ceiling on the strong model stayed hidden for a
             # full production run.
             print(
-                f"[{tag}] Gemini unavailable on {model} (attempt {attempt+1}/4), "
+                f"[{tag}] Gemini unavailable on {model} (attempt {attempt+1}/{_MAX_ATTEMPTS}), "
                 f"retrying in {wait:.0f}s — {_quota_hint(e)}"
             )
             time.sleep(wait)
