@@ -15,9 +15,37 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
+  guard:
+    # Once-a-day gate, enforced here so it holds no matter who dispatched this
+    # run (cron-job.org, watchdog.yml, or a human) — a duplicate trigger from
+    # any of those just no-ops instead of sending a second real digest email.
+    # Dry runs skip the gate: they don't send mail or touch docs/, so repeats
+    # are harmless and useful for testing.
+    runs-on: ubuntu-latest
+    outputs:
+      already_ran: ${{ steps.check.outputs.already_ran }}
+    steps:
+      - name: Check for a successful run today
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TODAY=$(date -u +%Y-%m-%d)
+          COUNT=$(gh run list --repo ${{ github.repository }} --workflow=run.yml --status=success \
+            --limit 20 --json createdAt --jq "[.[] | select(.createdAt | startswith(\"$TODAY\"))] | length")
+          echo "Successful real runs today so far: $COUNT"
+          if [ "$COUNT" -gt 0 ]; then
+            echo "already_ran=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "already_ran=false" >> "$GITHUB_OUTPUT"
+          fi
+
   run:
+    needs: guard
+    if: ${{ inputs.dry_run || needs.guard.outputs.already_ran != 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

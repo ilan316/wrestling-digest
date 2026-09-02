@@ -4,10 +4,14 @@ name: Wrestling Digest Watchdog
 # failing to fire run.yml — run.yml itself has no native `schedule:` trigger
 # anymore (GitHub's own cron repeatedly fired hours late or not at all, see
 # wrestling-digest loop notes 2026-08-29). Fires ~30-90min after the expected
-# 10:00 IL trigger, checks whether a successful run already happened today, and
-# if not, fires one via workflow_dispatch. Dual cron for DST-proofing (no manual
-# edits at changeovers) — whichever lands later than 10:00 IL that day just finds
-# count>0 from the earlier one and no-ops.
+# 10:00 IL trigger. Dual cron for DST-proofing (no manual edits at changeovers)
+# — whichever lands later than 10:00 IL that day is a harmless second dispatch.
+#
+# No "already ran today?" check here anymore (2026-09-02): that logic hit a
+# GitHub API eventual-consistency false negative — saw count=0 for a run that
+# had already succeeded hours earlier — and fired a real duplicate. The
+# once-a-day gate now lives in run.yml itself (the `guard` job there), so this
+# workflow can just always dispatch and let run.yml decide whether to no-op.
 on:
   schedule:
     - cron: "30 7 * * *"   # 10:30 Israel (summer, UTC+3)
@@ -19,24 +23,10 @@ permissions:
   contents: read
 
 jobs:
-  check-and-trigger:
+  trigger:
     runs-on: ubuntu-latest
     steps:
-      - name: Check for a successful run.yml run today
-        id: check
+      - name: Fire run.yml (it no-ops itself if today's digest already ran)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          TODAY=$(date -u +%Y-%m-%d)
-          COUNT=$(gh api "repos/${{ github.repository }}/actions/workflows/run.yml/runs?status=success&per_page=10" \
-            -q "[.workflow_runs[] | select(.created_at | startswith(\"$TODAY\"))] | length")
-          echo "Successful runs today: $COUNT"
-          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
-
-      - name: Trigger run.yml if missing
-        if: steps.check.outputs.count == '0'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "No successful run today — GitHub likely dropped the scheduled trigger. Firing manually."
-          gh workflow run run.yml
+        run: gh workflow run run.yml --repo ${{ github.repository }}
