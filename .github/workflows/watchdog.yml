@@ -1,21 +1,22 @@
 name: Wrestling Digest Watchdog
 
 # Safety net for the external cron-job.org trigger (10:00 Asia/Jerusalem) ever
-# failing to fire run.yml — run.yml itself has no native `schedule:` trigger
-# anymore (GitHub's own cron repeatedly fired hours late or not at all, see
-# wrestling-digest loop notes 2026-08-29). Fires ~30-90min after the expected
-# 10:00 IL trigger. Dual cron for DST-proofing (no manual edits at changeovers)
-# — whichever lands later than 10:00 IL that day is a harmless second dispatch.
+# failing to fire run.yml.
 #
-# No "already ran today?" check here anymore (2026-09-02): that logic hit a
-# GitHub API eventual-consistency false negative — saw count=0 for a run that
-# had already succeeded hours earlier — and fired a real duplicate. The
+# No native `schedule:` trigger here (2026-09-02): GitHub's own cron is exactly
+# the unreliable-timing problem run.yml was moved off of (see wrestling-digest
+# loop notes 2026-08-29) — using it here too just relocated the same flakiness
+# instead of removing it, and needed a dual cron hack for DST. This workflow is
+# now fired the same way run.yml is: an external cron-job.org job calling
+# workflow_dispatch (10:45 Asia/Jerusalem, native timezone — no UTC/DST math),
+# ~45min after the expected 10:00 IL run.
+#
+# No "already ran today?" check here: that logic hit a GitHub API
+# eventual-consistency false negative on 2026-09-02 — saw count=0 for a run
+# that had already succeeded hours earlier — and fired a real duplicate. The
 # once-a-day gate now lives in run.yml itself (the `guard` job there), so this
 # workflow can just always dispatch and let run.yml decide whether to no-op.
 on:
-  schedule:
-    - cron: "30 7 * * *"   # 10:30 Israel (summer, UTC+3)
-    - cron: "30 8 * * *"   # 10:30 Israel (winter, UTC+2)
   workflow_dispatch: {}
 
 permissions:
