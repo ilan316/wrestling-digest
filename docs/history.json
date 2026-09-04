@@ -1,5 +1,285 @@
 [
   {
+    "date": "2026-09-04",
+    "stories": [
+      {
+        "title": "Bryan & Vinny and WOL review AEW Dynamite post-All In and NXT booking",
+        "tldr": "Wrestling Observer programs recently reviewed the post-All In episode of AEW Dynamite, highlighting a surprisingly strong show that successfully built anticipation for the upcoming All Out pay-per-view. Meanwhile, critics expressed frustration over what they described as preposterous and goddamn stupid booking on NXT, despite acknowledging that the brand still featured a few good matches and strong individual performances from the talent. Coverage also included weekend previews for TNA Impact, WWE SmackDown, and WWE Collision, alongside detailed subscriber reports breaking down the weekly action.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "AEW and NJPW stars to challenge for CMLL titles at 93rd Aniversario",
+        "tldr": "CMLL has stacked the card for its upcoming 93rd Aniversario event at Arena Mexico on Friday, September 18, adding two major championship bouts featuring top stars from AEW, NJPW, and Stardom. In the heavyweight division, champion Hechicero will defend his title in a three-way match against AEW's Claudio Castagnoli and NJPW's Zack Sabre Jr. Meanwhile, the women's world title will be on the line in a four-way bout as Persephone defends against Tessa Blanchard, AEW's Mina Shirakawa, and Starlight Kid from Stardom. These high-profile additions join an already star-studded lineup that includes major singles matches and a high-stakes mask versus hair elimination final.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "AEW secures new Middle East and North Africa TV broadcasting deal",
+        "tldr": "All Elite Wrestling has secured a new television broadcasting deal to expand its reach into the Middle East and North Africa region. Through a partnership with the streaming platform TOD by beIN, fans will receive access to weekly episodes of Dynamite and Collision, as well as major live pay-per-view events. The new programming lineup will officially be in place in time for this month's All Out event. Financial terms of the agreement and details regarding commentary language options were not disclosed.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Jim Ross discusses injury recovery and planned return to AEW commentary",
+        "tldr": "Wrestling Hall of Famer Jim Ross is targeting an AEW commentary return at the All Out pay-per-view on September 26. Ross recently underwent brain surgery on August 12 and was forced to miss AEW All In in London due to travel risks. Compounding his recovery, he also suffered broken toes on his left foot the morning of his surgery, requiring a walking boot that affects his balance. Despite these hurdles and a recent contract expiration window, he remains optimistic about making the short flight from Oklahoma City to Chicago if his mobility continues to improve.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "NJPW commentator making AEW TV debut",
+        "tldr": "New Japan Pro Wrestling and Stardom English-language commentator Walker Stewart is set to make his official All Elite Wrestling television debut on an upcoming episode of Collision. Stewart previously worked on the commentary team for the AEW and NJPW Forbidden Door event, bringing his extensive knowledge of the Japanese wrestling scene to the broadcast. Although he was spotted working the desk during recent tapings for the September 5 show, it remains unconfirmed if this will be a permanent role or a one-night appearance. This addition comes as the promotion continues its ongoing build toward the upcoming All Out pay-per-view event.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Dustin Rhodes personal pizza war comments",
+        "tldr": "AEW veteran Dustin Rhodes has ignited a passionate online debate by declaring New York pizza to be trash and stating that New Haven Tavern style is the superior choice. His latest comments came after fellow wrestler John Silver sparked a discussion by claiming good pizza does not need toppings at all. Rhodes has a history of fiery food takes, having previously condemned supreme pizzas, black olives, pickles, and pineapple.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "AEW All In 2027 reported to leave Wembley Stadium",
+        "tldr": "AEW All In is reportedly expected to leave Wembley Stadium in 2027 for a return to North America, according to early backstage indications. While the London venue would take a one-year break, sources emphasize that nothing has been finalized and no specific city or venue has been chosen yet. The news follows All In 2026 at Wembley, which drew strong attendance and a gate approaching six million dollars.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Early betting odds released for AEW All Out 2026",
+        "tldr": "The first betting odds for the upcoming AEW All Out event in Chicago point toward a massive world title defense and a potential tag team championship change. Will Ospreay opens as an astronomical favorite to retain his newly won AEW World Championship against Jon Moxley. Meanwhile, the tag team division is gearing up for an unpredictable three-way ladder match between current champions Christian Cage and Adam Copeland, The Young Bucks, and FTR. Fans will find out if these early lines hold true when the pay-per-view broadcasts live from the NOW Arena on September 26, 2026.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "AEW All Out 2026 ticket sales update",
+        "tldr": "AEW All Out 2026 has distributed 7,131 tickets for its September 26 event at the NOW Arena in Hoffman Estates, Illinois, marking an increase of 203 tickets over the span of four days. The show faces direct same-state competition as WWE holds a Worlds Collide event at the Allstate Arena in Rosemont on the exact same night. Meanwhile, two major matches have been officially confirmed for the pay-per-view following this week's television broadcast. Will Ospreay will defend the AEW World Championship against Jon Moxley, and Adam Copeland and Christian Cage will defend the AEW World Tag Team titles in a three-way Tables, Ladders, and Chairs match against FTR and The Young Bucks.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Kay Lee Ray returns on MyAEW PPV",
+        "tldr": "Former WWE performer Kay Lee Ray, also known as Alba Fyre, is set to return for another MyAEW pay-per-view event this Friday. She will face UK standout Safire Reed at Pro Wrestling EVE's Mean Grrrls event in London, England. This follows EVE's first-ever MyAEW pay-per-view, where Ray wrestled a 26-minute main event classic against Miyu Yamashita. Fans can watch this upcoming event either as a one-off purchase on the streaming platform or through the EVE Champion Tier on YouTube.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Wrestling Observer Radio covers post-All In Dynamite and international shows",
+        "tldr": "The latest episode of Wrestling Observer Radio features hosts Bryan Alvarez and Dave Meltzer breaking down a busy week in professional wrestling. The duo covers the fallout from the post-All In episode of AEW Dynamite, matches set for All Out, and Collision spoilers. Additionally, the show dives into WWE Crown Jewel top matches, Kofi Kingston and Austin Creed's appearance with Ariel Helwani, and the upcoming CMLL Anniversary Show card.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Ric Flair and Eric Bischoff debate Kenny Omega vs. Will Ospreay match",
+        "tldr": "Ric Flair is pushing back against the backlash over his recent comments comparing Kenny Omega and Will Ospreay to his classic rivalry with Ricky Steamboat. The Nature Boy clarified that he actually thoroughly enjoyed the match and respects both wrestlers personally. However, Flair lashed out at Eric Bischoff and Jim Ross, demanding that he not be grouped with Bischoff's harsher criticism while warning Ross that mentioning his name will always draw a response.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "New Level (Kofi Kingston & Xavier Woods) speak on WWE departure, pay cuts, Big E, and AEW debut",
+        "tldr": "Following their AEW debut as New Level, Kofi Kingston and Austin Creed have shared fresh details regarding the origins of their team name and entrance music, which required assistance from Peter Rosenberg and Big E. The duo also opened up about having no bitterness toward WWE, though Creed was deeply affected by maintaining kayfabe with his family around Big E. Additionally, Swerve Strickland noted he cannot replace Big E in the faction, while Kofi revealed how Prince Nana once influenced his early career.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Will Ospreay reflects on AEW All In entrance and match fallout",
+        "tldr": "Following his emotional title win, Will Ospreay detailed the surreal experience of walking past former rivals and mentors during his entrance. While a future rematch with Kenny Omega remains possible if Omega wants it, Ospreay's immediate first challenger has been revealed as Jon Moxley. Meanwhile, Casino Gauntlet winner Andrade El Idolo is delaying his title shot to focus on defending the National Championship.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "AEW teases Steven Borden TV debut following Dynamite events",
+        "tldr": "Following Josh Alexander's shocking return and attack on Steven Borden on Dynamite, attention has turned toward how AEW will book Borden's upcoming television debut. Analysts suggest a tag team match pitting Borden and Darby Allin against Alexander and Mark Davis at All Out is the likely destination for the pay-per-view. Before then, AEW has several weeks of television to build momentum with potential tune-up matches against Don Callis Family associates or other roster members.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Adam Copeland set for Maple Leaf Pro debut match",
+        "tldr": "Steve Maclin has officially accepted Adam Copeland's challenge on MLP Mayhem, confirming their singles match for Maple Leaf Pro Wrestling's Northern Rising event on October 3. The clash at the historic Mattamy Athletic Centre in Toronto adds to a busy autumn schedule for Copeland, who is also booked for an AEW Tag Team title ladder match at All Out just one week prior. Maclin enters the matchup as a free agent following his departure from TNA Wrestling earlier this year.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Becky Lynch discusses her WWE career, original title plans, and Nia Jax incident",
+        "tldr": "During a recent podcast appearance, Becky Lynch reflected on various milestones and hardships throughout her WWE career. She revealed that she was never WWE's original choice to become the inaugural SmackDown Women's Champion, a spot meant for Nikki Bella before fan chants changed plans. Lynch also discussed how Nia Jax breaking her nose in 2018 ultimately altered her career trajectory for the better, leading to her historic WrestleMania main event. Additionally, she shared advice for younger talent, expressed regret over some harsh words spoken during her breakout run, and recalled her early fears of being fired and receiving her ring name.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Chelsea Green discusses WWE injury, Twitter exit, pitches, and Hollywood future",
+        "tldr": "WWE Women's Champion Chelsea Green recently discussed her recovery from a broken orbital bone, explaining her proactive approach to getting medical clearance and returning to the ring. She also detailed why she permanently left Twitter to protect her mental health and backstage workplace relationships from toxic online dogpiling. Furthermore, Green revealed a bold WrestleMania pitch to face Nikki Bella in a hair vs. hair match and shared her ambitions of building an acting career in the horror genre.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "WWE planning live music concerts and halftime performances for major shows",
+        "tldr": "WWE is reportedly testing the waters for incorporating live musical performances and halftime-style shows into its major events, beginning with the upcoming Sunday Night's Main Event in Atlanta. TKO views this as a long-term vision to enhance the live fan experience by adding standalone musical attractions when the venue and atmosphere align. Initially, local rapper Lil Yachty was slated to host a live concert at the event, but those plans shifted when he was instead booked for a match against Baron Corbin. Consequently, fellow Atlanta native Quavo was brought in to open the show with a performance of unreleased music.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Oba Femi reflects on Brock Lesnar's SummerSlam endorsement and WWE character psychology",
+        "tldr": "Following his high-profile Hell in a Cell victory over Brock Lesnar in the main event of SummerSlam Night 1, Oba Femi was completely caught off guard when Lesnar returned to the ring to give him an unprecedented, off-script endorsement as the next big thing in WWE. Femi noted that even the camera crew and production staff were shocked by the gesture, which marked a stark departure from Lesnar's typical character during his 25-year career and preceded Lesnar's retirement. In addition to reflecting on the historic moment, Femi discussed his wrestling philosophy and his disdain for characters who appear completely invincible without any human weaknesses. Looking ahead, Femi is now set to square off against Bron Breakker in a massive clash at WWE Sunday Night's Main Event.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Backstage frustration in WWE over Netflix Raw censorship restrictions",
+        "tldr": "WWE post-production staff reportedly feel handcuffed by intensive censorship restrictions imposed by Netflix on Monday Night Raw. The frustration came to a head following a taped episode featuring a brutal parking lot attack by Royce Keys and OTM on The Usos, where blood was heavily pixelated and blurred. While WWE knew parameters would exist in the partnership, the extent of the editing caught some internally off guard, leading executives like Paul Triple H Levesque and talent to unanimously share the unedited footage on social media. This friction highlights a growing tension between WWE creative plans and Netflix international broadcast standards, following previous edits like the removal of a suggestive line by Becky Lynch from an on-demand replay.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Jey Uso and Jimmy Uso respond to online criticism and Andrade comments",
+        "tldr": "The Usos recently sparked social media speculation by posting a blunt message telling critics to stop complaining and asserting that their ability to draw is the main difference between them and others. This followed a recent interview where AEW star Andrade criticized WWE for favoring Samoan wrestlers over Mexican talent. Concurrently, Jey Uso took to Instagram to call out his own online haters, pointing out that none of these critics ever confront him face-to-face in real life.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Tony D'Angelo main roster update following NXT Championship loss",
+        "tldr": "Following his NXT Championship loss to Grayson Waller at Heatwave, Tony D'Angelo is not currently scheduled for a main roster call-up to Raw or SmackDown. Reports indicate that his title loss is not an indictment of how WWE views him, and he will remain a key fixture of the NXT brand in Orlando. Meanwhile, Waller was quickly positioned as the new face of NXT and top heel after transitioning back to the developmental brand from the main roster. D'Angelo is already booked for a six-man tag team match on the upcoming September 8 episode of NXT.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "WWE Women's Tag Team Division updates and team formations",
+        "tldr": "With Fatal Influence holding the WWE Women's Tag Team Championships without enough contenders, analysts have proposed several potential new women's alliances including Bayley and AJ Lee, IYO SKY and Sol Ruca, and Giulia and Stephanie Vaquer. Additional roster updates highlight potential team formations for Ivy Nile and Jordynne Grace, as well as Alexa Bliss and Tatum Paxley. Beyond the women's division, the company could also look to reunite established duos like Trick Williams and Carmelo Hayes, or bring Enzo Amore back alongside Big Cass.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Jinder Mahal calls Penta vs. Rey Fenix match a missed opportunity for WWE",
+        "tldr": "Former WWE champion Jinder Mahal recently expressed his view that WWE missed a significant booking opportunity by having Penta defeat his brother Rey Fenix in the finals of a tournament to challenge Roman Reigns. During an appearance on Busted Open, Mahal explained that while Penta was the logical choice for the upcoming World Heavyweight Championship match in Mexico City, Fenix stood to gain much more from the spotlight. Although co-host Bully Ray suggested Fenix lost because management lacked immediate plans for him, Mahal argued that a high-profile performance against Reigns could have elevated Fenix's career trajectory permanently.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Blake Monroe scheduled for WWE SmackDown debut",
+        "tldr": "Blake Monroe is finally set to make her rescheduled in-ring debut on this Friday's episode of WWE SmackDown against Giulia, reviving a rivalry that began years ago in Stardom. The match was originally supposed to happen last month in Toronto, but was called off after Monroe brutally attacked Giulia before the opening bell. The taped broadcast will also feature Sami Zayn addressing his recent interference in a number one contender's match, alongside appearances from Cody Rhodes and Randy Orton ahead of Sunday Night's Main Event.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Booker T praises NXT talent including Vanity Project and Kelani Jordan",
+        "tldr": "Following WWE NXT Heatwave 2026, Hall of Famer and commentator Booker T used his podcast to praise several standout performers on the brand. He highlighted the stable Vanity Project, pointing out Myka Lockwood's immense star potential and comparing her stablemates to a modern-day Midnight Express. Additionally, Booker T celebrated Kelani Jordan capturing her first NXT Women's Championship by defeating Kendal Grey. He expressed confidence in Jordan's ability to carry the division, while offering constructive advice on developing her in-ring instincts as champion.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Mr. T criticizes his Netflix documentary",
+        "tldr": "WWE Hall of Famer Mr. T is openly criticizing his own Netflix documentary, Untold Mr. T: I Pity the Fool, calling the project garbage and stating that it completely missed the mark on who he is. He argues that director Scott Weintrob pushed a hidden agenda by focusing entirely on his tough-guy persona while ignoring his faith, charity work, and family values. Furthermore, Mr. T took issue with the documentary downplaying his career choices, omitting his pastor, and including an agent he explicitly asked to be left out.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Chelsea Green considers surrogacy with Matt Cardona",
+        "tldr": "WWE star Chelsea Green has revealed that she and her husband, Matt Cardona, are ready to start a family together. During a recent interview, Green shared that she is having open and honest conversations with WWE management about potentially taking time away in the future. While she is still figuring out the exact path to parenthood, she noted that surrogacy is one of the options she is considering. Green also humorously warned that Cardona will need to secure his famous action figure collection once they have children.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Summer Rae sparks WWE in-ring return rumors",
+        "tldr": "Former WWE star Summer Rae has sparked speculation about an in-ring return after sharing Instagram Stories of herself wearing wrestling gear and adjusting her boots. The posts conveniently arrived just hours after Carmella seemingly confirmed her own retirement, amplifying fan discussions about past talent. Rae last competed in the 2022 Women's Royal Rumble and has previously expressed a strong desire to work with WWE again despite battling past back injuries. While no official comeback has been announced, her recent social media activity has fans wondering if she is preparing for another run.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Tatum Paxley plays Mario theme on flute on Instagram",
+        "tldr": "WWE SmackDown Superstar Tatum Paxley surprised fans on Instagram by posting a random video of herself playing the Super Mario theme on a flute. With the simple two-word caption Game over, the clip offered a bizarre and unexpected look at her hidden musical talents. While Paxley is already known for her unpredictable television persona, this quirky performance was certainly not on anyone's wrestling bingo card for the day.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "WWE considering re-casting classic gimmick characters",
+        "tldr": "WWE is reportedly exploring the possibility of bringing back classic 1980s and 1990s wrestling gimmicks with modern twists by re-casting them for a new era. Rather than direct carbon copies, these reimagined characters could feature contemporary updates tailored for today's programming and digital spaces. The list of potential character revivals includes nostalgic personas like The Repo Man, The Ultimate Warrior, The Undertaker, Tiger Jackson, and The Million Dollar Man. This creative direction opens up fun new possibilities for modern storylines and rising talent across the roster.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "WWE WarGames format changes considered for Survivor Series",
+        "tldr": "WWE is reportedly considering a major format change for the traditional WarGames matches at the upcoming Survivor Series event, moving away from the standard two-team structure. Recent storylines on Raw involving The Bloodline, Solo Sikoa, LA Knight, and the debuting trio known as 946 hint at a potential three-way match featuring teams of three. This would echo the unique three-way WarGames format first introduced back at NXT TakeOver in 2017. Speculation is already swirling regarding potential third-man partners like Jacob Fatu, Seth Rollins, Penta, or Drew McIntyre to round out the competing factions.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Speculation builds over WWE 2K27 cover star",
+        "tldr": "Speculation is already building regarding who will grace the cover of the upcoming WWE 2K27 video game early next year. Following recent cover stars like CM Punk, Roman Reigns, and Cody Rhodes, the company is expected to pick someone fresh for the front of the box. Potential candidates include breakout star Oba Femi, nostalgia pick Brock Lesnar, and top womens division star Rhea Ripley.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "CM Punk films role for ABC series",
+        "tldr": "Undisputed WWE Champion CM Punk has expanded his acting resume by reportedly filming a guest role for the upcoming season of the ABC series RJ Decker. Reports indicate that Punk recently shot his episode on location in Florida, though specific details regarding his character are currently being kept under wraps. This new television gig follows a busy period of outside projects for Punk, including voice acting in Zootopia 2 and appearances on various network and streaming shows.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "TKO strategy and long-term vision for WWE Premium Live Events",
+        "tldr": "TKO is implementing a new long-term vision for WWE premium live events that focuses heavily on commercial growth, celebrity involvement, and mainstream entertainment elements like live musical performances modeled after Super Bowl halftime shows. While this business-first strategy is generating record revenue and aiming to attract lapsed fans through spectacles such as Lil Yachty stepping into the ring and Quavo performing live, it has also resulted in fewer matches and a reduced emphasis on the in-ring wrestling product. Consequently, long-time fans are experiencing a dip in enthusiasm as the company shifts away from traditional storytelling and pure wrestling towards high-profile pop culture crossovers and increased ad integration.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Bayley signs new WWE contract and return plans in motion",
+        "tldr": "Bayley is reportedly expected to stay with WWE after agreeing to a new contract extension that may eventually include backstage responsibilities beyond her on-screen role. Backstage creative plans are currently in motion for her return to the Raw brand, with her comeback anticipated within the next few weeks. This update largely puts to rest recent speculation regarding a potential departure to AEW.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Ridge Holland and New Day/New Level WWE pay cut controversy",
+        "tldr": "Following recent on-screen jabs about WWE lowering talent salaries, the pay cut controversy has continued to grow with new revelations from former roster members. Former WWE star Ridge Holland revealed he faced his own 56 percent pay cut during contract talks prior to his departure. Meanwhile, conflicting backstage rumors suggested The New Day's proposed reduction could have reached 75 percent, though insiders clarified it was closer to the slightly-over-50-percent mark the wrestlers themselves acknowledged.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Grayson Waller wins NXT Championship and reacts to title contenders and TNA locker room",
+        "tldr": "Following his NXT Championship victory, Grayson Waller is already facing a crowded field of challengers looking to dethrone him. Backstage reports indicate his title win was planned weeks in advance, while former champion Tony D'Angelo will remain on the brand without an immediate main roster call-up. To sort through the contenders, NXT has booked a series of matches to determine the official number one contender, prompting Waller to publicly dismiss most of his new rivals while offering rare praise for a select few.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Bronson Reed set for major heel return on WWE TV",
+        "tldr": "Creative plans are now locked in for Bronson Reed, whose imminent return to WWE television has gained significant momentum. During a recent visit to company headquarters in Stamford, Connecticut, Reed filmed promotional material and collaborated on new merchandise concepts. While an exact return date remains unconfirmed, speculation has grown that he could make his presence felt as soon as this weekend's Sunday Night Main Event.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "WWE NXT previews high-stakes trios match",
+        "tldr": "Following recent roster tension, NXT General Manager Robert Stone has officially booked a high-stakes trios match for this Tuesday's episode. Tony D'Angelo, Mason Rook, and Saquon Shugars will face EK Prosper, Cruz Montana, and Keanu Carver. The three members of the winning team will advance to a triple threat match on September 15, where the winner earns a shot at NXT Champion Grayson Waller.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Ticket sales update for WWE Sunday Night's Main Event",
+        "tldr": "As Sunday Night's Main Event approaches in Atlanta, ticket sales have reached 9,177 distributed seats with about 144 resale tickets still available. WrestleTix reports an increase of 860 tickets since the previous count, though the event has not yet reached the venue's recent Raw attendance or the 2026 year-to-date average. WWE has also finalized the match card and released global start times for fans tuning in around the world.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Planned return teased for WWE Sunday Night's Main Event",
+        "tldr": "Bronson Reed is reportedly cleared and expected to return as soon as Sunday Night's Main Event in Atlanta. Having been out since February with a torn bicep, Reed could directly impact the high-stakes match between Bron Breakker and Oba Femi. Creative options for his return range from reuniting with his Vision stablemate Breakker to targeting the group for going soft.",
+        "promotion": "WWE"
+      },
+      {
+        "title": "Matt Hardy and Nic Nemeth set for No DQ TNA World Title fight on TNA Impact",
+        "tldr": "TNA has announced a massive No Disqualification match between TNA World Champion Nic Nemeth and Matt Hardy for next week's TNA Impact following a chaotic backstage brawl. The intense rivalry stems from mutual accusations over mysterious backstage attacks on Jeff Hardy and Ryan Nemeth following Lockdown. Additionally, the upcoming card will feature Xia Brookside defending the Knockouts World Championship against Gabby Forza and an X-Division Championship qualifier between Fabian Aichner and Rohit Raju.",
+        "promotion": "Other"
+      },
+      {
+        "title": "KC Navarro qualifies for TNA X Division Championship match at Bound for Glory",
+        "tldr": "KC Navarro has punched his ticket to TNA Bound for Glory by defeating Joe Alonzo on TNA Impact to become the first competitor to qualify for the vacant X Division Championship match. The title was left vacant after recent champion Leon Slater chose to exercise Option C, relinquishing the X Division belt to challenge Nic Nemeth for the TNA World Championship. TNA has since announced that a six-way scramble match will take place at the October 11 event in Tampa, Florida, to crown the new champion, leaving five spots remaining to be filled.",
+        "promotion": "Other"
+      },
+      {
+        "title": "Daily Wrestling Updates and Top Matches in History",
+        "tldr": "Recent wrestling updates feature The Usos responding to Andrade El Idolo regarding roster opportunities, Dave Bautista training to play Kratos in an upcoming Amazon series, and Stephanie Vaquer reflecting on returning to perform in the same Chilean arena she first visited as a fan seventeen years ago. Historical retrospectives highlight iconic September 3 matches, including Gunther versus Sheamus at Clash at the Castle 2022 and Bryan Danielson versus Ricky Starks at All Out 2023. Additionally, archival data details notable historical title changes that occurred on September 3 across various promotions.",
+        "promotion": "Other"
+      },
+      {
+        "title": "Roxanne Perez and Nattie added to AAA Triplemania 34 match",
+        "tldr": "AAA has added a high-stakes four-way match featuring WWE stars Roxanne Perez and Natalya alongside Faby Apache and La Hiedra to the TripleMania 34 card in Las Vegas on September 11, 2026. The winner of this bout will earn a shot at the AAA Reina de Reinas Championship at the upcoming WWE Worlds Collide event in Chicago. This major addition helps flesh out the Las Vegas portion of the weekend, as reigning champion Lady Flammer is separately set to defend her title against La Catalina in Mexico City.",
+        "promotion": "Other"
+      },
+      {
+        "title": "Allie & Kiera Hogan retain Knockouts Tag Team Titles in TNA Impact open challenge",
+        "tldr": "TNA Knockouts Tag Team Champions Allie and Kiera Hogan successfully defended their titles in an open challenge against indie standouts Shazza McKenzie and Vipress on the latest episode of TNA Impact in Brampton. Allie secured the victory by pinning Vipress following a combined codebreaker and Face The Music maneuver. Allie is currently defending the titles alongside Hogan due to her original partner Rosemary being sidelined with a significant injury.",
+        "promotion": "Other"
+      },
+      {
+        "title": "Tate Mayfairs involved in car accident after falling asleep at wheel",
+        "tldr": "Independent wrestler Tate Mayfairs miraculously survived a severe car accident after falling asleep at the wheel and crashing his BMW into bollards on the opposite side of the road. Despite totaling his vehicle, Mayfairs walked away completely uninjured and quickly clarified that the terrifying incident was a real-life emergency rather than a wrestling storyline. He used the close call to issue a stern warning to fellow performers about the hazards of fatigue, urging them to utilize provided hotels and rest instead of pushing through dangerous late-night drives.",
+        "promotion": "Other"
+      },
+      {
+        "title": "Shota Umino diagnosed with concussion and amnesia after NJPW G1 Climax 36",
+        "tldr": "New Japan Pro Wrestling star Shota Umino has revealed he suffered a severe concussion and amnesia following his match against Zack Sabre Jr on the opening night of the G1 Climax 36 tournament on July 11. The accumulated damage led to frightening symptoms including memory loss of how he returned to his hotel and midnight vomiting episodes that forced him to miss the entire tournament. Fortunately, Umino has been cleared to make his in-ring return at NJPW Road to Destruction, where he aims to claw his way back to the top and eventually challenge IWGP Global Heavyweight Champion Gabe Kidd.",
+        "promotion": "Other"
+      },
+      {
+        "title": "Juggalo Championship Wrestling announces championship matches for Lunacy 100th episode",
+        "tldr": "Juggalo Championship Wrestling is celebrating the 100th episode of Lunacy with a free special event titled Carnival of Chaos on September 24, 2026, at the Grindhouse Arena in Jeffersonville, Indiana. To mark the milestone, management has officially announced two major championship matches for the card. Women World Champion Dani Mo will defend her title against Alice Crowley, and Josh Bishop will put the Linear World Championship on the line in a triple threat match against Krule and Cokane.",
+        "promotion": "Other"
+      },
+      {
+        "title": "TNA Wrestling signs three new talent",
+        "tldr": "TNA Wrestling is experiencing significant roster changes in 2026, highlighted by the recent arrival of former WWE star Zoey Serrano ahead of Bound for Glory. To bolster its main event scene, the company is viewed as a prime destination for several high-profile free agents. Speculation surrounds potential arrivals including Romeo Malverde, the tandem of Killer Kross and Scarlett Bordeaux, and the husband-and-wife duo of Malakai Black and Xelina.",
+        "promotion": "Other"
+      },
+      {
+        "title": "Sonya Deville (Daria Rae) lands role in Netflix series",
+        "tldr": "TNA Director of Operations Daria Rae, formerly known in WWE as Sonya Deville, has reportedly landed an acting role in an upcoming Netflix television series called Myron Bolitar. Rae is set to portray a professional wrestler named Fury, with production currently underway in New York. Alongside her new television venture, she continues her on-screen authority role with TNA Wrestling following her recent contract renewal.",
+        "promotion": "Other"
+      },
+      {
+        "title": "Zoey Serrano loses first match in TNA and reflects on NXT preparing wrestlers",
+        "tldr": "Following her recent TNA debut and name change, Zoey Serrano suffered her first defeat in the promotion due to miscommunication with her tag team partner. The loss unfolded when Serrano accidentally struck Xia Brookside, allowing Indi Hartwell and Harley Hudson to capitalize. Outside of the ring, Serrano also spoke candidly about her time in WWE, arguing that NXT does not properly prepare wrestlers for the pressures of the main roster.",
+        "promotion": "Other"
+      },
+      {
+        "title": "Eric Bischoff discusses WCW nWo booking and Ted DiBiase casting",
+        "tldr": "Eric Bischoff has updated his thoughts on Ted DiBiase joining the early New World Order, admitting that despite looking like a perfect spokesperson on paper, the casting ultimately did not work out. Bischoff explained that the lingering WWF Million Dollar Man persona conflicted with the grounded, reality-based vibe the nWo needed, leading him to label the move as bad casting due to a lack of chemistry. In addition to reflecting on DiBiase, Bischoff discussed the booking strategy behind smaller subversive acts during the 1996 angle, such as spray-painting the WCW production truck.",
+        "promotion": "Other"
+      }
+    ]
+  },
+  {
     "date": "2026-09-03",
     "stories": [
       {
@@ -1875,296 +2155,6 @@
       {
         "title": "CMLL Arena Mexico Results and Attendance Update",
         "tldr": "Following his much-anticipated debut, Eddie Kingston fell short in his challenge against CMLL World Heavyweight Champion Hechicero at Arena Mexico. The under-ten-minute match was heavily panned by critics and fans alike, drawing negative reviews for its awkward pacing and abrupt finish. Additionally, the event may have snapped CMLL's impressive 15-show Friday night sellout streak at the historic venue.",
-        "promotion": "Other"
-      }
-    ]
-  },
-  {
-    "date": "2026-08-29",
-    "stories": [
-      {
-        "title": "Kris Statlander and Maya World make surprise appearances at Pro Wrestling EVE MyAEW PPV",
-        "tldr": "During AEW All In weekend in London, Pro Wrestling EVE hosted its x The World 2 event at The Big Penny Social, marking the promotion's debut on the MyAEW platform. The card featured a strong AEW presence, highlighted by surprise appearances from Skye Blue, Marina Shafir, referee Aubrey Edwards, and TBS Champion Maya World. The biggest shock of the night saw Kris Statlander answer Session Moth Martina open challenge and defeat the champion to capture the EVE Championship.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Jonathan Coachman claims he would be a top three promo in modern WWE or AEW",
-        "tldr": "Jonathan Coachman recently made a bold claim during a podcast appearance, stating that he could walk into modern WWE or AEW today and immediately be considered one of their top three promo performers. He reflected on his past career, noting that early work with The Rock, a strong physical presentation, and the trust of Vince McMahon helped him transition from a backstage interviewer into a heavily booed heel. Coachman explained that running his mouth eventually required him to learn how to actually wrestle, noting that McMahon insisted he learn how to work if he wanted to get physical in storylines.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Podcast host threatens to expose AEW NDAs and allegations; D-Von Dudley comments on past racial slurs",
-        "tldr": "During a recent episode of the D-Von and the Duke podcast, co-host Duke issued a severe warning to AEW and Tony Khan, threatening to expose confidential NDAs, hotel partying, and allegations regarding the treatment of independent female wrestlers during the pandemic. Duke challenged MJF to deny his accusations, claiming he has supporting tweets and insiders willing to go on the record. Meanwhile, WWE Hall of Famer D-Von Dudley addressed a separate topic on the show, claiming that Hulk Hogan was not the only major wrestling star to use racial slurs behind closed doors. D-Von stated that several prominent figures from past and present frequently used the N-word without getting caught and now attempt to hide their past behavior by publicly associating with minorities.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Opinion on WWE counterprogramming against AEW All In weekend",
-        "tldr": "WWE continues its ongoing strategy of counterprogramming major AEW events by running competitive shows like NXT Heatwave and AAA Ola de Calor head-to-head with AEW All In weekend. Although past counterprogramming attempts have yielded mixed results and failed to severely dent AEW's loyal fanbase, WWE persists to divert attention away from its rival. Meanwhile, the upcoming NXT Heatwave event in Edinburg, Texas, features a high-stakes card packed with potential championship unification matches, high-profile returns, and dramatic stable betrayals.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Kota Ibushi suffers injury setback and requires another surgery",
-        "tldr": "AEW star Kota Ibushi has suffered a major setback in his recovery from a severe femur injury and now requires another surgery. He revealed on Instagram that the operation is scheduled for September 17 because the surgical plate originally inserted in the United States was too weak to properly heal the bone. Although doctors informed him that he essentially will not be able to participate in contact sports again, Ibushi remains determined and refuses to give up on a potential comeback. For now, his primary focus is simply getting healthy, recovering from the procedure, and eventually living without strong painkillers.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "AEW Dynamite scores highest viewership of 2026 for All In go-home show",
-        "tldr": "The August 26, 2026 episode of AEW Dynamite served as the All In go-home show and achieved the program's highest viewership and demo ratings of the year so far. The broadcast averaged 792,000 viewers on TBS, marking a 34.9 percent increase from the previous week and the largest overall audience since July 2024. Additionally, the show scored a 0.18 rating in the 18-49 demographic, representing an 80 percent jump from last week and significant year-over-year growth.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Female stars set to join The Don Callis Family in AEW",
-        "tldr": "The Don Callis Family has historically operated exclusively as a men's faction in All Elite Wrestling, but recent comments suggest that could soon change. Following hints from Kevin Knight about adding female power to the group, speculation has grown regarding which roster members might join. Seven distinct candidates, ranging from rising international talents to former world champions and sidelined megastars, have been identified as potential additions to the stable.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Wrestling Weekly staff make predictions for AEW All In London",
-        "tldr": "The latest episode of Wrestling Weekly features Les Thatcher and Vic Sosa as they share their expert predictions for All In, AEW’s biggest event of the year taking place this weekend. The hosts also examine recent major WWE developments, including Sami Zayn costing Kevin Owens the WWE championship and Royce Keys making a strong statement alongside his new allies on Raw. Listeners can access the full audio episode on the program website with a subscription.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Report on potential multi-women ladder match addition to AEW All In card",
-        "tldr": "Speculation is growing that a multi-women ladder match could be added to the upcoming AEW All In pay-per-view event. Reports indicate that company leadership recently hinted at an additional women's match or a major match for the pre-show during recent media appearances. While official confirmation is still pending, fans online are speculating it could involve the TBS Championship following recent television angles. The massive event is set to broadcast live from Wembley Stadium on Sunday, August 30th.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Willow Nightingale discusses racial bias, injury status, and hand X-ray ahead of AEW All In",
-        "tldr": "Beyond her upcoming title defense, AEW Women's World Champion Willow Nightingale has confirmed she is dealing with a broken hand and awaits X-ray results to determine her ring gear for Sunday. Nightingale also addressed inherent racial bias in wrestling following a powerful photo of Black champions at Media Day, while challenger Mercedes Mone opened up about lingering resentment from their 2023 NJPW encounter.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Large fire near Wembley Stadium disrupts plans ahead of AEW All In 2026",
-        "tldr": "A massive industrial fire near Wembley Stadium disrupted travel, transport lines, and AEW media activities just two days before All In. Tube and rail services faced delays, forcing wrestlers and fans to alter their schedules around London. Despite the logistical hurdles, scheduled media appearances proceeded and Sunday's pay-per-view remains on track.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Britt Baker not returning for AEW All In London despite Tony Khan comments",
-        "tldr": "Despite Tony Khan playing coy with a stay tuned response during the All In media call, reports have confirmed that Britt Baker is not in London for the upcoming pay-per-view. Fightful Select put an end to the weekend speculation by confirming she is not backstage. While her Wembley return is officially off the table, rumors continue to swirl regarding a potential appearance on television this September.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Kevin Knight hints at special entrance for TNT Title match at AEW All In",
-        "tldr": "TNT Champion Kevin Knight has teased a special and potentially crowded entrance for his upcoming Falls Count Anywhere match at AEW All In. Speaking during the London media junket, Knight hinted that he will not be walking to the ring alone at Wembley Stadium. The surprise tease follows a heated go-home episode of Collision that saw physical interference from Steven Borden.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Will Ospreay comments on fast surgery recovery and character evolution in Death Riders storyline",
-        "tldr": "Will Ospreay revealed that his intensive rehab allowed him to return from neck surgery in under six months, jokingly claiming he beat John Cena's famous 2008 Royal Rumble recovery record. He also discussed how his violent feud and subsequent alliance with Jon Moxley's Death Riders brought a fresh, aggressive edge to his character. Ospreay explained that aligning with the faction removed his previous hesitation and added new layers to his in-ring persona as he prepares to challenge Kenny Omega.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Tony Khan announces AEW All In ticket sales and gate approaching $6 million at Wembley",
-        "tldr": "Tony Khan revealed during a media call that AEW All In at Wembley Stadium is approaching a $6 million gate, making it the third highest-grossing event in company history. WrestleTix reports that ticket distribution has reached roughly 43,600 as final preparations are made for Sunday. Additionally, updated match card details and secondary market ticket availability have been released heading into the weekend.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Pro wrestling rumor roundup regarding Kenny Omega, AJ Lee, The Rock, and more",
-        "tldr": "Kenny Omega reportedly requested his recent heel turn specifically to ensure his match with Will Ospreay at Wembley stands the test of time. Additional updates indicate that AJ Lee is expected to eventually return to WWE for another run, while The Rock has strongly hinted at a future WrestleMania return. Meanwhile, weekend rumors point to a potential multi-person women's ladder match being added to the upcoming pay-per-view card.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Thekla in London ahead of AEW All In following absence",
-        "tldr": "Following her absence since losing the women's title in July, Thekla has traveled to London ahead of AEW All In. Reports have confirmed her arrival in the UK, fueling speculation of a surprise appearance at Wembley Stadium. Tony Khan previously teased her imminent television return during a media call, suggesting fans will see her back very soon.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Big Vinny V discusses potential winners for the Casino Gauntlet Match at AEW All In",
-        "tldr": "Former champions Chris Jericho and Mark Davis have joined the field for the upcoming Casino Gauntlet match at AEW All In. Analyst predictions point heavily toward frontrunners MJF and Andrade El Idolo as the favorites to secure the contract. The winner is expected to challenge Will Ospreay, though dark horse candidates like Tommaso Ciampa and Nick Wayne remain outside threats.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Nigel McGuinness addresses potential retirement ahead of Jon Moxley match at AEW All In",
-        "tldr": "Speculation is growing that Nigel McGuinness could retire from in-ring competition following his upcoming AEW Continental Championship match at All In London. Wrestling in front of family and friends while battling an ankle injury, the British veteran enters the bout with immense motivation. Given his sporadic appearances and high-profile matches since returning two years ago, this Wembley Stadium title clash feels like a fitting potential swan song for his legendary career.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Kyle Fletcher discusses potential match against Ilja Dragunov in AEW",
-        "tldr": "Kyle Fletcher has expressed strong interest in reigniting his rivalry with the heavily rumored AEW newcomer Ilja Dragunov. Speaking ahead of All In, Fletcher praised Dragunov's raw passion and recalled their past matches in promotions like PROGRESS and wXw. Meanwhile, Tony Khan has added to the speculation by openly praising Dragunov as an excellent athlete and someone whose work he deeply admires.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "AEW All In London 2026 updated match card and event lineup",
-        "tldr": "AEW has finalized a massive card for All In London 2026 taking place at Wembley Stadium this Sunday. Alongside the previously announced pre-show Trios Roulette Royale, the event features high-profile bouts like Kenny Omega defending the World Championship against Will Ospreay. Additional marquee matches include Jon Moxley facing Nigel McGuinness and a loaded Casino Gauntlet match.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "The Rock teases future WWE WrestleMania appearance and retirement opponent",
-        "tldr": "Dwayne The Rock Johnson recently appeared on The Morning Shift podcast and promised the hosts that they will be his special guests whenever he makes his future return to WrestleMania. While this confirms he plans to step back into WWE and eventually have another match, his immediate in-ring status remains uncertain due to a busy Hollywood schedule that includes the upcoming movie Fast Forever. Analysts and fans are already speculating on potential retirement opponents for the legend, ranging from Roman Reigns and Cody Rhodes to Gunther, Jacob Fatu, and Trick Williams.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Sami Zayn causes chaos during WWE SmackDown main event number one contender match",
-        "tldr": "The August 28 episode of SmackDown ended in total chaos when Sami Zayn once again disrupted the main event picture for the Undisputed WWE Championship. After being omitted from a triple threat number one contender match featuring Kevin Owens, Finn Balor, and Gunther, Zayn violently interfered to prevent a winner from being crowned. He took out multiple referees and laid out Owens, Balor, Gunther, and champion CM Punk with the title belt. The show ultimately closed with Zayn standing tall, making it clear he is willing to do whatever it takes to become WWE champion again.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Tatum Paxley wins WWE SmackDown debut against Michin, set for SNME tag match",
-        "tldr": "Tatum Paxley successfully made her in-ring WWE SmackDown debut by defeating Michin with her signature Cemetery Drive finisher. Accompanied to the ring by Charlotte Flair and Alexa Bliss, Paxley secured the victory following weeks of building tension on the main roster. It was also announced that Paxley will team with Bliss and Flair to face Michin, Jade Cargill, and B-Fab in a high-profile six-woman tag team match at Sunday Night's Main Event.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Matches and updates confirmed for WWE Sunday Night's Main Event",
-        "tldr": "WWE has confirmed a new six-woman tag team match for the upcoming Sunday Night's Main Event special taking place on September 6 in Atlanta, Georgia. Alexa Bliss, Charlotte Flair, and newly called-up NXT star Tatum Paxley will join forces to face Jade Cargill, B-Fab, and Michin. This addition brings the official match card to four announced bouts, alongside ongoing speculation regarding several other potential matchups. The event will emanate from the State Farm Arena with high-profile encounters already locked in.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Joe Gacy reveals scrapped Ava character idea and conveys unfulfilled concepts for NXT's Schism and Wyatt Sicks",
-        "tldr": "Former WWE star Joe Gacy recently opened up in an interview about several unrealized creative concepts from his time in NXT and the main roster. He revealed that during Ava Raine's time in the Schism faction, she wanted her character to mirror the movie Pearl and serve as a devout enforcer for the group. Gacy also shed light on the original, deeper psychological backstory planned for the Wyatt Sicks, explaining that Bo Dallas was supposed to have gathered lost souls to embody Firefly Funhouse characters as a manifestation of grief. Although these concepts were never fully realized on television, Gacy's revelations offer a fascinating look at what could have been.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Charlotte Flair addresses being labeled difficult and asserting input on WWE creative",
-        "tldr": "Charlotte Flair recently addressed backstage perceptions of her work ethic during a podcast appearance, firmly rejecting the label of being difficult. She explained that her strong opinions stem from her extensive experience and athletic background, while also noting a double standard for women in the industry who voice creative concerns. Flair shared that she has learned to let down her athletic ego over the past year to embrace losses that serve the overall story. Additionally, she highlighted the considerable freedom WWE grants her in constructing her own matches.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "CM Punk merchandise pulled after designer accuses WWE and Mitchell & Ness of artwork theft",
-        "tldr": "Graphic designer David Stenken has publicly accused WWE and Mitchell and Ness of stealing his iconic CM Punk artwork for a recent clothing collaboration. The disputed design was originally created for Punk's massive 2021 AEW debut at the United Center and became one of their highest-selling merchandise items of all time. After Stenken called out the companies on social media and asked for legal recommendations, Mitchell and Ness quietly removed the hoodies from their website. Stenken believes an internal review is currently underway, though neither company has issued a public explanation.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Johnny Gargano delivers emotional post-show address to Cleveland crowd following SmackDown taping",
-        "tldr": "Following the WWE SmackDown taping in Cleveland, hometown star Johnny Gargano delivered an emotional post-show address after coming up short in his Undisputed WWE Championship match against CM Punk. Joined in the ring by Punk and Cody Rhodes, Gargano reflected on his journey from a fan in the stands to main eventing in his hometown. He praised Punk and Rhodes for paving the way, thanked Rhodes for career advice, and expressed deep gratitude for his wife Candice LeRae and the Cleveland crowd.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Paige and Nikki Bella recall physical post-match altercation following WWE SmackDown",
-        "tldr": "Paige recently failed to capture the WWE Women's United States Championship from Jacy Jayne on SmackDown due to outside interference from Fatal Influence. Following the match, WWE Hall of Famer Nikki Bella blindsided Paige with a vicious beatdown that included elbow strikes, stomps to the neck, and the Rack Attack 2.0. The rivalry quickly spilled over onto social media with a fiery exchange where Paige shockingly told Nikki she should have choked her harder. The escalating feud has now set the stage for a highly anticipated singles match between the two stars on the upcoming September 11 episode in Mexico City.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "War Raiders set to defend AAA Tag Team Titles against R-Truth and Damian Priest on SmackDown",
-        "tldr": "The War Raiders are scheduled to defend their AAA World Tag Team Titles against R-Truth and Damian Priest on the September 11 edition of WWE SmackDown in Mexico City. The match stems from a backstage segment where Priest initially wanted to dissolve their partnership to focus on singles competition following recent title losses. However, the War Raiders interrupted, prompting R-Truth to hastily accept a title challenge on their behalf, which Priest ultimately agreed to as their final ride together. This marks the latest chapter in a rivalry that previously saw a no contest due to outside interference from the MFTs.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Stephanie McMahon recalls Triple H suggesting she vomit on Shane McMahon during WWE segment",
-        "tldr": "During a recent interview with Chris Van Vliet, Stephanie McMahon recalled a bizarre backstage moment from February 2016 involving her husband, Triple H, and her brother, Shane McMahon. Suffering from a severe case of the flu and worried about getting sick on live television right before Shane's major return to Monday Night Raw, Stephanie panicked. In response to her anxiety, Triple H casually suggested that she simply vomit on her brother if she could not hold it in. Fortunately, Stephanie made it through the segment without incident, and Shane's return—framed around Stephanie receiving the Vincent J. McMahon Legacy of Excellence Award—drew a massive positive response from the live audience.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Randy Orton insults Cody Rhodes' mother ahead of Sunday Night's Main Event match",
-        "tldr": "On the August 28 episode of WWE SmackDown, Randy Orton took his rivalry with Cody Rhodes to a deeply personal level by insulting Rhodes' mother, wife, and late dog Pharaoh ahead of their upcoming match at Sunday Night's Main Event. Orton attempted to goad Rhodes into breaking a strict no-contact rule enforced by Nick Aldis, which would cost Rhodes his WWE Championship opportunity. Despite the severe verbal provocations and retaliatory jabs from Rhodes regarding Orton's father, both competitors managed to keep their hands to themselves and avoid physical confrontation before the big event.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Trish Stratus explains iconic WWF SmackDown video game loading screen photo",
-        "tldr": "WWE Hall of Famer Trish Stratus recently shared the backstory of her iconic loading screen photo from the year 2000 video game WWF SmackDown! 2: Know Your Role. Speaking on INSIGHT with Chris Van Vliet, Stratus revealed that the image originated from a fitness modeling photoshoot taken before she even officially debuted on television while waiting for her work visa. The outfit, featuring a memorable zebra jacket, was just something she had in her bag for autograph signings that ultimately became a defining piece of Attitude Era folklore.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Blake Monroe explains turning down Love Island UK opportunities",
-        "tldr": "WWE star Blake Monroe recently appeared on The Nikki & Brie Show to address long-running rumors about her turning down opportunities to appear on Love Island UK. She revealed that she was first approached as a teenager around age 18 or 19 during the unfiltered early seasons, but declined because of her laser focus on becoming a WWE Superstar. Monroe was approached a second time while living in America, but ultimately passed again due to the intensity of the show and because she had already found love on her own.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "WWE legend Slick recovering following open heart surgery",
-        "tldr": "WWE legend and manager Slick is now resting at home following a serious heart attack and subsequent open heart surgery earlier this month. Steve Stasiak shared a direct statement from Slick expressing deep gratitude for the overwhelming prayers, love, and well wishes from the wrestling community during this difficult time. Because of his ongoing recovery, Slick will be unable to travel or make public appearances for the immediate future, prompting supporters to share his official Cash App for voluntary financial assistance. Slick also plans to record a personal video message for his fans once he is strong enough.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Retrospective 2005 video shows fans debating WWE vs TNA at Magic Mountain",
-        "tldr": "A newly surfaced 2005 video features wrestling fans Jeff Meacham and Stagger Lee debating the state of professional wrestling while riding attractions at Six Flags Magic Mountain. The nostalgic conversation covers a wide range of topics from that era, including WWE storylines, personnel changes, and the rising presence of TNA. Their discussion provides a fascinating time capsule of fan sentiment during a pivotal period in the industry.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Kelani Jordan argues her match should main event WWE NXT Heatwave",
-        "tldr": "Kelani Jordan believes her upcoming NXT Women's Championship match against Kendal Grey should main event the upcoming Heatwave event. During a recent radio appearance, Jordan cited the dominance and athleticism of the women's division to justify taking the top spot on the card. Her bout is currently competing for the closing slot against a heavy-hitting NXT Championship Fatal 4-Way match. NXT Heatwave is scheduled to take place this Sunday, August 30, from Edinburg, Texas.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Former WWE star Velveteen Dream involved in wild brawl at boxing press conference",
-        "tldr": "Former WWE star Patrick Clark, known as Velveteen Dream, exploded during a pre-fight press conference for his upcoming boxing debut against social media personality Ryan Pownall. After being mocked for his career trajectory, Clark grabbed a metal pole and later returned to trash the stage. He has since claimed on social media that he is suing Pownall for defamation as the August 29 fight approaches.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Mick Foley resolves UK comedy show charity auction prize incident with attendees",
-        "tldr": "Mick Foley has resolved the charity auction incident after the two fans who fled with his signed shirts provided proof of a generous donation to the Cauliflower Alley Club. After Foley issued a public warning giving them a deadline, the intoxicated men stepped up within hours to make amends. Foley stated he believes in second chances and officially declared the matter closed.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Shinsuke Nakamura and Kyoki reveal tag team name Bakusai and set debut match on SmackDown",
-        "tldr": "Shinsuke Nakamura and Kyoki are officially bringing their new tag team to the ring on upcoming programming. SmackDown General Manager Nick Aldis made the team name official on television while booking their debut match. The duo will face The Miz and Kit Wilson following a backstage lobbying effort.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Update on Richard Holliday's status regarding potential WWE signing and independent dates",
-        "tldr": "Richard Holliday recently sparked massive WWE speculation by leaving his boots in the ring after a independent match. However, backstage reports indicate that despite internal interest, there is currently no active movement or finalized deal between Holliday and WWE. Meanwhile, the star remains active on the independent circuit with upcoming match commitments and has promised to address his cryptic social media teases directly.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "WWE SmackDown August 28, 2026 review and match results",
-        "tldr": "Following her return in a protective mask, Women's Champion Chelsea Green surprisingly opted to wrestle a tag team match rather than waiting out her 30-day clearance window, ultimately eating the pin from Nia Jax. Meanwhile, a strict no-contact order failed to stop Cody Rhodes and Randy Orton from trading fiery verbal barbs ahead of their grudge match. The taped Cleveland episode also featured Sami Zayn disrupting a contendership match, Tatum Paxley's main roster debut, and Jacy Jayne defending the women's US title.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Killer Kross and Scarlett complete ALS Ice Bucket Challenge with Rebel, nominate Rhea Ripley",
-        "tldr": "Killer Kross and Scarlett recently completed the ALS Ice Bucket Challenge with assistance from their friend Rebel, who is battling the terminal disease. During the video, Rebel personally helped dump the ice water over Kross to support the cause. The couple concluded by nominating WWE stars Dominik Mysterio and Rhea Ripley to take on the challenge next.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "WWE preparing to debut new second-generation talent",
-        "tldr": "Beyond recent roster moves, WWE is preparing a massive wave of second-generation and legacy talent for television debuts. NXT arrival Zilla Fatu is already challenging for gold, while prospects like Dean Malenko's daughter Kenzie and Tatanka's son Joseph Chavis are nearing their own television introductions. Additional legacy names like Avery Styles, Thamiko Fatu, and boxing royalty Elijah Holyfield are also working their way toward WWE programming through developmental and partner promotions.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Rey Fenix discusses facing brother Penta for WWE World Title shot at Roman Reigns",
-        "tldr": "Rey Fenix and Penta are set to clash on Raw to earn a World Heavyweight Championship match against Roman Reigns in Mexico City. Ahead of their historic first-ever WWE singles match, Fenix expressed immense pride in facing his brother on such a massive stage. The winner will move on to challenge Reigns for the first time in their careers on September 14.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Interview with Scott Vick covering WCW politics, Katie Vick angle, and Chris Kanyon",
-        "tldr": "In the rest of his Wrestling Epicenter interview, Scott Vick detailed his journey from high school football to the brutal WCW Power Plant. He credited Chris Kanyon with taking him under his wing and praised the innovative star's wrestling mind. Vick also shared insights on DDP's relentless self-analysis and his early days in WCW.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Bully Ray advocates for Enzo Amore return to WWE following Big Cass return",
-        "tldr": "Hall of Famer Bully Ray recently shared mixed thoughts on Big Cass's singles return to WWE and his recent match against Je'Von Evans. Building on that discussion, Ray has now advocated for WWE to bring back Enzo Amore to reunite the former tag team. Ray argued that the duo remains a stronger act together and praised Enzo as a superior talker compared to most of the current main roster.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Jacob Fatu secretly training Tatanka's sons at Natalya's Dungeon 2.0",
-        "tldr": "WWE star Jacob Fatu has been secretly coaching wrestling legend Tatanka’s sons, Jeremiah and Joseph, at Natalya and Tyson Kidd’s Dungeon 2.0 facility. According to Natalya, the two brothers have been quietly training there for the past six months following a recommendation from company executives. Fatu has reportedly taken a hands-on approach during his visits, helping the aspiring wrestlers refine both their in-ring skills and promo work.",
-        "promotion": "WWE"
-      },
-      {
-        "title": "Kevin Nash reflects on choosing TNA over WWE return",
-        "tldr": "Wrestling legend Kevin Nash recently discussed why he chose to sign with TNA Wrestling in 2004 rather than return to WWE after his 2002 stint. Speaking on his Kliq This podcast, Nash explained that TNA's significantly lighter schedule and close proximity to his home allowed him to spend much-needed time with his wife and son. During his run with the promotion, which lasted until 2011, Nash formed close bonds with younger talent and enjoyed memorable storylines before eventually making a brief return to WWE.",
-        "promotion": "Other"
-      },
-      {
-        "title": "Zach Gowen explains conditions for participating in Dark Side of the Ring",
-        "tldr": "Former professional wrestler Zach Gowen initially turned down an offer to appear on Dark Side of the Ring because he did not want to reopen old wounds without purpose. However, after his wife convinced him of the show's importance and producers agreed to his financial terms, he reconsidered. Gowen ultimately agreed to participate only after ensuring the documentary would prominently feature his modern-day recovery and redemption rather than solely focusing on his past mistakes.",
-        "promotion": "Other"
-      },
-      {
-        "title": "Awesome Kong open to potential wrestling comeback",
-        "tldr": "Former WWE and AEW star Awesome Kong, also known as Kia Stevens, is leaving the door open for a potential professional wrestling return. During a recent interview, she explained that while wrestling is not her primary focus, she would consider stepping back into the ring if someone helped her get back into shape. Kong last wrestled in September 2023 and is currently evaluating her next professional steps as she approaches her 49th birthday.",
-        "promotion": "Other"
-      },
-      {
-        "title": "Mustafa Ali suffers punctured lung and fractured ribs at TNA Lockdown, pulls from events",
-        "tldr": "TNA International Champion Mustafa Ali recently suffered a punctured lung and fractured ribs, forcing him to withdraw from upcoming independent bookings in Australia and Scotland. Backstage reports have clarified that the injury occurred during a routine bump in his Lockdown match against Jason Hotch rather than a high-risk cage dive. Despite being hospitalized, Ali appeared on TNA Impact to offer Hotch a truce and a chance to rejoin the Order 4 faction. TNA has no plans to strip Ali of his championship, and a match between Hotch and Trey Miguel is set to determine the next title challenger.",
-        "promotion": "Other"
-      },
-      {
-        "title": "Matt Cardona vows rapid return following triceps surgery",
-        "tldr": "Matt Cardona recently suffered a torn triceps during a Main Event taping against Kit Wilson in Toronto. Despite the significant setback, the 41-year-old star has undergone surgery and vowed to return faster than expected. Cardona remains determined to re-establish his momentum and chase his ultimate goal of becoming WWE Champion.",
-        "promotion": "Other"
-      },
-      {
-        "title": "Retrospective look at pro wrestling title changes on August 28",
-        "tldr": "Beyond historic title changes, August 28 boasts an impressive catalog of critically acclaimed matches throughout pro wrestling history. Top-rated encounters include brutal deathmatches and a star-studded 2015 six-man tag team bout praised for its non-stop action and stellar heel work. Additional championship changes from promotions like AAA, NWA, and ROH further flesh out this busy date on the wrestling calendar.",
-        "promotion": "Other"
-      },
-      {
-        "title": "Bully Ray suggests TNA push AJ Francis despite potential controversy",
-        "tldr": "Wrestling legend Bully Ray is urging TNA to give AJ Francis a major push despite acknowledging that the polarizing star often rubs people the wrong way. Speaking on Busted Open Radio, Ray highlighted Francis's improved physique, strong promo skills, and ability to generate genuine heat. Francis recently wrapped up a feud with Elijah at Lockdown and is looking for a breakthrough opportunity after two years with the company.",
-        "promotion": "Other"
-      },
-      {
-        "title": "AAA preparing for Ola de Calor Global event broadcast times",
-        "tldr": "General Manager Rey Mysterio has announced a major triple threat match for the upcoming AAA Ola de Calor event on August 30, 2026, featuring Jack Cartwheel, Nathan Frazer, and Mini Vikingo battling for the top contendership to the Latin American Championship. The show will emanate from the Bert Ogden Arena in Edinburg, Texas, taking place immediately before NXT Heatwave. Officials have now released the complete global broadcast schedule so international fans can plan their viewing times.",
         "promotion": "Other"
       }
     ]
