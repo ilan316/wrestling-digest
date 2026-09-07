@@ -15,7 +15,7 @@
 - **Scheduler:** GitHub Actions (cron) + Windows Task Scheduler (מקומי)
 
 ## GitHub
-- **Repo:** https://github.com/ilan316/wrestling-digest
+- **Repo:** https://github.com/ilan316/wrestling-digest · ענף `master` (לא `main`)
 - **Actions:** `.github/workflows/run.yml` — שני cron: `"43 4 * * *"` + `"43 5 * * *"` (04:43 ו-05:43 UTC).
   ה-guard ב-main.py בורר את הריצה שנוחתת על ~07:xx שעון ישראל — **אין צורך לשנות cron ידנית במעברי שעון**.
   הדקה :43 (ולא :00) כדי להימנע מעומס תחילת-שעה של GitHub Actions, שיכול לדחות ריצות ב-1-2 שעות.
