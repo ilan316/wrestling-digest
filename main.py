@@ -86,6 +86,16 @@ def run(dry_run: bool = False) -> None:
     print(f"\n[main] Clustering {len(articles)} articles...")
     all_clusters = clusterer.group_by_story(articles=articles)
 
+    # Keep only the configured promotions, before the history filter and the
+    # summaries, so dropped promotions never reach an LLM call.
+    all_clusters = [
+        c for c in all_clusters if c[0].get("promotion", "Other") in config.PROMOTIONS
+    ]
+    print(f"[main] Keeping {config.PROMOTIONS} — {len(all_clusters)} clusters")
+    if not all_clusters:
+        print("[main] No stories for the selected promotions. Nothing to send.")
+        return
+
     # 3. Drop stories we already sent in the last few days. Wrestling sites rehash the
     # same story daily, so without this the digest repeats itself every morning.
     # Fails open — on any error every cluster survives.

@@ -23,6 +23,13 @@ CATEGORIES_FILTER: list[str] = [
     c.strip() for c in os.getenv("CATEGORIES", "").split(",") if c.strip()
 ]
 
+# Which promotions make it into the digest — comma-separated keys from the
+# clusterer ("AEW", "WWE", "Other"). Filtered right after clustering, so dropped
+# promotions cost no summary calls. Set to "AEW,WWE,Other" to restore the full digest.
+PROMOTIONS: list[str] = [
+    p.strip() for p in os.getenv("PROMOTIONS", "AEW").split(",") if p.strip()
+]
+
 # Gemini (Google AI Studio free tier — no billing account attached)
 GEMINI_API_KEY: str = _require("GEMINI_API_KEY")
 

@@ -5,6 +5,8 @@
 ## תיאור
 מערכת יומית לאיסוף חדשות פלחון מ-RSS feeds, קיבוץ לפי נושא דרך LLM, וסיכום מפורט לפי promotion (AEW/WWE/Other). נשלח כאימייל HTML בכל בוקר (טריגר 10:00 שעון ישראל, המייל מגיע ~10:20-10:40). **הפלט באנגלית.**
 
+**מ-28/09/26 המייל כולל AEW בלבד** (`PROMOTIONS` ב-config.py, ברירת מחדל `AEW`). WWE/Other מסוננים מיד אחרי הקיבוץ — לא מסוכמים ולא נכנסים ל-history. להחזרה: `PROMOTIONS=AEW,WWE,Other`.
+
 ## טכנולוגיות
 - **שפה:** Python 3.11+
 - **AI:** Google Gemini API (free tier) — כל הקריאות עוברות דרך `llm.py`.
@@ -42,6 +44,7 @@ LOOKBACK_HOURS=24
 GEMINI_MODEL=             # אופציונלי, ברירת מחדל gemini-3.5-flash-lite (הסיכומים)
 GEMINI_MODEL_HEAVY=       # אופציונלי, ברירת מחדל gemini-3.6-flash (clusterer + history-filter)
 GEMINI_RPM=               # אופציונלי, ברירת מחדל 10 (מתחת ל-15/דקה שנמדדו)
+PROMOTIONS=               # אופציונלי, ברירת מחדל AEW (למייל המלא: AEW,WWE,Other)
 ```
 
 ## הערה — free tier ומגבלות מכסה
