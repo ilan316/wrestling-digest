@@ -51,7 +51,7 @@ def _fetch_full_text(url: str) -> str:
 # Off-topic / spoiler-type titles to skip. Word-boundary match (not substring) so
 # "report"/"rumor" no longer nuke legitimate news — those are core wrestling genres.
 _SKIP_RE = re.compile(
-    r"\b(SPOILERS?|RESULTS|HIGHLIGHTS|PREVIEW|RECAP|WINNERS|RATINGS|REVIEW|UFC|MMA)\b"
+    r"\b(SPOILERS?|RESULTS|HIGHLIGHTS|PREVIEW|RECAP|WINNERS|RATINGS|REVIEW|UFC|MMA|MAILBAG)\b"
 )
 
 
