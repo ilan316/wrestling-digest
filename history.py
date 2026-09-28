@@ -25,7 +25,8 @@ def _path(docs_dir: str) -> str:
 
 def _prune(entries: list[dict[str, Any]], days: int) -> list[dict[str, Any]]:
     """Keep only entries from the last `days` days, newest first."""
-    cutoff = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
+    # days-1: today counts as one of the `days` dates (was keeping days+1).
+    cutoff = (datetime.now() - timedelta(days=days - 1)).strftime("%Y-%m-%d")
     kept = [e for e in entries if isinstance(e, dict) and e.get("date", "") >= cutoff]
     kept.sort(key=lambda e: e.get("date", ""), reverse=True)
     return kept
@@ -87,16 +88,25 @@ def append(
     print(f"[history] Saved {len(digest)} stories for {date_str} ({len(entries)} day(s) retained)")
 
 
-def as_prompt_block(entries: list[dict[str, Any]]) -> str:
-    """Render history as a plain-text block for a Claude prompt."""
+TLDR_DAYS = 2
+
+
+def as_prompt_block(entries: list[dict[str, Any]], tldr_days: int = TLDR_DAYS) -> str:
+    """Render history as a plain-text block for the history-filter prompt.
+
+    Only the newest `tldr_days` dates carry a TL;DR — that is where a story is
+    most likely to be continuing. Older dates are headline-only, which keeps the
+    prompt to a fraction of its size (~500 stories × 300 chars otherwise).
+    `entries` is newest-first (as returned by `load`).
+    """
     lines = []
-    for entry in entries:
+    for i, entry in enumerate(entries):
         for s in entry.get("stories", []):
             title = s.get("title", "").strip()
             if not title:
                 continue
             lines.append(f"[{entry.get('date', '')}] {title}")
             tldr = (s.get("tldr") or "").strip()
-            if tldr:
+            if tldr and i < tldr_days:
                 lines.append(f"    {tldr[:300]}")
     return "\n".join(lines)

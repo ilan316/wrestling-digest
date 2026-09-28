@@ -2,8 +2,10 @@
 """Feedly Daily Digest Agent — entry point."""
 from __future__ import annotations
 
+import json
 import os
 import sys
+import time
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -16,6 +18,30 @@ import history
 import llm
 
 PROMO_ORDER = {"AEW": 0, "WWE": 1, "Other": 2}
+
+# Lookback spans back to the last successful send, so a failed day's news is not
+# lost — capped so a long outage does not flood one digest. Lives under docs/ so
+# the workflow's `git add docs/` persists it (same trick as history.json).
+STATE_FILENAME = "state.json"
+MAX_LOOKBACK_HOURS = 72
+_LOOKBACK_MARGIN_HOURS = 1
+
+
+def _lookback_hours(docs_dir: str) -> float:
+    try:
+        with open(os.path.join(docs_dir, STATE_FILENAME), encoding="utf-8") as f:
+            last_ts = float(json.load(f)["last_run_ts"])
+    except Exception:
+        return config.LOOKBACK_HOURS
+    since = (time.time() - last_ts) / 3600 + _LOOKBACK_MARGIN_HOURS
+    hours = min(max(since, config.LOOKBACK_HOURS), MAX_LOOKBACK_HOURS)
+    print(f"[main] Last successful run {since - _LOOKBACK_MARGIN_HOURS:.1f}h ago — lookback {hours:.1f}h")
+    return hours
+
+
+def _save_last_run(docs_dir: str, ts: float) -> None:
+    with open(os.path.join(docs_dir, STATE_FILENAME), "w", encoding="utf-8") as f:
+        json.dump({"last_run_ts": ts}, f)
 
 
 def run(dry_run: bool = False) -> None:
@@ -46,10 +72,11 @@ def run(dry_run: bool = False) -> None:
             return
 
     # 1. Fetch all articles
+    run_started = time.time()
     articles = feedly_client.fetch_all(
         opml_path=config.OPML_PATH,
         categories_filter=config.CATEGORIES_FILTER,
-        lookback_hours=config.LOOKBACK_HOURS,
+        lookback_hours=_lookback_hours(docs_dir),
     )
     if not articles:
         print("[main] No articles found. Exiting.")
@@ -132,6 +159,7 @@ def run(dry_run: bool = False) -> None:
         date_range=date_range,
         pages_url=pages_url,
     )
+    _save_last_run(docs_dir, run_started)
 
     print("\n[main] Done.")
 

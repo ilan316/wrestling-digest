@@ -31,7 +31,7 @@ _rate_lock = threading.Lock()
 _last_call = 0.0
 
 # The strong model's ceiling is 20 requests per *day*, and the free tier resets at
-# midnight Pacific — i.e. ~07:00 UTC, *after* the 04:43/05:43 UTC scheduled run.
+# midnight Pacific — i.e. ~07:00 UTC, right as the 10:00 Israel scheduled run fires.
 # So a manual test in the evening spends budget the next morning's digest needs.
 # On 2026-08-22 the scheduled run opened on an already-exhausted quota and only got
 # through on a retry. Flipping this off makes a manual run physically unable to
@@ -44,6 +44,13 @@ _heavy_enabled = True
 # (~140s of backoff). Widened to 6 attempts (~10min of backoff) to outlast a
 # longer outage window.
 _MAX_ATTEMPTS = 6
+
+# The strong model sheds load far more often than lite: on 2026-09-23..25 it 503'd
+# through all 6 attempts on 3 of 5 mornings, so history-dedup was skipped (and on
+# 09-23 clustering too — 166 unclustered stories). Lite stayed up throughout. After
+# this many consecutive transient failures a heavy call finishes on lite instead —
+# same provider, free tier, never Claude.
+_HEAVY_FALLBACK_AFTER = 2
 
 
 def disable_heavy_model(reason: str) -> None:
@@ -110,6 +117,7 @@ def generate(prompt: str, max_tokens: int, tag: str, heavy: bool = False) -> str
     structural steps.
     """
     model = config.GEMINI_MODEL_HEAVY if (heavy and _heavy_enabled) else config.GEMINI_MODEL
+    heavy_failures = 0
     for attempt in range(_MAX_ATTEMPTS):
         _throttle()
         try:
@@ -132,6 +140,16 @@ def generate(prompt: str, max_tokens: int, tag: str, heavy: bool = False) -> str
             if not _is_transient(e) or attempt == _MAX_ATTEMPTS - 1:
                 print(f"[{tag}] Gemini API error: {e}")
                 return None
+            if model != config.GEMINI_MODEL:
+                heavy_failures += 1
+                # A PerDay 429 will not clear today — no point waiting it out.
+                if heavy_failures >= _HEAVY_FALLBACK_AFTER or "PerDay" in _quota_hint(e):
+                    print(
+                        f"[{tag}] Heavy model {model} unavailable ({_quota_hint(e)}) — "
+                        f"falling back to {config.GEMINI_MODEL} for this call"
+                    )
+                    model = config.GEMINI_MODEL
+                    continue
             wait = _retry_after(e) or 20 * (2 ** attempt)
             # Print *why*. Without the quota id here, a daily-cap exhaustion and an
             # ordinary per-minute 429 look identical in the Actions log — which is

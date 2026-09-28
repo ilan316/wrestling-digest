@@ -24,7 +24,12 @@ SCRAPE_FEEDS = {
 # Network timeout for fetching a single feed (seconds). Without this, a slow
 # or hung feed can block a worker thread indefinitely.
 FEED_TIMEOUT = 20
-_USER_AGENT = "Mozilla/5.0 (compatible; WrestlingDigest/1.0)"
+# A browser UA: some sites 403 a bot-looking UA (bodyslam.net did with the old
+# "compatible; WrestlingDigest/1.0", 2026-09-28) and the feed silently drops out.
+_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+)
 
 
 def _fetch_full_text(url: str) -> str:
@@ -94,6 +99,13 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
         print(f"[rss] Error fetching {feed['xmlUrl']}: {e}")
         return []
 
+    # An undated entry in an otherwise-dated feed would be stamped "now" and
+    # re-enter the digest every single day — skip it. Only a feed with no dates
+    # at all keeps the old "treat as now" behaviour, so it is not lost entirely.
+    feed_has_dates = any(
+        e.get("published_parsed") or e.get("updated_parsed") for e in parsed.entries
+    )
+
     articles = []
     for entry in parsed.entries:
         # Get publish time. feedparser returns *_parsed as a UTC struct_time,
@@ -102,8 +114,10 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
         pub_struct = entry.get("published_parsed") or entry.get("updated_parsed")
         if pub_struct:
             pub_ts = calendar.timegm(pub_struct)
+        elif feed_has_dates:
+            continue
         else:
-            pub_ts = time.time()  # treat as now if no date
+            pub_ts = time.time()  # whole feed is undated — treat as now
 
         if pub_ts < newer_than:
             continue
@@ -145,7 +159,7 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
 def fetch_all(
     opml_path: str,
     categories_filter: list[str],
-    lookback_hours: int,
+    lookback_hours: float,
 ) -> list[dict[str, Any]]:
     """
     Parse OPML, fetch all feeds (in parallel), return deduplicated articles
