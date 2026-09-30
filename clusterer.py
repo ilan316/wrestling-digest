@@ -61,6 +61,11 @@ Do two things:
 
 Each article index must appear in exactly one group.
 
+Critical rule: group articles ONLY when they report the SAME SPECIFIC news item — the same
+announcement, match, injury, quote, or event outcome. Sharing a promotion, a show, or a
+wrestler is NOT enough: "Dynamite ticket sales" and "Tony Khan comments on All Out PPV buys"
+are DIFFERENT stories. When in doubt, keep an article in its own group.
+
 Return ONLY valid JSON (no markdown, no explanation):
 [
   {{"story_title": "Short descriptive title", "promotion": "AEW", "indices": [0, 3, 7]}},
@@ -236,7 +241,11 @@ Return ONLY valid JSON (no markdown, no explanation), one object per story index
             by_index[v["index"]] = v
 
     kept: list[list[dict[str, Any]]] = []
-    dropped, updates = 0, 0
+    dropped, updates, merged = 0, 0, 0
+    # Two clusters continuing the same previous story (e.g. PAC tributes and The
+    # Rock's PAC statement, 2026-09-30) would otherwise render as two separate
+    # "continuation" cards — fold the later ones into the first.
+    update_by_prev: dict[str, list[dict[str, Any]]] = {}
     for i, cluster in enumerate(clusters):
         verdict = by_index.get(i, {})
         status = str(verdict.get("status", "NEW")).upper()
@@ -256,7 +265,17 @@ Return ONLY valid JSON (no markdown, no explanation), one object per story index
             print(f"[history-filter] DROPPED (already sent): {story_title!r} ~ {prev_headline!r}")
             continue
 
+        if status == "UPDATE" and prev_key and prev_key in update_by_prev:
+            first = update_by_prev[prev_key]
+            first.extend(cluster)
+            merged += 1
+            print(f"[history-filter] MERGED into {first[0].get('_story_title', first[0]['title'])!r}: "
+                  f"{story_title!r} ~ {prev_headline!r}")
+            continue
+
         if status == "UPDATE":
+            if prev_key:
+                update_by_prev[prev_key] = cluster
             updates += 1
             cluster[0]["_is_update"] = True
             cluster[0]["_prev_tldr"] = prev_tldr_by_headline.get(prev_key, prev_headline)
@@ -265,5 +284,5 @@ Return ONLY valid JSON (no markdown, no explanation), one object per story index
         kept.append(cluster)
 
     new_count = len(kept) - updates
-    print(f"[history-filter] NEW={new_count}  UPDATE={updates}  DUPLICATE(dropped)={dropped}")
+    print(f"[history-filter] NEW={new_count}  UPDATE={updates}  MERGED={merged}  DUPLICATE(dropped)={dropped}")
     return kept

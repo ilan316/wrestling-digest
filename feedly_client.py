@@ -82,6 +82,26 @@ def parse_opml(opml_path: str) -> dict[str, list[dict[str, str]]]:
     return categories
 
 
+# Terminal punctuation, optionally followed by closing quotes/brackets. A bare
+# quote doesn't count — "Women’s" would otherwise look like a sentence end.
+_SENTENCE_END_RE = re.compile(r"[.!?…][\"”'’)\]]*")
+
+
+def _trim_to_sentence(text: str) -> str:
+    """Cut a mid-sentence ending back to the last complete sentence. Some feeds
+    (F4W, paywalled — scraping stops at the same spot) truncate with no marker,
+    and the summarizer then copies the dangling fragment ("...there is one").
+    Keeps the text as-is if trimming would throw away more than half of it."""
+    text = text.rstrip()
+    ends = list(_SENTENCE_END_RE.finditer(text))
+    if not ends or ends[-1].end() == len(text):
+        return text
+    cut = ends[-1].end()
+    if cut < len(text) * 0.5:
+        return text
+    return text[:cut]
+
+
 def _clean_html(text: str) -> str:
     clean = re.sub(r"<[^>]+>", " ", text or "")
     clean = html.unescape(clean)
@@ -148,7 +168,7 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
             "id": entry.get("id") or entry.get("link", ""),
             "title": title,
             "url": entry.get("link", ""),
-            "summary": summary,
+            "summary": _trim_to_sentence(summary),
             "published": int(pub_ts * 1000),
             "source_name": feed["title"],
             "source_url": feed["htmlUrl"],
