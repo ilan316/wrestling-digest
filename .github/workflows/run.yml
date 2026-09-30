@@ -34,8 +34,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TODAY=$(date -u +%Y-%m-%d)
-          COUNT=$(gh run list --repo ${{ github.repository }} --workflow=run.yml --status=success \
-            --limit 20 --json createdAt --jq "[.[] | select(.createdAt | startswith(\"$TODAY\"))] | length")
+          # Filter conclusion client-side: the server-side --status=success filter
+          # returns a stale, unsorted set that can miss today's runs entirely.
+          COUNT=$(gh run list --repo ${{ github.repository }} --workflow=run.yml \
+            --limit 20 --json createdAt,conclusion \
+            --jq "[.[] | select(.conclusion == \"success\" and (.createdAt | startswith(\"$TODAY\")))] | length")
           echo "Successful real runs today so far: $COUNT"
           if [ "$COUNT" -gt 0 ]; then
             echo "already_ran=true" >> "$GITHUB_OUTPUT"
