@@ -22,17 +22,43 @@ def _parse_json(raw: str, tag: str) -> Any | None:
         return None
 
 
+def _keyword_promotion(text: str) -> str | None:
+    """"AEW"/"WWE" when the text names exactly one of them, else None."""
+    text = text.lower()
+    aew = "aew" in text or "all elite wrestling" in text
+    wwe = "wwe" in text or "nxt" in text or "wrestlemania" in text
+    if aew != wwe:
+        return "AEW" if aew else "WWE"
+    return None
+
+
 def _guess_promotion(article: dict[str, Any]) -> str:
     """Keyword fallback for when the model's grouping is unusable. Titles almost
     always name the promotion outright (AEW/WWE/NXT), so this is a cheap and
     fairly reliable stand-in for the LLM classification — better than silently
-    defaulting everything to "Other"."""
+    defaulting everything to "Other".
+
+    The title decides first: a WWE story's snippet often mentions a wrestler's
+    AEW past ("former AEW star Ricky Saints"), which used to win because AEW was
+    checked first over title+summary together (2026-10-01)."""
+    by_title = _keyword_promotion(article.get("title", ""))
+    if by_title:
+        return by_title
     text = f"{article.get('title', '')} {article.get('summary', '')}".lower()
     if "aew" in text or "all elite wrestling" in text:
         return "AEW"
     if "wwe" in text or "nxt" in text or "wrestlemania" in text:
         return "WWE"
     return "Other"
+
+
+def _title_override(cluster: list[dict[str, Any]]) -> str | None:
+    """The promotion the cluster's headlines unanimously name, if any. Overrides
+    the model, which tends to classify by the wrestlers' past employers — the
+    lite fallback put a "WWE stars to reform tag team" piece under AEW because
+    all three teams had ex-AEW members (2026-10-01)."""
+    named = {p for a in cluster if (p := _keyword_promotion(a.get("title", "")))}
+    return named.pop() if len(named) == 1 else None
 
 
 def group_by_story(articles: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
@@ -58,6 +84,7 @@ Do two things:
 1. Group articles by the news story they cover.
 2. For each group, identify the wrestling promotion: "AEW", "WWE", or "Other" (NJPW, AAA, MLW, etc.).
    Use the full context — even if "AEW" or "WWE" is not in the title, infer from wrestlers, shows, and events mentioned.
+   Classify by the promotion the story is ABOUT, not where the wrestlers previously worked.
 
 Each article index must appear in exactly one group.
 
@@ -118,6 +145,13 @@ Articles:
                 cluster_articles.append(article)
                 assigned.add(idx)
         if cluster_articles:
+            override = _title_override(cluster_articles)
+            # AEW<->WWE swaps only: an "Other" story (TNA, NJPW) often names a
+            # wrestler's former promotion in its headline.
+            if override and promotion in ("AEW", "WWE") and override != promotion:
+                print(f"[clusterer] Promotion override: {story_title!r} model={promotion} -> {override} (title)")
+                for a in cluster_articles:
+                    a["promotion"] = override
             clusters.append(cluster_articles)
 
     # Add any articles the model didn't assign to any group
