@@ -195,6 +195,7 @@ _HTML_TEMPLATE = """\
 </style>
 </head>
 <body>
+<div style="display:none;font-size:1px;color:#fff;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">{preheader_filler}</div>
 <div class="wrapper">
   <div class="header">
     <h1>{header_title}</h1>
@@ -299,6 +300,9 @@ def _build_html(digest: list[dict[str, Any]], title: str = "Wrestling Digest", d
         executive_html=executive_html,
         stories_html="\n".join(stories_parts),
         pages_url=pages_url or PAGES_URL,
+        # Blank inbox preview: fills the snippet slot with invisible chars so
+        # Gmail doesn't pull the header/TL;DR text into it.
+        preheader_filler="&#847;&zwnj;&nbsp;" * 150,
     )
 
 
