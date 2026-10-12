@@ -51,7 +51,19 @@ def _fetch_full_text(url: str) -> str:
 # Off-topic / spoiler-type titles to skip. Word-boundary match (not substring) so
 # "report"/"rumor" no longer nuke legitimate news — those are core wrestling genres.
 _SKIP_RE = re.compile(
-    r"\b(SPOILERS?|RESULTS|HIGHLIGHTS|PREVIEW|RECAP|WINNERS|RATINGS|REVIEW|UFC|MMA|MAILBAG)\b"
+    r"\b(SPOILERS?|RESULTS|HIGHLIGHTS|PREVIEW|RECAP|WINNERS|RATINGS|REVIEW|UFC|MMA|MAILBAG"
+    r"|DAILY UPDATE|ROUND-?UP|LOOK BACK)\b"
+    # Show reports ("Bryan Alvarez's AEW Dynamite October 6, 2026 report") —
+    # bare REPORT stays allowed, it's a legit news genre.
+    r"|\b(DYNAMITE|COLLISION|RAMPAGE|RAW|SMACKDOWN|NXT)\b.*\bREPORT\s*$"
+)
+
+# Opinion / blog / roundup sections, marked in the article URL path. These are
+# columns, speculation lists and multi-story recaps — not news.
+_SKIP_URL_RE = re.compile(
+    r"/(opinions?|features|cageside-seats-features|rumor-round-up|event-guides)/"
+    r"|/news/daily-updates/",
+    re.IGNORECASE,
 )
 
 
@@ -144,6 +156,8 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
 
         title = html.unescape(entry.get("title", "(no title)"))
         if _SKIP_RE.search(title.upper()):
+            continue
+        if _SKIP_URL_RE.search(entry.get("link", "")):
             continue
 
         rss_summary_raw = entry.get("summary", "")

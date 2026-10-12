@@ -33,6 +33,7 @@
 - `state.json` — `last_run_ts` של השליחה המוצלחת האחרונה. חלון ה-lookback = מאז הריצה האחרונה + שעה,
   לא פחות מ-`LOOKBACK_HOURS` ולא יותר מ-72 שעות — יום שנפל לא מאבד חדשות.
 - כתבה בלי תאריך בפיד שיש בו תאריכים — מדולגת (אחרת היא "חדשה" כל יום מחדש).
+- **רק חדשות (12/10/26):** `_SKIP_URL_RE` ב-feedly_client.py מדלג לפי נתיב URL על דעות/בלוגים/סיכומים (`/opinion(s)/`, `/features/`, `/cageside-seats-features/`, `/rumor-round-up/`, `/news/daily-updates/`, `/event-guides/`); `_SKIP_RE` מדלג על כותרות "Daily Update"/roundup ודוחות תוכנית ("... Dynamite ... report"). `/podcasts/` של F4W נשאר בכוונה (דיווחי מלצר).
 
 ## משתני סביבה
 ```
