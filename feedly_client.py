@@ -66,6 +66,11 @@ _SKIP_URL_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Opinion sections marked only by the feed's category tag, not the URL
+# (wrestlingheadlines "COLUMNS", pwmania "Columns", nodq "Opinions").
+# Full-tag match so "Opinion Poll" or a wrestler's name never trips it.
+_SKIP_TAG_RE = re.compile(r"^(columns?|opinions?|editorials?|commentary)$", re.IGNORECASE)
+
 
 def parse_opml(opml_path: str) -> dict[str, list[dict[str, str]]]:
     """
@@ -158,6 +163,8 @@ def _fetch_feed(feed: dict[str, str], newer_than: float) -> list[dict[str, Any]]
         if _SKIP_RE.search(title.upper()):
             continue
         if _SKIP_URL_RE.search(entry.get("link", "")):
+            continue
+        if any(_SKIP_TAG_RE.match((t.get("term") or "").strip()) for t in entry.get("tags", [])):
             continue
 
         rss_summary_raw = entry.get("summary", "")
