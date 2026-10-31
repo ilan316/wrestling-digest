@@ -62,7 +62,9 @@ _SKIP_RE = re.compile(
 # columns, speculation lists and multi-story recaps — not news.
 _SKIP_URL_RE = re.compile(
     r"/(opinions?|features|cageside-seats-features|rumor-round-up|event-guides)/"
-    r"|/news/daily-updates/",
+    r"|/news/daily-updates/"
+    # F4W's Bryan & Vinny podcast — show reviews, not news.
+    r"|/podcasts/bryan-and-vinny-show/",
     re.IGNORECASE,
 )
 
