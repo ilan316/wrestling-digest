@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any
 
 import llm
@@ -61,11 +62,91 @@ def _title_override(cluster: list[dict[str, Any]]) -> str | None:
     return named.pop() if len(named) == 1 else None
 
 
-def group_by_story(articles: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
+class ClusteringDeferred(Exception):
+    """The model could not group today's articles and a later run can still try."""
+
+
+# Words that say nothing about *which* story a headline is: function words,
+# promotion/show names, and wrestling-news boilerplate ("cuts promo", "update").
+_GROUP_STOP = set("""
+a an the and or of to in on at for with from by as is are was were be been it its his her their he she
+they them this that these after before over into out up off about vs new more set says said say
+reveals reveal reportedly report reports update updates news why how what who when will would could
+should can has have had not no just finally ever all one two first last next
+aew wwe nxt tna njpw roh aaa cmll wrestling wrestler wrestlers pro star stars match matches show
+tonight week night company dynamite collision rampage raw smackdown former current
+promo cuts backstage segment comments talks discusses reacts responds shares opens addresses
+""".split())
+
+
+def _headline_stems(title: str) -> list[str]:
+    """Distinctive words in headline order, cut to 5 chars as crude stemming
+    ("declines"/"declining" -> "decli")."""
+    t = title.lower().replace("’", "'").replace("'s", "")
+    return [w[:5] for w in re.findall(r"[a-z0-9]+", t) if len(w) >= 3 and w not in _GROUP_STOP]
+
+
+def _headline_gender(title: str) -> str | None:
+    t = title.lower().replace("’", "'")
+    if re.search(r"\bwomen\b", t):
+        return "w"
+    if re.search(r"\bmen\b", t):
+        return "m"
+    return None
+
+
+def _headline_overlap(a: list[str], b: list[str]) -> int:
+    """Shared stems, with a pair adjacent in both headlines counted once —
+    "Darby Allin" or "Blood & Guts" is one shared fact, not two. Otherwise every
+    pair of stories about the same wrestler merges."""
+    shared = set(a) & set(b)
+    joint = {p for p in set(zip(a, a[1:])) & set(zip(b, b[1:])) if p[0] in shared and p[1] in shared}
+    return len(shared) - len(joint)
+
+
+def _local_group(articles: list[dict[str, Any]], min_shared: int = 2) -> list[list[int]]:
+    """Model-free grouping by shared headline words — the last resort when Gemini
+    is down. On the 2026-11-05 headlines it took 45 solo stories to 31 with no
+    false merges (Taya Valkyrie x5, RVD x3, Borden x3, men's and women's Blood &
+    Guts kept apart). Coarser than the model, far better than nothing."""
+    stems = [_headline_stems(a.get("title", "")) for a in articles]
+    df: dict[str, int] = {}
+    for s in stems:
+        for w in set(s):
+            df[w] = df.get(w, 0) + 1
+    # A word in a fifth of all headlines that day ("blood", "guts" during a PPV)
+    # is the day's theme, not a story key.
+    limit = max(3, len(articles) // 5)
+    stems = [[w for w in s if df[w] <= limit] for s in stems]
+
+    clusters: list[dict[str, Any]] = []
+    for i, s in enumerate(stems):
+        g = _headline_gender(articles[i].get("title", ""))
+        best, best_n = None, 0
+        for c in clusters:
+            if g and c["gender"] and g != c["gender"]:
+                continue  # men's vs women's match: different stories
+            n = max(_headline_overlap(s, stems[j]) for j in c["members"])
+            if n > best_n:
+                best, best_n = c, n
+        if best is not None and best_n >= min_shared:
+            best["members"].append(i)
+            best["gender"] = best["gender"] or g
+        else:
+            clusters.append({"members": [i], "gender": g})
+    return [c["members"] for c in clusters]
+
+
+def group_by_story(
+    articles: list[dict[str, Any]], can_defer: bool = False
+) -> list[list[dict[str, Any]]]:
     """
     Use the LLM to group articles by the story they cover.
     Returns a list of clusters, each cluster is a list of article dicts.
     Articles that don't share a story with anyone else get their own cluster.
+
+    If the model is unavailable: raises ClusteringDeferred when `can_defer`
+    (a later run today will retry), otherwise groups locally by headline words.
     """
     if not articles:
         return []
@@ -119,15 +200,26 @@ Articles:
             print("[clusterer] Retrying once after malformed JSON")
 
     if groups is None:
-        # Fallback: one article per cluster, promotion guessed by keyword so it
-        # doesn't silently collapse into a single "Other" bucket.
-        print("[clusterer] Falling back to solo clusters with keyword-guessed promotion")
+        # On 2026-11-05 both models 503'd for ~10 minutes and the old fallback —
+        # one article per cluster — sent a 45-story digest with Taya Valkyrie's
+        # departure seven times. A run that can still be retried later today
+        # defers instead; the last chance groups by shared headline words.
+        if can_defer:
+            raise ClusteringDeferred("model grouping unavailable")
+        print("[clusterer] Falling back to local headline grouping (no model)")
         clusters = []
-        for a in articles:
-            article = dict(a)
-            article["_story_title"] = article["title"]
-            article["promotion"] = _guess_promotion(article)
-            clusters.append([article])
+        for members in _local_group(articles):
+            cluster = []
+            for idx in members:
+                article = dict(articles[idx])
+                article["_story_title"] = articles[members[0]]["title"]
+                cluster.append(article)
+            promo = _title_override(cluster) or _guess_promotion(cluster[0])
+            for a in cluster:
+                a["promotion"] = promo
+            clusters.append(cluster)
+        clusters.sort(key=len, reverse=True)
+        print(f"[clusterer] {len(articles)} articles -> {len(clusters)} story clusters (local)")
         return clusters
 
     clusters: list[list[dict[str, Any]]] = []

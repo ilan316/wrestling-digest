@@ -84,7 +84,11 @@ def run(dry_run: bool = False) -> None:
 
     # 2. Cluster ALL articles at once (the model classifies each by promotion)
     print(f"\n[main] Clustering {len(articles)} articles...")
-    all_clusters = clusterer.group_by_story(articles=articles)
+    # run.yml sets DIGEST_CAN_DEFER=1 on the first real run of the day: if the
+    # model is down it is better to fail now and let the watchdog run retry than
+    # to send an ungrouped digest. Locally / on the watchdog run it is unset.
+    can_defer = not dry_run and os.environ.get("DIGEST_CAN_DEFER") == "1"
+    all_clusters = clusterer.group_by_story(articles=articles, can_defer=can_defer)
 
     # Keep only the configured promotions, before the history filter and the
     # summaries, so dropped promotions never reach an LLM call.
@@ -192,6 +196,12 @@ if __name__ == "__main__":
     dry = "--dry-run" in sys.argv
     try:
         run(dry_run=dry)
+    except clusterer.ClusteringDeferred as e:
+        # Deliberately a failed run (not success): run.yml's guard only blocks
+        # the watchdog after a *successful* run today. No error email — the
+        # watchdog run is the follow-up, and it emails if it crashes too.
+        print(f"[main] Deferring today's digest to the watchdog run — {e}")
+        sys.exit(75)
     except Exception:
         tb = traceback.format_exc()
         print(tb)

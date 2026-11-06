@@ -27,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       already_ran: ${{ steps.check.outputs.already_ran }}
+      can_defer: ${{ steps.check.outputs.can_defer }}
     steps:
       - name: Check for a successful run today
         id: check
@@ -44,6 +45,19 @@ jobs:
             echo "already_ran=true" >> "$GITHUB_OUTPUT"
           else
             echo "already_ran=false" >> "$GITHUB_OUTPUT"
+          fi
+          # First real attempt today may defer (exit non-zero, no digest) when
+          # Gemini can't group the articles, leaving it to the watchdog run.
+          # Any earlier failed run today means this IS the retry — never defer
+          # again, fall back to local grouping and send.
+          FAILED=$(gh run list --repo ${{ github.repository }} --workflow=run.yml \
+            --limit 20 --json createdAt,conclusion \
+            --jq "[.[] | select(.conclusion == \"failure\" and (.createdAt | startswith(\"$TODAY\")))] | length")
+          echo "Failed runs today so far: $FAILED"
+          if [ "$FAILED" -gt 0 ]; then
+            echo "can_defer=0" >> "$GITHUB_OUTPUT"
+          else
+            echo "can_defer=1" >> "$GITHUB_OUTPUT"
           fi
 
   run:
@@ -68,6 +82,7 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          DIGEST_CAN_DEFER: ${{ needs.guard.outputs.can_defer }}
         # `inputs` is null on schedule runs, so this collapses to a plain run.
         run: python main.py ${{ inputs.dry_run && '--dry-run' || '' }}
 

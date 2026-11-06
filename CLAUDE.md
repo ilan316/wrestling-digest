@@ -15,6 +15,11 @@
   **fallback:** קריאת heavy שנכשלת פעמיים ברצף (503 וכו') או מקבלת 429 PerDay — עוברת ל-lite
   לשאר הניסיונות של אותה קריאה (`_HEAVY_FALLBACK_AFTER` ב-llm.py). נוסף 28/09/26 אחרי ש-3.6-flash
   נפל ב-503 בשלושה בקרים מתוך חמישה (23-25/09) והדדופ דולג.
+  **06/11/26:** אם גם lite נופל באמצע קריאת heavy — חוזרים ל-3.6-flash (מתחלפים) במקום להמשיך לדפוק על lite
+  (ב-05/11 lite החזיר 503 53 פעמים, הקיבוץ נכשל ונשלח דיגסט של 45 ידיעות עם כפילויות).
+- **קיבוץ שנכשל:** בריצה הראשונה של היום (`DIGEST_CAN_DEFER=1` מה-guard) — `ClusteringDeferred` → exit 75,
+  בלי מייל ובלי docs, ה-watchdog ב-10:45 מנסה שוב (ריצה כושלת ב-Actions = **בכוונה**). אם כבר הייתה היום ריצה
+  כושלת (או ריצה מקומית) — קיבוץ מקומי לפי מילים משותפות בכותרות (`_local_group` ב-clusterer.py, בלי מודל).
 - **feeds:** RSS via feedparser + OPML, 10 פידים (BodySlam הוסר 28/09/26). User-Agent של Chrome — UA "מזוהה" מקבל 403 מחלק מהאתרים
 - **Email:** Gmail SMTP (App Password)
 - **Scheduler:** cron-job.org → `workflow_dispatch` ל-GitHub Actions (ראו למטה)
@@ -25,7 +30,7 @@
   cron-job.org job `8348224` שולח POST ל-`run.yml/dispatches` ב-10:00 Asia/Jerusalem (timezone נטיבי —
   **אין צורך לשנות דבר במעברי שעון**). Watchdog: job `8371743` ב-10:45 מפעיל את `watchdog.yml`, שמריץ את run.yml שוב.
   ה-PAT שבכותרת ה-Authorization הוא ללא תפוגה.
-- **חסימת כפילות:** ה-`guard` job ב-run.yml מדלג אם כבר הייתה היום ריצה מוצלחת, ו-main.py מדלג אם
+- **חסימת כפילות:** ה-`guard` job ב-run.yml מדלג אם כבר הייתה היום ריצה מוצלחת (רק success — ריצה שנדחתה לא חוסמת), ו-main.py מדלג אם
   `docs/{date}-digest.html` של היום (שעון ישראל) כבר קיים.
 
 ## state ב-docs/ (נשמר דרך `git add docs/` ב-workflow)
