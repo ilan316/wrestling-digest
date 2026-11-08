@@ -1,5 +1,60 @@
 [
   {
+    "date": "2026-11-08",
+    "stories": [
+      {
+        "title": "Tommaso Ciampa defeats Andrade El Idolo for AEW National Championship on Collision",
+        "tldr": "Tommaso Ciampa defeated Andrade El Idolo to capture the AEW National Championship on the November 7, 2026, episode of AEW Collision, which emanated from the Chris Jericho Rock 'N' Wrestling Rager at Sea cruise. The chaotic main event featured heavy interference, a ref bump, low blows, and a slippery ring due to rain, ending Andrade's 104-day title reign. Ciampa successfully capitalized with a roll-up pin after failing to defeat Andrade in their previous encounter at WrestleDream.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Mercedes Moné mourns death of younger sister Alexis",
+        "tldr": "AEW Women's World Champion Mercedes Moné recently revealed in her newsletter that her younger sister, Alexis Varnado, passed away in September, leaving behind two young children. Moné shared deeply personal memories of her sister, including attending WrestleMania together in Atlanta when they were younger and helping care for their mother in 2020. The devastating family loss was further compounded later that month by the unexpected death of her longtime friend and fellow wrestler PAC at the age of 40. Moné continues to navigate her grief while preparing to defend her championship against Marina Shafir at AEW Full Gear on November 14.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Kazuchika Okada vs. Adam Copeland International Title match set for AEW Full Gear",
+        "tldr": "Kazuchika Okada will defend the AEW International Championship against Adam Copeland at the upcoming AEW Full Gear pay-per-view event. The high-profile match was officially announced following weeks of escalating tension and physical confrontations between the two veteran stars. Their brewing rivalry has been fueled by Okada interfering in Copeland matches and their involvement in chaotic multi-man bouts like Blood and Guts and WrestleDream.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Will Ospreay and Kyle Fletcher face-to-face and new matches set for AEW Dynamite & Collision",
+        "tldr": "AEW has announced a loaded card for an upcoming three-hour live television special combining Dynamite and Collision on November 11, serving as the final stop before the Full Gear pay-per-view. The highlight of the night will be a high-stakes face-to-face confrontation between AEW World Champion Will Ospreay and his challenger Kyle Fletcher. Additionally, fans will witness a major mixed tag team match and a tag team bout building toward next week's championship matches.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Kyle Fletcher on Don Callis' advice",
+        "tldr": "AEW star Kyle Fletcher recently discussed his nearly two-year tenure in the Don Callis Family and shared the best piece of advice he has received from the veteran manager. Speaking on Tony Schiavone podcast, Fletcher noted that Callis frequently sends him clips and weekly suggestions to help refine his work. However, Fletcher emphasized that the most valuable takeaway has been learning to truly believe in his own abilities. That backing and renewed confidence have directly shaped his current in-ring style and overall presentation as he prepares to face Will Ospreay at AEW Full Gear 2026 for the AEW World Championship.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Juice Robinson hospitalized after bloody scene on AEW Collision",
+        "tldr": "Juice Robinson of The Cut was hospitalized following a violent and bloody backstage incident aboard a cruise ship during AEW Collision. Earlier in the night, Jay White and his faction laid out Jon Moxley and The Death Riders, but the situation escalated dramatically when Robinson disappeared, leaving behind a pool of blood and two forks. While suspicion immediately fell on The Death Riders, AEW has not yet confirmed who was responsible for the brutal attack. This developing storyline adds intense heat to the feud between The Cut and The Death Riders as they head toward Full Gear.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "Jon Moxley and The Death Riders attacked by The Cut and Mercedes Moné on Collision",
+        "tldr": "During the November 7, 2026 episode of AEW Collision, Jon Moxley and The Death Riders suffered a brutal ambush by Jay White and The Cut following a successful trios match. AEW Women's World Champion Mercedes Moné also got involved, exchanging words with Moxley before delivering a kick to his head during the beatdown. The segment culminated with a Blade Runner from White, leaving The Death Riders humiliated and sending a definitive message ahead of Full Gear.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "WON Flashback: FTR vs. The Young Bucks at AEW Full Gear 2020",
+        "tldr": "On November 7, 2020, at the AEW Full Gear pay-per-view, The Young Bucks defeated FTR in a critically acclaimed match that received a stellar five and a quarter star rating. The nearly 29-minute encounter for the AEW tag team titles featured intense action, heavy storytelling built around a classic NBA rivalry aesthetic, and numerous homages to legendary tag teams of the past. Ultimately, The Young Bucks secured the victory after overcoming FTR's desperate strategies, leading to post-match celebrations involving Kenny Omega and a poignant moment with Hangman Page.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "US Senator Ruben Gallego declares allegiance to AEW",
+        "tldr": "United States Senator Ruben Gallego recently declared his loyalty to All Elite Wrestling on social media. The statement came in response to a fan post joking about his potential future interactions with WWE Hall of Famer Kane on the senate floor. Kane is currently considered a top candidate to be appointed to the U.S. Senate in January 2027 following political shifts in Tennessee. As the wrestling and political worlds potentially collide, Gallego made it clear that he prefers the rival promotion.",
+        "promotion": "AEW"
+      },
+      {
+        "title": "AEW Dynamite ticket sales update for November 7, 2026",
+        "tldr": "AEW Dynamite is heading to the Maverik Center in West Valley City, Utah, for a special dual taping of Dynamite and Collision serving as the go-home shows for the upcoming Full Gear pay-per-view. According to WrestleTix, 1,580 tickets have been distributed for the event, showing a minor increase of five tickets from the previous day. This figure trails behind the 2,429 tickets distributed the last time the company ran the venue in October 2024. Fans still looking to attend can find standard admission tickets starting at $35.35, with approximately 136 tickets currently available on the resale market.",
+        "promotion": "AEW"
+      }
+    ]
+  },
+  {
     "date": "2026-11-07",
     "stories": [
       {
@@ -360,51 +415,6 @@
       {
         "title": "Death Riders declare war on NJPW ahead of Wrestle Kingdom 21",
         "tldr": "New Japan Pro Wrestling's Power Struggle event set the stage for a massive crossover showing at Wrestle Kingdom 21 with heavy AEW involvement. MJF challenged Ryohei Oiwa, Will Ospreay booked a match against Callum Newman, and Kenny Omega staked a claim for the IWGP Heavyweight title. Meanwhile, Gabe Kidd and the Death Riders officially declared war on New Japan by assaulting Hiroshi Tanahashi, Yuya Uemura, and Shingo Takagi after a chaotic night of action.",
-        "promotion": "AEW"
-      }
-    ]
-  },
-  {
-    "date": "2026-11-03",
-    "stories": [
-      {
-        "title": "Swerve Strickland Booked for Indie Match",
-        "tldr": "Former AEW World Champion Swerve Strickland is returning to the independent wrestling scene for the first time in two years. He is scheduled to face Ninja Mack at the Fourth Rope Heelmatic event, a collaborative show with Mass Appeal founded by rapper Westside Gunn at the Melrose Ballroom in New York City on Thursday, November 12. This rare indie appearance occurs just days before Strickland teams up with Austin Creed and Kofi to challenge for the AEW Trios Championship at the Full Gear pay-per-view on Saturday, November 14.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Ricochet Reflects on Emotional AEW Tribute Match for PAC",
-        "tldr": "Ricochet recently reflected on the emotional September 30 episode of AEW Dynamite, where he wrestled Will Ospreay in a tribute match honoring their late friend PAC. He explained that having the match to focus on provided a necessary distraction from the grief following PAC's sudden passing at the age of forty. Despite having very little time to put the bout together, the two performers relied on their deep history and close friendship with PAC to deliver a meaningful performance. Ospreay ultimately won the match at the Petersen Events Center in Pittsburgh by hitting PAC's signature Black Arrow.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Cody Rhodes Names Strongest Opponents He Has Faced",
-        "tldr": "During a recent appearance on the Double Coverage Podcast, undisputed wrestling star Cody Rhodes named the toughest and strongest opponents he has ever faced in the ring. He highlighted legendary powerhouses like Mark Henry and Big Show, alongside current standouts such as Big E, Claudio Castagnoli, John Cena, and Bron Breakker. Rhodes also detailed the terrifying speed of Brock Lesnar and praised Bianca Belair as arguably WWE greatest athlete ever.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Ricochet Discusses His Performer Growth in AEW",
-        "tldr": "Ricochet believes he is a stronger performer now in AEW than during earlier stages of his career. He credits this growth to developing a deep emotional connection with fans rather than relying solely on spectacular physical moves. This evolution is prominently displayed through his current heel run, where he actively embraces drawing negative crowd reactions to elevate his opponents.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Bryce Remsburg Suggests AEW Could Hold Stadium Show in Philadelphia",
-        "tldr": "AEW referee Bryce Remsburg recently discussed the possibility of the promotion hosting a major stadium show at Lincoln Financial Field, the home of the NFL's Philadelphia Eagles. While noting that Philadelphia is one of AEW's strongest markets and that the venue has previous experience hosting WrestleMania, Remsburg admitted that current demand might not quite support a stadium show there just yet. He did not rule out the possibility for the future, even as separate rumors point toward a potential AEW stadium show happening in New York City this coming April.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Paul Wight Praises AEW's Kyle Fletcher",
-        "tldr": "AEW commentator Paul Wight recently named Kyle Fletcher as the wrestler who impresses him the most due to his incredible momentum and massive star potential. Wight praised Fletcher for checking every box in the industry, highlighting his in-ring skills, promo ability, work ethic, and professional backstage demeanor. Calling him a very humble and good kid, Wight ultimately stated that Fletcher has money written all on him.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Gabe Kidd Takes Shot at WWE Roster",
-        "tldr": "AEW star Gabe Kidd recently dismissed the entire WWE roster during an Instagram Q and A session while waiting for a connecting flight. When asked about a dream match against any WWE superstar, Kidd bluntly stated that none of them interest him and that they are all shit. This trademark controversy comes as Kidd also navigates major changes in his own career, including former stablemates David Finlay and Clark Connors turning on him to form a new faction called The Cut with The Bang Bang Gang.",
-        "promotion": "AEW"
-      },
-      {
-        "title": "Update on AEW and Skydance Media Rights Situation",
-        "tldr": "Dave Meltzer has provided a fresh subscriber-only update regarding the ongoing discussions between AEW and Skydance. While previous reports questioned whether the media company would exercise an option year, this new report delves deeper into the current backstage dynamics and negotiations. Subscribers received a comprehensive breakdown of how these talks are progressing behind the scenes. The latest analysis sheds more light on what the potential partnership could mean for AEW's television future.",
         "promotion": "AEW"
       }
     ]
