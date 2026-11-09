@@ -55,7 +55,7 @@ _SKIP_RE = re.compile(
     r"|DAILY UPDATE|ROUND-?UP|LOOK BACK)\b"
     # Show reports ("Bryan Alvarez's AEW Dynamite October 6, 2026 report") —
     # bare REPORT stays allowed, it's a legit news genre.
-    r"|\b(DYNAMITE|COLLISION|RAMPAGE|RAW|SMACKDOWN|NXT)\b.*\bREPORT\s*$"
+    r"|\b(DYNAMITE|COLLISION|RAMPAGE|RAW|SMACKDOWN|NXT)\b.*\bREPORT(\s+FOR\s+SUBSCRIBERS)?\s*$"
 )
 
 # Opinion / blog / roundup sections, marked in the article URL path. These are
@@ -69,9 +69,10 @@ _SKIP_URL_RE = re.compile(
 )
 
 # Opinion sections marked only by the feed's category tag, not the URL
-# (wrestlingheadlines "COLUMNS", pwmania "Columns", nodq "Opinions").
+# (wrestlingheadlines "COLUMNS", pwmania "Columns", nodq "Opinions"), plus F4W
+# paywalled posts ("Subscriber Exclusive") — the feed only carries the teaser.
 # Full-tag match so "Opinion Poll" or a wrestler's name never trips it.
-_SKIP_TAG_RE = re.compile(r"^(columns?|opinions?|editorials?|commentary)$", re.IGNORECASE)
+_SKIP_TAG_RE = re.compile(r"^(columns?|opinions?|editorials?|commentary|subscriber exclusive)$", re.IGNORECASE)
 
 
 def parse_opml(opml_path: str) -> dict[str, list[dict[str, str]]]:
